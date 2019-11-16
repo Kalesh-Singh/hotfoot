@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "" = "$(grep -E '^[0-9]+ - ' "$1")" ]; then
+    echo -e "\e[1m\e[31m\nCommit Failed: Commit messages must start with the issue number and a '-'.\e[0m"
+    echo -e "\e[1m\e[31m    e.g. '3 - Moved FAB to center'.\e[0m\n"
+    echo -e "\e[1m\e[34mIf this commit should close the issue, add 'Fixes #' followed by the issue number.\e[0m"
+    echo -e "\e[1m\e[34m-------------------------------------\e[0m"
+    echo -e "\e[1m\e[34m#3 - Moved FAB to center.\e[0m\n"
+    echo -e "\e[1m\e[34mFixes #3\e[0m"
+    echo -e "\e[1m\e[34m-------------------------------------\e[0m\n"
+    exit 1 # push will not execute
+else
+    exit 0 # push will execute
+fi

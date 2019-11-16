@@ -1,0 +1,12 @@
+#!/bin/bash
+
+protected_branch='master'
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ $protected_branch = $current_branch ]; then
+    echo -e "\n\e[1m\e[31mYou can't push directly to master branch.\e[0m\n"
+    echo -e "\e[1m\e[32mPlease commit your changes on another branch and create a pull request.\e[0m\n"
+    exit 1 # push will not execute
+else
+    exit 0 # push will execute
+fi
