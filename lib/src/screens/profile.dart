@@ -7,18 +7,41 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('User Profile'),
       ),
-      body: Center(
-        child: submitButton(context),
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          children: <Widget>[
+            SizedBox(height: 70.0),
+            Column(
+              children: <Widget>[
+                //CircleAvatar(
+                 // minRadius: 90.0, 
+                Icon(Icons.account_circle,size: 130.0,),
+                  //)
+              ],
+            ),
+            SizedBox(height: 24.0),
+            Center(
+              child: Text(
+                'U S E R N A M E',
+                style: TextStyle(fontSize: 20),
+              )
+            ),
+            SizedBox(height: 24.0),
+            Center(child: signoutButton(context),)
+          ],
+        ),
       ),
     );
   }
 }
 
-Widget submitButton(context) {
+Widget signoutButton(context) {
   return RaisedButton(
     onPressed: () {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, '/');
     },
-    child: Text('Home'),
+    color: Colors.amber,
+    child: Text('Signout'),
   );
 }
