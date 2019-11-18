@@ -45,9 +45,11 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                     },
                   ),
-                  Center(child: submitButton(context))
+                  Center(
+                    child: loginButton(context),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         )
@@ -55,13 +57,13 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-Widget submitButton(context) {
+Widget loginButton(context) {
   return RaisedButton(
     onPressed: () {
       Navigator.pushNamed(context, '/home');
     },
     child: Text('Login'),
     color: Colors.amber,
-    padding: EdgeInsets.fromLTRB(10, 10, 10, 10)
+    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
   );
 }
