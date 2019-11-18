@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
                   Text('Hotfoot'),
                 ],
               ),
-              SizedBox(height: 65.0),
+              SizedBox(height: 45.0),
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Username',
@@ -35,20 +35,9 @@ class LoginScreen extends StatelessWidget {
                 ),
                 obscureText: true,
               ),
-              SizedBox(height: 15.0),
-              ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text('Cancel'),
-                    color: Colors.blue,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10), 
-                    onPressed: () {
-                    },
-                  ),
-                  Center(
-                    child: loginButton(context),
-                  ),
-                ],
+              SizedBox(height: 45.0),
+              Center(
+                child: loginButton(context),
               ),
             ],
           ),
@@ -64,6 +53,6 @@ Widget loginButton(context) {
     },
     child: Text('Login'),
     color: Colors.amber,
-    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+    padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
   );
 }
