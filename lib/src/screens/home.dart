@@ -7,12 +7,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
-            onPressed: () { Navigator.pushNamed(context, '/profile'); },
-            child: Icon(Icons.account_circle, size: 50.0,),
-            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
-          ),
+          profileButton(context),
         ],
       ),
       body: Center(
@@ -20,7 +15,6 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             submitButton(context),
-            profileButton(context),
           ],
         ),
       ),
@@ -38,10 +32,12 @@ Widget submitButton(context) {
 }
 
 Widget profileButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      Navigator.pushNamed(context, '/profile');
-    },
-    child: Text('Profile'),
-  );
+  return FlatButton(
+    textColor: Colors.white,
+    onPressed: () { 
+      Navigator.pushNamed(context, '/profile'); 
+      },
+    child: Icon(Icons.account_circle, size: 50.0,),
+    shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+    );
 }

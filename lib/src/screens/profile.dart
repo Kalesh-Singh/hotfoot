@@ -14,10 +14,7 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(height: 70.0),
             Column(
               children: <Widget>[
-                //CircleAvatar(
-                 // minRadius: 90.0, 
                 Icon(Icons.account_circle,size: 130.0,),
-                  //)
               ],
             ),
             SizedBox(height: 24.0),
