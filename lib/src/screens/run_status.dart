@@ -6,8 +6,6 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:geolocator/geolocator.dart';
 
 class RunStatusScreen extends StatelessWidget {
-  static String keyword = "YEET!";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +13,7 @@ class RunStatusScreen extends StatelessWidget {
           title: const Text('Run Status'),
         ),
         body: Center(
-          child: Atlas(keyword),
+          child: Atlas(),
         ));
   }
 }
@@ -30,10 +28,6 @@ Widget submitButton(context) {
 }
 
 class Atlas extends StatefulWidget {
-  final String keyword;
-
-  Atlas(this.keyword);
-
   @override
   State<Atlas> createState() {
     return _Atlas();
