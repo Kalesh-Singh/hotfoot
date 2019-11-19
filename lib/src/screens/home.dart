@@ -6,13 +6,15 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        actions: <Widget>[
+          profileButton(context),
+        ],
       ),
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             submitButton(context),
-            profileButton(context),
           ],
         ),
       ),
@@ -30,10 +32,12 @@ Widget submitButton(context) {
 }
 
 Widget profileButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      Navigator.pushNamed(context, '/profile');
-    },
-    child: Text('Profile'),
-  );
+  return FlatButton(
+    textColor: Colors.white,
+    onPressed: () { 
+      Navigator.pushNamed(context, '/profile'); 
+      },
+    child: Icon(Icons.account_circle, size: 50.0,),
+    shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+    );
 }
