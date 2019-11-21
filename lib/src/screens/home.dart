@@ -12,6 +12,9 @@ class HomeScreen extends StatelessWidget {
           title: Center(
             child: Text('Popular Near You'),
           ),
+          actions: <Widget>[
+            profileButton(context),
+          ],
           bottom: TabBar(tabs: [
             Tab(
               icon: Icon(Icons.local_dining),
@@ -38,22 +41,15 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget submitButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      Navigator.pushNamed(context, '/request_run');
-    },
-    child: Text('Request Run'),
-  );
-}
-
 Widget profileButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      Navigator.pushNamed(context, '/profile');
-    },
-    child: Text('Profile'),
-  );
+  return FlatButton(
+    textColor: Colors.white,
+    onPressed: () { 
+      Navigator.pushNamed(context, '/profile'); 
+      },
+    child: Icon(Icons.account_circle, size: 50.0,),
+    shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+    );
 }
 
 class PlaceModel {

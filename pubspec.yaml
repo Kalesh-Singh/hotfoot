@@ -25,13 +25,16 @@ dependencies:
   location: ^2.3.5
 
   # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # Use with the Cupertino Icons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  google_maps_flutter: ^0.5.21
+  flutter_google_places: ^0.2.3
+  google_maps_webservice: ^0.0.16
+  geolocator: ^5.1.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -43,6 +46,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/asteroid.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
