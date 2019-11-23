@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../navigation/nav_bar.dart';
 
 class RequestRunScreen extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class RequestRunScreen extends StatelessWidget {
       body: Center(
         child: submitButton(context),
       ),
+      bottomNavigationBar: NavBar.build(),
     );
   }
 }

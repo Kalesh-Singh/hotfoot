@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../navigation/nav_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -29,6 +30,7 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: NavBar.build(),
     );
   }
 }
