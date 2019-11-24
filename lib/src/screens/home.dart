@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../navigation/nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -6,38 +7,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
-        actions: <Widget>[
-          profileButton(context),
-        ],
       ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            submitButton(context),
-          ],
-        ),
-      ),
+      body: Text('List Nearby Places'),
+      bottomNavigationBar: NavBar.build(),
     );
   }
-}
-
-Widget submitButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      Navigator.pushNamed(context, '/request_run');
-    },
-    child: Text('Request Run'),
-  );
-}
-
-Widget profileButton(context) {
-  return FlatButton(
-    textColor: Colors.white,
-    onPressed: () { 
-      Navigator.pushNamed(context, '/profile'); 
-      },
-    child: Icon(Icons.account_circle, size: 50.0,),
-    shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
-    );
 }

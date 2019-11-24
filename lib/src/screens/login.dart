@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
 Widget loginButton(context) {
   return RaisedButton(
     onPressed: () {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, '/app_state');
     },
     child: Text('Login'),
     color: Colors.amber,
