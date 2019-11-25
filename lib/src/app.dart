@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/login.dart';
-import 'screens/home.dart';
-import 'screens/request_run.dart';
 import 'screens/run_status.dart';
-import 'screens/profile.dart';
+import 'screens/login.dart';
+import 'app_state.dart';
 
 class App extends StatelessWidget {
   @override
@@ -23,46 +21,19 @@ Route routes(RouteSettings settings) {
   switch (routeName) {
     case '/':
       return MaterialPageRoute(
-        builder: (BuildContext context) {
-          return LoginScreen();
-        },
+        builder: (BuildContext context) => LoginScreen(),
       );
-    case '/home':
+    case '/app_state':
       return MaterialPageRoute(
-        builder: (BuildContext context) {
-          return HomeScreen();
-        },
-      );
-    case '/request_run':
-      return MaterialPageRoute(
-        builder: (BuildContext context) {
-          return RequestRunScreen();
-        },
+        builder: (BuildContext context) => AppState(),
       );
     case '/run_status':
       return MaterialPageRoute(
-        builder: (BuildContext context) {
-          return RunStatusScreen();
-        },
+        builder: (BuildContext context) => RunStatusScreen(),
       );
-    case '/profile':
+    default:
       return MaterialPageRoute(
-        builder: (BuildContext context) {
-          return ProfileScreen();
-        },
+        builder: (BuildContext context) => AppState(),
       );
-  }
-  if (settings.name == '/') {
-    return MaterialPageRoute(
-      builder: (BuildContext context) {
-        return LoginScreen();
-      },
-    );
-  } else {
-    return MaterialPageRoute(
-      builder: (BuildContext context) {
-        return HomeScreen();
-      },
-    );
   }
 }
