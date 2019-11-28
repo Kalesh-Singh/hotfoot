@@ -7,6 +7,8 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:hotfoot/src/utils/step.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class Atlas extends StatefulWidget {
   @override
@@ -57,15 +59,26 @@ class _Atlas extends State<Atlas> {
           polylines: Set<Polyline>.of(_polylines.values),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
-        onPressed: () async {
-          // show input autocomplete with selected mode
-          // then get the Prediction selected
-          Prediction p = await PlacesAutocomplete.show(
-              context: context, apiKey: kGoogleApiKey);
-          _updateAtlasWithQuery(p);
-        },
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.camera_alt),
+            label: "Scan QR Code",
+            onTap: _scanQR,
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.search),
+            label: "Search Source Location",
+            onTap: () async {
+              // show input autocomplete with selected mode
+              // then get the Prediction selected
+              Prediction p = await PlacesAutocomplete.show(
+                  context: context, apiKey: kGoogleApiKey);
+              _updateAtlasWithQuery(p);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -128,8 +141,8 @@ class _Atlas extends State<Atlas> {
         .then((dynamic res) {
       try {
         List<LatLng> path = List();
-        List<Steps> steps = (JsonDecoder().convert(res.body)["routes"][0]["legs"]
-                [0]["steps"])
+        List<Steps> steps = (JsonDecoder().convert(res.body)["routes"][0]
+                ["legs"][0]["steps"])
             .map<Steps>((json) => new Steps.fromJson(json))
             .toList();
         for (final step in steps) {
@@ -141,5 +154,45 @@ class _Atlas extends State<Atlas> {
         throw new Exception("Cannot parse steps properly!");
       }
     });
+  }
+
+  Future _scanQR() async {
+    try {
+      String qrScanResult = await FlutterBarcodeScanner.scanBarcode(
+          "#000000", "Cancel", true, ScanMode.QR);
+      setState(() {
+        _qrConfirmation(qrScanResult);
+      });
+    } catch (e) {
+      throw new Exception("Error scanning QRCode!");
+    }
+  }
+
+  void _qrConfirmation(String qrScanResult) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Completion Confirmation"),
+            content: new Text("($qrScanResult)\ncompleted their task?",
+                style: TextStyle(color: Colors.grey)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("CANCEL"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text("CONFIRM"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 }
