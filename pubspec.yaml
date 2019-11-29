@@ -28,6 +28,8 @@ dependencies:
   google_maps_webservice: ^0.0.16
   geolocator: ^5.1.5
   rxdart: ^0.22.6
+  flutter_speed_dial: ^1.2.4
+  flutter_barcode_scanner : ^0.1.7
 
 dev_dependencies:
   flutter_test:
