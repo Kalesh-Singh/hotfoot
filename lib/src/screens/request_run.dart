@@ -6,14 +6,69 @@ class RequestRunScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Run Request'),
+        leading: null,
+        automaticallyImplyLeading: false,
+        title: const Text('Run Details'),
       ),
-      body: Center(
-        child: submitButton(context),
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+          children: <Widget>[
+            // Card placeholder for the store the user will be ordering from
+            buildCard(
+                context,
+                PlaceModel('McDonald\'s', 'Georgia Ave',
+                    'https://timedotcom.files.wordpress.com/2014/10/mcdonalds-sign.jpg')),
+            Text('1 Crispy Buttermild Sandwich Combo', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            Text('For: John Doe'),
+            submitButton(context),
+          ],
+        ),
       ),
       bottomNavigationBar: NavBar.build(),
     );
   }
+}
+
+class PlaceModel {
+  String name;
+  String address;
+  String imageUrl;
+
+  PlaceModel(this.name, this.address, this.imageUrl);
+}
+
+Widget buildCard(BuildContext context, PlaceModel place) {
+  return Center(
+    child: Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Image(
+            image: NetworkImage(place.imageUrl),
+            fit: BoxFit.fill,
+            height: 250.0,
+          ),
+          ListTile(
+            title: Text(place.name, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+            subtitle: Text(place.address, style: TextStyle(fontSize: 12.0)),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget suggestedTip(context, double cost) {
+  // Suggested Tip should be 20% of purchase amount
+  double tipValue = (cost * 20) / 100;
+  return TextField(
+    autocorrect: true,
+    decoration: InputDecoration(
+      labelText: 'Suggested Tip: \$' + tipValue.toString() + '0',
+      filled: true,
+    ),
+  );
 }
 
 Widget submitButton(context) {
@@ -21,6 +76,7 @@ Widget submitButton(context) {
     onPressed: () {
       Navigator.pushNamed(context, '/run_status');
     },
-    child: Text('Place Run Request'),
+    child: Text('Accept'),
+    color: Colors.amber,
   );
 }

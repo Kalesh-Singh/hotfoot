@@ -6,6 +6,8 @@ class RunStatusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
           title: const Text('Run Status'),
         ),
         body: Center(
