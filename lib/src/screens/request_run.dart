@@ -49,10 +49,11 @@ class RequestRunScreen extends StatelessWidget {
             suggestedTip(context, 20.0),
             SizedBox(height: 45.0,),
             submitButton(context),
-            bottomNavigationBar: NavBar.build(),
           ],
         )
-      )
+      ),
+      // * Moved navbar to outside of SafeArea
+      bottomNavigationBar: NavBar.build(),
     );
   }
 }
