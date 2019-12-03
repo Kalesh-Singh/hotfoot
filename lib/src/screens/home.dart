@@ -35,7 +35,7 @@ Widget buildRequestList(BuildContext context) {
     requests.add(
       buildTile(
         context,
-        RequestModel('McDonald\'s', 'East Towers', 'John Doe',
+        RequestModel('McDonald\'s', 'West Towers', 'John Doe',
             'Crispy Buttermilk Sandwich Combo'),
       ),
     );

@@ -19,7 +19,7 @@ class Atlas extends StatefulWidget {
 
 class _Atlas extends State<Atlas> {
   // TODO: API Key.
-  static const kGoogleApiKey = "";
+  static const kGoogleApiKey = "AIzaSyDpEaOXUzkvBqu2-yoJOCQqTr1NQry8MW4";
   GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Map<MarkerId, Polyline> _polylines = <MarkerId, Polyline>{};
@@ -35,8 +35,15 @@ class _Atlas extends State<Atlas> {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() {
-        _userLatLng = LatLng(position.latitude, position.longitude);
-        _addMarker(_userLatLng, "user_current_location", "You are here!");
+        LatLng one = LatLng(38.920634, -77.022393);
+        LatLng two = LatLng(38.919433, -77.024058);
+        _getPathBetweenSrcAndDst(one, two).then((List<LatLng> path) {
+          _path = path;
+          _addMarker(one, "curr_location",
+              "You are here!");
+          _addMarker(two, "dst_location",
+              "Destination!");
+        });
       });
     });
     super.initState();
@@ -104,7 +111,7 @@ class _Atlas extends State<Atlas> {
     // Move the camera to the newly added marker.
     _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: markerLatLng,
-      zoom: 12,
+      zoom: 16,
     )));
   }
 
