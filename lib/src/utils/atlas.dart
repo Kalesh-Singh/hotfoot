@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:hotfoot/src/utils/step.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class Atlas extends StatefulWidget {
   @override
@@ -62,6 +63,13 @@ class _Atlas extends State<Atlas> {
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         children: [
+          SpeedDialChild(
+            child: Icon(Icons.person),
+            label: "Your QR Code",
+            onTap: () async {
+              _generateQR("Sanic");
+            },
+          ),
           SpeedDialChild(
             child: Icon(Icons.camera_alt),
             label: "Scan QR Code",
@@ -192,6 +200,20 @@ class _Atlas extends State<Atlas> {
                 },
               ),
             ],
+          );
+        });
+  }
+
+  void _generateQR(String userName) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new QrImage(
+              data: userName,
+              version: QrVersions.auto,
+              size: 225.0,
+            ),
           );
         });
   }
