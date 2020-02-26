@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "210547514584",
+    "firebase_url": "https://hotfoot-testing.firebaseio.com",
+    "project_id": "hotfoot-testing",
+    "storage_bucket": "hotfoot-testing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210547514584:android:970609af8a6ecbc50b4bad",
+        "android_client_info": {
+          "package_name": "com.ninjas.foot.hotfoot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210547514584-a5u5ijkdaddah7j06rdf84us8bcmtacd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBVm9j4yrf3qN8lX3i4j3CpW8y4fFDt8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210547514584-a5u5ijkdaddah7j06rdf84us8bcmtacd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
