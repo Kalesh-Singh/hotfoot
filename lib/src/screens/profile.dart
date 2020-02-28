@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import '../navigation/nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/src/blocs/authentication_bloc/authentication_bloc.dart';
+
 
 class ProfileScreen extends StatelessWidget {
+  final String name;
+  ProfileScreen({Key key, @required this.name}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +27,7 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(height: 24.0),
             Center(
               child: Text(
-                'U S E R N A M E',
+                '$name',
                 style: TextStyle(fontSize: 20),
               )
             ),
@@ -38,6 +44,10 @@ class ProfileScreen extends StatelessWidget {
 Widget signoutButton(context) {
   return RaisedButton(
     onPressed: () {
+      // Log out of application
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        LoggedOut(),
+        );
       Navigator.pushNamed(context, '/');
     },
     color: Colors.amber,

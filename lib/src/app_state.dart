@@ -4,6 +4,7 @@ import 'screens/home.dart';
 import 'screens/request_run.dart';
 import 'screens/profile.dart';
 
+// Need some reworking here
 class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class AppState extends StatelessWidget {
             case Navigation.RUN:
               return RequestRunScreen();
             case Navigation.ACCOUNT:
-              return ProfileScreen();
+              return ProfileScreen(name: 'Ruel Gordon',);
             default:
               return HomeScreen();
           }

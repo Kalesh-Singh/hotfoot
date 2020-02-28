@@ -68,8 +68,9 @@ Widget buildNearbyGroceryList(BuildContext context) {
 
 Widget buildNearbyFoodList(BuildContext context) {
   List<PlaceModel> places = [
-    PlaceModel('McDonalds', 'Georgia Ave',
-        'https://timedotcom.files.wordpress.com/2014/10/mcdonalds-sign.jpg'),
+    // Commented this because this image is returning a 404 error which crashes the app
+    // PlaceModel('McDonalds', 'Georgia Ave',
+    //     'https://timedotcom.files.wordpress.com/2014/10/mcdonalds-sign.jpg'),
     PlaceModel('Howard China', 'Georgia Ave',
         'https://s3-media1.fl.yelpcdn.com/bphoto/0eMSmEGQZ9bw0kvAV-cGkQ/348s.jpg'),
     PlaceModel('Chipotle', 'Georgia Ave',
