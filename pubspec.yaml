@@ -20,6 +20,15 @@ dependencies:
   flutter:
     sdk: flutter
 
+  firebase_core: ^0.4.0+8
+  google_sign_in: ^4.0.0
+  firebase_auth: ^0.15.0+1
+  bloc: ^3.0.0
+  flutter_bloc: ^3.2.0
+  equatable: ^1.0.0
+  meta: ^1.1.6
+  font_awesome_flutter: ^8.4.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the Cupertino Icons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -27,7 +36,7 @@ dependencies:
   flutter_google_places: ^0.2.3
   google_maps_webservice: ^0.0.16
   geolocator: ^5.1.5
-  rxdart: ^0.22.6
+  rxdart: ^0.23.0
   flutter_speed_dial: ^1.2.4
   flutter_barcode_scanner : ^0.1.7
 
@@ -48,6 +57,7 @@ flutter:
 
   assets:
     - assets/asteroid.png
+    - assets/flutter_logo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
