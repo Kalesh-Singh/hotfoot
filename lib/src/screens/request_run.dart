@@ -13,7 +13,7 @@ class RequestRunScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
           children: <Widget>[
             // Card placeholder for the store the user will be ordering from
-            buildCard(context, PlaceModel('McDonald\'s', 'Georgia Ave', 'https://timedotcom.files.wordpress.com/2014/10/mcdonalds-sign.jpg')),
+            buildCard(context, PlaceModel('Chipotle\'s', 'Georgia Ave', 'https://patch.com/img/cdn20/users/714975/20170530/020320/styles/raw/public/article_images/20160256bb4a4a41646-1496163356-6008.jpg')),
             SizedBox(height: 15.0),
             TextField(
               autocorrect: true,

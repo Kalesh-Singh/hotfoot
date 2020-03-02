@@ -6,7 +6,7 @@ class NavigationBloc {
   final BehaviorSubject<Navigation> _navigationController =
       BehaviorSubject.seeded(Navigation.HOME);
 
-  Observable<Navigation> get navigationStream => _navigationController.stream;
+  Stream<Navigation> get navigationStream => _navigationController.stream;
 
   Function(Navigation) get changeNavigationIndex => _navigationController.sink.add;
 
