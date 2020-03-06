@@ -85,7 +85,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return !state.isEmailValid ? 'Invalid Email' : null;
+                      return displayEmailErrorMessage(Text(_emailController.text).toString(), state);
                     },
                   ),
                   TextFormField(
@@ -98,13 +98,12 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                      return displayPasswordErrorMessage(Text(_passwordController.text).toString(), state);
                     },
                   ),
+                  Padding(padding: EdgeInsets.all(12.0)),
                   RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state)
-                        ? _onFormSubmitted
-                        : null,
+                    onPressed: isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
                   ),
                 ],
               ),
@@ -113,6 +112,28 @@ class _RegisterFormState extends State<RegisterForm> {
         },
       ),
     );
+  }
+
+  // Function to help with displaying an appropriate message
+  String displayEmailErrorMessage(String _emailAddress, RegisterState _emailAddressState) {
+    if (_emailAddressState.isEmailValid) {
+      return null;
+    }
+    else {
+      return 'john.doe@bison.howard.edu';
+    }
+  }
+
+  String displayPasswordErrorMessage(String _password, RegisterState _passwordState) {
+    if (_passwordState.isPasswordValid) {
+      return null;
+    }
+    else {
+      // Password needs to have at least 8 characters, one of which must be a number
+      // I cannot think of an appropriate message to show here
+      // So I will just put 'Password is invalid' for now
+      return 'Password is invalid';
+    }
   }
 
   @override

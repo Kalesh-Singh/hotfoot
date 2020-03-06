@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return !state.isEmailValid ? 'Invalid Email' : null;
+                      return displayEmailErrorMessage(Text(_emailController.text).toString(), state);
                     },
                   ),
                   TextFormField(
@@ -110,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                      return displayPasswordErrorMessage(Text(_passwordController.text).toString(), state);
                     },
                   ),
                   Padding(
@@ -137,6 +137,28 @@ class _LoginFormState extends State<LoginForm> {
         },
       ),
     );
+  }
+
+  // Function to help with displaying an appropriate message
+  String displayEmailErrorMessage(String _emailAddress, LoginState _emailAddressState) {
+    if (_emailAddressState.isEmailValid) {
+      return null;
+    }
+    else {
+      return 'Example, john.doe@bison.howard.edu';
+    }
+  }
+
+  String displayPasswordErrorMessage(String _password, LoginState _passwordState) {
+    if (_passwordState.isPasswordValid) {
+      return null;
+    }
+    else {
+      // Password needs to have at least 8 characters, one of which must be a number
+      // I cannot think of an appropriate message to show here
+      // So I will just put 'Password is invalid' for now
+      return 'Password is invalid';
+    }
   }
 
   @override
