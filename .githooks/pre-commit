@@ -9,7 +9,7 @@ google_api_key_matcher="['\\\"][a-zA-Z0-9_]{39}['\\\"]"
 files_with_api_key=0
 
 for modified_file in "${files_modified_array[@]}"; do
-  if [ "" != "$(grep -rE "$google_api_key_matcher" "$modified_file")" ]; then
+  if [ "" != "$(grep -E "$google_api_key_matcher" "$modified_file")" ]; then
     printf "\n\e[1m\e[31mAPI key found in %s \n\e[0m\n" "$modified_file"
     files_with_api_key=$((files_with_api_key+1))
   fi
