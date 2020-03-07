@@ -3,11 +3,25 @@
 protected_branch='master'
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
 
-if [ $protected_branch = $current_branch ]; then
-    echo -e "\n\e[1m\e[31mYou can't commit directly to master branch.\e[0m\n"
-    echo -e "\e[1m\e[32mPlease checkout another branch and commit your changes there.\e[0m\n"
-    exit 1 # push will not execute
-else
-    exit 0 # push will execute
-fi
+files_modified="$(git diff-index --cached --name-only HEAD)"
+readarray -t files_modified_array <<<"$files_modified"
+google_api_key_matcher="['\\\"][a-zA-Z0-9_]{39}['\\\"]"
+files_with_api_key=0
 
+for modified_file in "${files_modified_array[@]}"; do
+  if [ "" != "$(grep -E "$google_api_key_matcher" "$modified_file")" ]; then
+    printf "\n\e[1m\e[31mAPI key found in %s \n\e[0m\n" "$modified_file"
+    files_with_api_key=$((files_with_api_key+1))
+  fi
+done
+
+if [ "$files_with_api_key" -ne 0 ]; then
+  echo -e "\e[1m\e[32mPlease remove all references to API keys and try committing again.\e[0m\n"
+  exit "$files_with_api_key" # commit will not execute
+elif [ $protected_branch = "$current_branch" ]; then
+  echo -e "\n\e[1m\e[31mYou can't commit directly to master branch.\e[0m\n"
+  echo -e "\e[1m\e[32mPlease checkout another branch and commit your changes there.\e[0m\n"
+  exit 1 # commit will not execute
+else
+  exit 0 # commit will execute
+fi
