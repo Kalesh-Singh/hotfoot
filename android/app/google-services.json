@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "210547514584",
-    "firebase_url": "https://hotfoot-testing.firebaseio.com",
-    "project_id": "hotfoot-testing",
-    "storage_bucket": "hotfoot-testing.appspot.com"
+    "project_number": "356022604104",
+    "firebase_url": "https://hotfoot-test.firebaseio.com",
+    "project_id": "hotfoot-test",
+    "storage_bucket": "hotfoot-test.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:210547514584:android:970609af8a6ecbc50b4bad",
+        "mobilesdk_app_id": "1:356022604104:android:ae98ac1377e7ea2ec2637d",
         "android_client_info": {
           "package_name": "com.ninjas.foot.hotfoot"
         }
       },
       "oauth_client": [
         {
-          "client_id": "210547514584-a5u5ijkdaddah7j06rdf84us8bcmtacd.apps.googleusercontent.com",
+          "client_id": "356022604104-455hrk3m4sdeni4pgd2eh8u7k5fnqng4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBBVm9j4yrf3qN8lX3i4j3CpW8y4fFDt8c"
+          "current_key": "AIzaSyABxXmvrT6keY5thbv8wE1t81JHJHnM1lM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "210547514584-a5u5ijkdaddah7j06rdf84us8bcmtacd.apps.googleusercontent.com",
+              "client_id": "356022604104-455hrk3m4sdeni4pgd2eh8u7k5fnqng4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
