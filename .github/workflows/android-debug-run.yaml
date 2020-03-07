@@ -1,0 +1,31 @@
+name: android debug run
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+    android_debug_run:
+        runs-on: macOS-latest
+        strategy:
+            matrix:
+                api-level: [23, 29]
+                target: [default, google_apis]
+                profile: [Nexus 6, pixel_xl]
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: List Available Emulators
+          run: $ANDROID_HOME/tools/bin/avdmanager list
+        - name: Run Android app in Debug Mode
+          uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: ${{ matrix.api-level }}
+            target: ${{ matrix.target }}
+            arch: x86_64
+            profile: ${{ matrix.profile }}
+            script: ./scripts/debug-run.sh

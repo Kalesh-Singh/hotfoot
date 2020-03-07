@@ -1,0 +1,49 @@
+name: ios debug run
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ios_debug_run:
+    # Creates a build matrix for the jobs. You can define different
+    # variations of an environment to run each job in.
+    strategy:
+      # A set of different configurations of the virtual environment.
+      matrix:
+        device:
+        - "iPhone 8 (13.3)"
+        - "iPhone 11 Pro Max (13.3)"
+      # When set to true, GitHub cancels all in-progress jobs if any matrix job
+      # fails.
+      fail-fast: false
+    runs-on: macOS-latest
+    steps:
+    - name: "List all simulators"
+      run: "xcrun instruments -s"
+    - name: "Start Simulator"
+      run: |
+        UDID=$(
+          xcrun instruments -s |
+          awk \
+            -F ' *[][]' \
+            -v 'device=${{ matrix.device }}' \
+            '$1 == device { print $2 }'
+        )
+        open `xcode-select -p`/Applications/Simulator.app/ --args -CurrentDeviceUDID "${UDID:?No Simulator with this name found}"
+    # The branch or tag ref that triggered the workflow will be checked out.
+    # https://github.com/actions/checkout
+    - uses: actions/checkout@v1
+    # Sets up a flutter environment.
+    # https://github.com/marketplace/actions/flutter-action
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable' # or: 'dev' or 'beta'
+    - name: "Run iOS app in Debug Mode"
+      run: |
+          chmod +x ./scripts/debug-run.sh
+          ./scripts/debug-run.sh
