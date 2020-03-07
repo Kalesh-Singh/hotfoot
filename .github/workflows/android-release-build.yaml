@@ -20,5 +20,5 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable' # or: 'dev' or 'beta'
-      - name: "Run iOS Simulator Build"
+      - name: "Run Android Release Build"
         run: "flutter build apk --release"
