@@ -31,6 +31,8 @@ dependencies:
   equatable: ^1.0.0
   # For dart annotations
   meta: ^1.1.6
+  # For functional programming Either<> type
+  dartz: ^0.8.9
   # ????
   font_awesome_flutter: ^8.4.0
 

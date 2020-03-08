@@ -66,24 +66,32 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoginWithGooglePressedToState() async* {
-    try {
-      await authenticationRepository.signInWithGoogle();
-      yield AuthenticationState.success();
-    } catch (_) {
-      yield AuthenticationState.failure();
-    }
+    final resultEither = await authenticationRepository.signInWithGoogle();
+    yield* resultEither.fold(
+      (failure) async* {
+        yield AuthenticationState.failure();
+      },
+      (success) async* {
+        yield AuthenticationState.success();
+      },
+    );
   }
 
   Stream<AuthenticationState> _mapLoginWithCredentialsPressedToState({
     String email,
     String password,
   }) async* {
-    yield AuthenticationState.loading();
-    try {
-      await authenticationRepository.signInWithCredentials(email, password);
-      yield AuthenticationState.success();
-    } catch (_) {
-      yield AuthenticationState.failure();
-    }
+    final resultEither = await authenticationRepository.signInWithCredentials(
+      email: email,
+      password: password,
+    );
+    yield* resultEither.fold(
+      (failure) async* {
+        yield AuthenticationState.failure();
+      },
+      (success) async* {
+        yield AuthenticationState.success();
+      },
+    );
   }
 }

@@ -30,17 +30,20 @@ class AuthenticationNavBloc
   }
 
   Stream<AuthenticationNavState> _mapAppStartedToState() async* {
-    try {
-      final isSignedIn = await authenticationRepository.isSignedIn();
-      if (isSignedIn) {
-        final name = await authenticationRepository.getUser();
-        yield Authenticated(name);
-      } else {
+    final isSignedInEither = await authenticationRepository.isSignedIn();
+    yield* isSignedInEither.fold(
+      (failure) async* {
         yield Unauthenticated();
-      }
-    } catch (_) {
-      yield Unauthenticated();
-    }
+      },
+      (success) async* {
+        final name = await authenticationRepository.getUser();
+        if (name == null) {
+          yield Unauthenticated();
+        } else {
+          yield Authenticated(name);
+        }
+      },
+    );
   }
 
   Stream<AuthenticationNavState> _mapLoggedInToState() async* {

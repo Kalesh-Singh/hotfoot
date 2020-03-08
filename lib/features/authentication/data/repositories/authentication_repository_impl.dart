@@ -1,5 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -13,30 +15,52 @@ class AuthenticationRepository implements IAuthenticationRepository {
   });
 
   @override
-  Future<bool> isSignedIn() async {
-    final currentUser = await firebaseAuth.currentUser();
-    return currentUser != null;
+  Future<Either<Failure, bool>> isSignedIn() async {
+    try {
+      final currentUser = await firebaseAuth.currentUser();
+      return Right(currentUser != null);
+    } catch (e) {
+      print(e); // Log exceptions
+      return Left(FirebaseAuthFailure());
+    }
   }
 
   @override
-  Future<void> signInWithCredentials(String email, String password) {
-    return firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+  Future<Either<Failure, void>> signInWithCredentials({
+    @required String email,
+    @required String password,
+  }) async {
+    try {
+      final result = firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Right(result);
+    } catch (e) {
+      print(e);
+      return Left(FirebaseAuthFailure());
+    }
   }
 
   @override
-  Future<FirebaseUser> signInWithGoogle() async {
+  Future<Either<Failure, FirebaseUser>> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    await firebaseAuth.signInWithCredential(credential);
-    return firebaseAuth.currentUser();
+    if (googleUser == null) {
+      return Left(GoogleSignInFailure());
+    }
+    try {
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await firebaseAuth.signInWithCredential(credential);
+      return Right(await firebaseAuth.currentUser());
+    } catch (e) {
+      print(e);
+      return Left(FirebaseAuthFailure());
+    }
   }
 
   @override
@@ -48,14 +72,25 @@ class AuthenticationRepository implements IAuthenticationRepository {
   }
 
   @override
-  Future<void> signUp({String email, String password}) async {
-    return await firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+  Future<Either<Failure, void>> signUp({
+    @required String email,
+    @required String password,
+  }) async {
+    try {
+      final result = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Right(result);
+    } catch (e) {
+      print(e);
+      return Left(FirebaseAuthFailure());
+    }
   }
 
+  // Returns null if no user is signed in, else returns the user's email.
+  @override
   Future<String> getUser() async {
-    return (await firebaseAuth.currentUser()).email;
+    return (await firebaseAuth.currentUser())?.email;
   }
 }
