@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hotfoot/features/authentication/domain/repositories/login_repositroy.dart';
+import 'package:hotfoot/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:meta/meta.dart';
 
 class AuthenticationRepository implements IAuthenticationRepository {
@@ -53,5 +53,9 @@ class AuthenticationRepository implements IAuthenticationRepository {
       email: email,
       password: password,
     );
+  }
+
+  Future<String> getUser() async {
+    return (await firebaseAuth.currentUser()).email;
   }
 }

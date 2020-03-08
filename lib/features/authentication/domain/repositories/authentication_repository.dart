@@ -7,4 +7,5 @@ abstract class IAuthenticationRepository {
   Future<void> signOut();
   Future<bool> isSignedIn();
   Future<void> signUp({@required String email, @required String password});
+  Future<String> getUser();
 }
