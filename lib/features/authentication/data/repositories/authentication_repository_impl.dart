@@ -64,11 +64,11 @@ class AuthenticationRepository implements IAuthenticationRepository {
   }
 
   @override
-  Future<void> signOut() async {
-    return Future.wait([
+  Future<Either<Failure, void>> signOut() async {
+    return Right(Future.wait([
       firebaseAuth.signOut(),
       googleSignIn.signOut(),
-    ]);
+    ]));
   }
 
   @override
@@ -90,7 +90,7 @@ class AuthenticationRepository implements IAuthenticationRepository {
 
   // Returns null if no user is signed in, else returns the user's email.
   @override
-  Future<String> getUser() async {
-    return (await firebaseAuth.currentUser())?.email;
+  Future<Either<Failure, String>> getUser() async {
+    return Right((await firebaseAuth.currentUser())?.email);
   }
 }

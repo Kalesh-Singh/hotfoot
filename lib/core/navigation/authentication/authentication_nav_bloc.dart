@@ -36,18 +36,33 @@ class AuthenticationNavBloc
         yield Unauthenticated();
       },
       (success) async* {
-        final name = await authenticationRepository.getUser();
-        if (name == null) {
-          yield Unauthenticated();
-        } else {
-          yield Authenticated(name);
-        }
+        final nameEither = await authenticationRepository.getUser();
+        yield* nameEither.fold(
+          (failure) async* {
+            throw UnimplementedError();
+          },
+          (name) async* {
+            if (name == null) {
+              yield Unauthenticated();
+            } else {
+              yield Authenticated(name);
+            }
+          },
+        );
       },
     );
   }
 
   Stream<AuthenticationNavState> _mapLoggedInToState() async* {
-    yield Authenticated(await authenticationRepository.getUser());
+    final nameEither = await authenticationRepository.getUser();
+    yield* nameEither.fold(
+      (failure) async* {
+        throw UnimplementedError();
+      },
+      (name) async* {
+        yield Authenticated(name);
+      },
+    );
   }
 
   Stream<AuthenticationNavState> _mapLoggedOutToState() async* {

@@ -10,8 +10,8 @@ abstract class IAuthenticationRepository {
     @required String password,
   });
   Future<Either<Failure, FirebaseUser>> signInWithGoogle();
-  Future<void> signOut();
+  Future<Either<Failure, void>> signOut();
   Future<Either<Failure, void>> signUp();
   // Returns null if no user is signed in, else returns the user's email.
-  Future<String> getUser();
+  Future<Either<Failure, String>> getUser();
 }
