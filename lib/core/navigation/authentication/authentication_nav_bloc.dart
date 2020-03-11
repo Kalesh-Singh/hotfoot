@@ -2,16 +2,25 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:hotfoot/core/navigation/authentication/authentication_nav_event.dart';
 import 'package:hotfoot/core/navigation/authentication/authentication_nav_state.dart';
-import 'package:hotfoot/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/authentication/domain/use_cases/get_user.dart';
+import 'package:hotfoot/features/authentication/domain/use_cases/is_signed_in.dart';
+import 'package:hotfoot/features/authentication/domain/use_cases/sign_out.dart';
 import 'package:meta/meta.dart';
 
 class AuthenticationNavBloc
     extends Bloc<AuthenticationNavEvent, AuthenticationNavState> {
-  final IAuthenticationRepository authenticationRepository;
+  final IsSignedIn isSignedIn;
+  final GetUser getUser;
+  final SignOut signOut;
 
   AuthenticationNavBloc({
-    @required this.authenticationRepository,
-  }) : assert(authenticationRepository != null);
+    @required this.isSignedIn,
+    @required this.getUser,
+    @required this.signOut,
+  })  : assert(isSignedIn != null),
+        assert(getUser != null),
+        assert(signOut != null);
 
   @override
   AuthenticationNavState get initialState => Uninitialized();
@@ -30,13 +39,13 @@ class AuthenticationNavBloc
   }
 
   Stream<AuthenticationNavState> _mapAppStartedToState() async* {
-    final isSignedInEither = await authenticationRepository.isSignedIn();
+    final isSignedInEither = await isSignedIn(NoParams());
     yield* isSignedInEither.fold(
       (failure) async* {
         yield Unauthenticated();
       },
       (success) async* {
-        final nameEither = await authenticationRepository.getUser();
+        final nameEither = await getUser(NoParams());
         yield* nameEither.fold(
           (failure) async* {
             throw UnimplementedError();
@@ -54,7 +63,7 @@ class AuthenticationNavBloc
   }
 
   Stream<AuthenticationNavState> _mapLoggedInToState() async* {
-    final nameEither = await authenticationRepository.getUser();
+    final nameEither = await getUser(NoParams());
     yield* nameEither.fold(
       (failure) async* {
         throw UnimplementedError();
@@ -67,6 +76,6 @@ class AuthenticationNavBloc
 
   Stream<AuthenticationNavState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
-    authenticationRepository.signOut();
+    signOut(NoParams());
   }
 }

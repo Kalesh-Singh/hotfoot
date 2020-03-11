@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:hotfoot/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/authentication/domain/use_cases/sign_in_with_credentials.dart';
+import 'package:hotfoot/features/authentication/domain/use_cases/sign_in_with_google.dart';
 import 'package:hotfoot/features/authentication/presentation/bloc/authentication_event.dart';
 import 'package:hotfoot/features/authentication/presentation/bloc/authentication_state.dart';
 import 'package:meta/meta.dart';
@@ -9,11 +11,14 @@ import 'package:hotfoot/src/utils/validators.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  IAuthenticationRepository authenticationRepository;
+  final SignInWithGoogle signInWithGoogle;
+  final SignInWithCredentials signInWithCredentials;
 
   AuthenticationBloc({
-    @required this.authenticationRepository,
-  }) : assert(authenticationRepository != null);
+    @required this.signInWithGoogle,
+    @required this.signInWithCredentials,
+  })  : assert(signInWithGoogle != null),
+        assert(signInWithCredentials != null);
 
   @override
   AuthenticationState get initialState => AuthenticationState.empty();
@@ -66,7 +71,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoginWithGooglePressedToState() async* {
-    final resultEither = await authenticationRepository.signInWithGoogle();
+    final resultEither = await signInWithGoogle(NoParams());
     yield* resultEither.fold(
       (failure) async* {
         yield AuthenticationState.failure();
@@ -81,9 +86,11 @@ class AuthenticationBloc
     String email,
     String password,
   }) async* {
-    final resultEither = await authenticationRepository.signInWithCredentials(
-      email: email,
-      password: password,
+    final resultEither = await signInWithCredentials(
+      SignInWithCredentialsParams(
+        email: email,
+        password: password,
+      ),
     );
     yield* resultEither.fold(
       (failure) async* {
