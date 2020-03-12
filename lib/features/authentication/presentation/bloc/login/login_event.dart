@@ -1,14 +1,14 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationEvent extends Equatable {
-  const AuthenticationEvent();
+abstract class LoginEvent extends Equatable {
+  const LoginEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class EmailChanged extends AuthenticationEvent {
+class EmailChanged extends LoginEvent {
   final String email;
 
   const EmailChanged({@required this.email});
@@ -20,7 +20,7 @@ class EmailChanged extends AuthenticationEvent {
   String toString() => 'EmailChanged { email :$email }';
 }
 
-class PasswordChanged extends AuthenticationEvent {
+class PasswordChanged extends LoginEvent {
   final String password;
 
   const PasswordChanged({@required this.password});
@@ -32,7 +32,7 @@ class PasswordChanged extends AuthenticationEvent {
   String toString() => 'PasswordChanged { password: $password }';
 }
 
-class Submitted extends AuthenticationEvent {
+class Submitted extends LoginEvent {
   final String email;
   final String password;
 
@@ -52,9 +52,9 @@ class Submitted extends AuthenticationEvent {
 
 // Google button, probably won't be using this since we will be only allowing howard email
 // unless we can override but I am not sure
-class LoginWithGooglePressed extends AuthenticationEvent {}
+class LoginWithGooglePressed extends LoginEvent {}
 
-class LoginWithCredentialsPressed extends AuthenticationEvent {
+class LoginWithCredentialsPressed extends LoginEvent {
   final String email;
   final String password;
 

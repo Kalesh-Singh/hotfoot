@@ -3,30 +3,30 @@ import 'package:bloc/bloc.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/authentication/domain/use_cases/sign_in_with_credentials.dart';
 import 'package:hotfoot/features/authentication/domain/use_cases/sign_in_with_google.dart';
-import 'package:hotfoot/features/authentication/presentation/bloc/authentication_event.dart';
-import 'package:hotfoot/features/authentication/presentation/bloc/authentication_state.dart';
+import 'package:hotfoot/features/authentication/presentation/bloc/login/login_event.dart';
+import 'package:hotfoot/features/authentication/presentation/bloc/login/login_state.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:hotfoot/src/utils/validators.dart';
 
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class LoginBloc
+    extends Bloc<LoginEvent, LoginState> {
   final SignInWithGoogle signInWithGoogle;
   final SignInWithCredentials signInWithCredentials;
 
-  AuthenticationBloc({
+  LoginBloc({
     @required this.signInWithGoogle,
     @required this.signInWithCredentials,
   })  : assert(signInWithGoogle != null),
         assert(signInWithCredentials != null);
 
   @override
-  AuthenticationState get initialState => AuthenticationState.empty();
+  LoginState get initialState => LoginState.empty();
 
   @override
-  Stream<AuthenticationState> transformEvents(
-    Stream<AuthenticationEvent> events,
-    Stream<AuthenticationState> Function(AuthenticationEvent event) next,
+  Stream<LoginState> transformEvents(
+    Stream<LoginEvent> events,
+    Stream<LoginState> Function(LoginEvent event) next,
   ) {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
@@ -41,8 +41,8 @@ class AuthenticationBloc
   }
 
   @override
-  Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event) async* {
+  Stream<LoginState> mapEventToState(
+      LoginEvent event) async* {
     if (event is EmailChanged) {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is PasswordChanged) {
@@ -57,32 +57,32 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _mapEmailChangedToState(String email) async* {
+  Stream<LoginState> _mapEmailChangedToState(String email) async* {
     yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
-  Stream<AuthenticationState> _mapPasswordChangedToState(
+  Stream<LoginState> _mapPasswordChangedToState(
       String password) async* {
     yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
 
-  Stream<AuthenticationState> _mapLoginWithGooglePressedToState() async* {
+  Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
     final resultEither = await signInWithGoogle(NoParams());
     yield* resultEither.fold(
       (failure) async* {
-        yield AuthenticationState.failure();
+        yield LoginState.failure();
       },
       (success) async* {
-        yield AuthenticationState.success();
+        yield LoginState.success();
       },
     );
   }
 
-  Stream<AuthenticationState> _mapLoginWithCredentialsPressedToState({
+  Stream<LoginState> _mapLoginWithCredentialsPressedToState({
     String email,
     String password,
   }) async* {
@@ -94,10 +94,10 @@ class AuthenticationBloc
     );
     yield* resultEither.fold(
       (failure) async* {
-        yield AuthenticationState.failure();
+        yield LoginState.failure();
       },
       (success) async* {
-        yield AuthenticationState.success();
+        yield LoginState.success();
       },
     );
   }

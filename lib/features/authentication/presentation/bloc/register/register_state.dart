@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class AuthenticationState {
+class RegisterState {
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
@@ -10,7 +10,7 @@ class AuthenticationState {
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
-  AuthenticationState({
+  RegisterState({
     @required this.isEmailValid,
     @required this.isPasswordValid,
     @required this.isSubmitting,
@@ -18,8 +18,8 @@ class AuthenticationState {
     @required this.isFailure,
   });
 
-  factory AuthenticationState.empty() {
-    return AuthenticationState(
+  factory RegisterState.empty() {
+    return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -28,8 +28,8 @@ class AuthenticationState {
     );
   }
 
-  factory AuthenticationState.loading() {
-    return AuthenticationState(
+  factory RegisterState.loading() {
+    return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: true,
@@ -38,8 +38,8 @@ class AuthenticationState {
     );
   }
 
-  factory AuthenticationState.failure() {
-    return AuthenticationState(
+  factory RegisterState.failure() {
+    return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -48,8 +48,8 @@ class AuthenticationState {
     );
   }
 
-  factory AuthenticationState.success() {
-    return AuthenticationState(
+  factory RegisterState.success() {
+    return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -58,7 +58,7 @@ class AuthenticationState {
     );
   }
 
-  AuthenticationState update({
+  RegisterState update({
     bool isEmailValid,
     bool isPasswordValid,
   }) {
@@ -71,7 +71,7 @@ class AuthenticationState {
     );
   }
 
-  AuthenticationState copyWith({
+  RegisterState copyWith({
     bool isEmailValid,
     bool isPasswordValid,
     bool isSubmitEnabled,
@@ -79,7 +79,7 @@ class AuthenticationState {
     bool isSuccess,
     bool isFailure,
   }) {
-    return AuthenticationState(
+    return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -90,7 +90,7 @@ class AuthenticationState {
 
   @override
   String toString() {
-    return '''LoginState {
+    return '''RegisterState {
       isEmailValid: $isEmailValid,
       isPasswordValid: $isPasswordValid,
       isSubmitting: $isSubmitting,
