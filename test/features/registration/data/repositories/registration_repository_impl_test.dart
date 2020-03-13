@@ -21,7 +21,7 @@ void main() {
   final String tEmail = 'email';
   final String tPassword = 'password';
 
-  group('signUp', () {
+  group('Sign Up', () {
     test('should create user with email and password using FirebaseAuth',
         () async {
       // arrange

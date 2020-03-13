@@ -35,10 +35,11 @@ void main() {
   final tValidEmail = 'valid@email.com';
   final tAuthResult = MockAuthResult();
 
-  test('should have initial state of [RegistrationState.empyt()]', () async {
+  test('should have initial state of [RegistrationState.empty()]', () async {
     // assert
     expect(bloc.initialState, equals(RegistrationState.empty()));
   });
+
   // Group tests based on the bloc events
   group('Email Changed', () {
     test('''should call [validators.isValidEmail] when an email change occurs
@@ -162,7 +163,7 @@ void main() {
       );
 
       // act
-      bloc.add(PasswordChanged(password: tValidPassword));
+      bloc.add(PasswordChanged(password: tInvalidPassword));
     });
   });
 
@@ -170,8 +171,7 @@ void main() {
     test('should yield [RegistrationState.success()] if sign up was successful',
         () async {
       // arrange
-      when(mockSignUp(any))
-          .thenAnswer((_) async => Right(tAuthResult));
+      when(mockSignUp(any)).thenAnswer((_) async => Right(tAuthResult));
 
       // assert later
       final expectedStates = [
@@ -190,25 +190,25 @@ void main() {
     });
 
     test('should yield [RegistrationState.failure()] if sign up failed',
-            () async {
-          // arrange
-          when(mockSignUp(any))
-              .thenAnswer((_) async => Left(FirebaseAuthFailure()));
+        () async {
+      // arrange
+      when(mockSignUp(any))
+          .thenAnswer((_) async => Left(FirebaseAuthFailure()));
 
-          // assert later
-          final expectedStates = [
-            RegistrationState.empty(),
-            RegistrationState.loading(),
-            RegistrationState.failure(),
-          ];
+      // assert later
+      final expectedStates = [
+        RegistrationState.empty(),
+        RegistrationState.loading(),
+        RegistrationState.failure(),
+      ];
 
-          expectLater(
-            bloc.asBroadcastStream(),
-            emitsInOrder(expectedStates),
-          );
+      expectLater(
+        bloc.asBroadcastStream(),
+        emitsInOrder(expectedStates),
+      );
 
-          // act
-          bloc.add(Submitted(email: tValidEmail, password: tValidPassword));
-        });
+      // act
+      bloc.add(Submitted(email: tValidEmail, password: tValidPassword));
+    });
   });
 }
