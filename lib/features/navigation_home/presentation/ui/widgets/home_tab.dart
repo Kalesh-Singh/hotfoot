@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hotfoot/features/naviagtion_home/presentation/ui/widgets/bottom_nav_bar.dart';
 
-class Home extends StatelessWidget {
+import 'bottom_nav_bar.dart';
+
+class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -115,7 +116,8 @@ Widget buildCard(BuildContext context, PlaceModel place) {
             title: Text(place.name),
             subtitle: Text(place.address),
             onTap: () {
-              // TODO: Should enter order flow
+              // TODO: Should not be possible
+              //navBloc.changeNavigationIndex(Navigation.RUN);
             },
           ),
         ],

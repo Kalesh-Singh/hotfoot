@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hotfoot/features/naviagtion_home/presentation/ui/widgets/bottom_nav_bar.dart';
 import '../navigation/nav_bar.dart';
 
-class RequestRunScreen extends StatelessWidget {
+class RequestRunTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +54,7 @@ class RequestRunScreen extends StatelessWidget {
         )
       ),
       // * Moved navbar to outside of SafeArea
-      bottomNavigationBar: NavBar.build(),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/login/data/repositories/login_repository_impl.dart';
 import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_credentials.dart';
+import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_home_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/data/repositories/navigation_auth_repository_impl.dart';
 import 'package:hotfoot/features/navigation_auth/domain/repositories/navigation_auth_repository.dart';
 import 'package:hotfoot/features/navigation_auth/domain/use_cases/get_user.dart';
@@ -37,6 +38,7 @@ void init() {
         getUser: sl(),
         signOut: sl(),
       ));
+  sl.registerFactory(() => NavigationHomeBloc());
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
