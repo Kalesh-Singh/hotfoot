@@ -4,8 +4,11 @@ import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_au
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_state.dart';
 import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_home_bloc.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/screen/home_screen.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/injection_container.dart';
-import 'screens/run_status.dart';
+import 'package:hotfoot/src/screens/settings_screen.dart';
+import 'package:hotfoot/src/screens/request_run_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/login/presentation/ui/screen/splash_screen.dart';
 
@@ -22,42 +25,30 @@ class App extends StatelessWidget {
           builder: (context, state) {
             if (state is Uninitialized) {
               return SplashScreen();
-            }
-            if (state is Authenticated) {
+            } else if (state is Authenticated) {
               print('Authenticated');
-              return HomeScreen();
-            }
-            if (state is Unauthenticated) {
+              return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
+                  builder: (context, state) {
+                if (state is Home) {
+                  return HomeScreen();
+                } else if (state is RequestRun) {
+                  return RequestRunScreen();
+                } else if (state is Settings) {
+                  return SettingsScreen();
+                } else if (state is Login) {
+                  return LoginScreen();
+                }
+                return Container();
+              });
+            } else if (state is Unauthenticated) {
               print('Not logged in');
               return LoginScreen();
             }
-            return Container();
+            print('Navigation Auth State: $state');
+            return SplashScreen();
           },
         ),
-        onGenerateRoute: routes,
       ),
     );
-  }
-}
-
-Route routes(RouteSettings settings) {
-  String routeName = settings.name;
-  switch (routeName) {
-    case '/':
-      return MaterialPageRoute(
-        builder: (BuildContext context) => LoginScreen(),
-      );
-    case '/app_state':
-      return MaterialPageRoute(
-        builder: (BuildContext context) => HomeScreen(),
-      );
-    case '/run_status':
-      return MaterialPageRoute(
-        builder: (BuildContext context) => RunStatusScreen(),
-      );
-    default:
-      return MaterialPageRoute(
-        builder: (BuildContext context) => HomeScreen(),
-      );
   }
 }

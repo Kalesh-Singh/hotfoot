@@ -15,12 +15,12 @@ class BottomNavBar extends StatelessWidget {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_run),
-            title: Text('Run'),
+            icon: Icon(Icons.search),
+            title: Text('Search'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Account'),
+            icon: Icon(Icons.library_books),
+            title: Text('Orders'),
           ),
         ],
         currentIndex: navigationHomeBloc.currentNavigationIndex,
