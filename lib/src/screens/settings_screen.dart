@@ -4,10 +4,10 @@ import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_au
 import '../navigation/nav_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
   final String name;
 
-  ProfileTab({Key key, @required this.name}) : super(key: key);
+  ProfileScreen({Key key, @required this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
