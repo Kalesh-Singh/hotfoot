@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/src/blocs/login_bloc/login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotfoot/features/login/presentation/bloc/login_bloc.dart';
+import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   @override

@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/src/utils/user_repository.dart';
-import 'package:hotfoot/src/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:hotfoot/src/blocs/login_bloc/login.dart';
-import 'package:hotfoot/src/blocs/login_bloc/google_login_button.dart';
-import 'package:hotfoot/src/blocs/login_bloc/create_account_button.dart';
+import 'package:hotfoot/features/login/presentation/bloc/login_bloc.dart';
+import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
+import 'package:hotfoot/features/login/presentation/bloc/login_state.dart';
+import 'package:hotfoot/features/login/presentation/ui/widgets/create_account_button.dart';
+import 'package:hotfoot/features/login/presentation/ui/widgets/google_login_button.dart';
+import 'package:hotfoot/features/login/presentation/ui/widgets/login_button.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
 
 class LoginForm extends StatefulWidget {
-  final UserRepository _userRepository;
-
-  LoginForm({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(key: key);
-
   State<LoginForm> createState() => _LoginFormState();
 }
 
@@ -22,8 +18,6 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginBloc _loginBloc;
-
-  UserRepository get _userRepository => widget._userRepository;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -73,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          BlocProvider.of<NavigationAuthBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -97,7 +91,8 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return displayEmailErrorMessage(Text(_emailController.text).toString(), state);
+                      return displayEmailErrorMessage(
+                          Text(_emailController.text).toString(), state);
                     },
                   ),
                   TextFormField(
@@ -110,7 +105,8 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return displayPasswordErrorMessage(Text(_passwordController.text).toString(), state);
+                      return displayPasswordErrorMessage(
+                          Text(_passwordController.text).toString(), state);
                     },
                   ),
                   Padding(
@@ -126,7 +122,7 @@ class _LoginFormState extends State<LoginForm> {
                         // ! More than likely will not be using this unless we have a way to
                         // ! override the functionality so it works only with bison.howard.edu
                         GoogleLoginButton(),
-                        CreateAccountButton(userRepository: _userRepository),
+                        CreateAccountButton(),
                       ],
                     ),
                   ),
@@ -140,20 +136,20 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   // Function to help with displaying an appropriate message
-  String displayEmailErrorMessage(String _emailAddress, LoginState _emailAddressState) {
+  String displayEmailErrorMessage(
+      String _emailAddress, LoginState _emailAddressState) {
     if (_emailAddressState.isEmailValid) {
       return null;
-    }
-    else {
+    } else {
       return 'Example, john.doe@bison.howard.edu';
     }
   }
 
-  String displayPasswordErrorMessage(String _password, LoginState _passwordState) {
+  String displayPasswordErrorMessage(
+      String _password, LoginState _passwordState) {
     if (_passwordState.isPasswordValid) {
       return null;
-    }
-    else {
+    } else {
       // Password needs to have at least 8 characters, one of which must be a number
       // I cannot think of an appropriate message to show here
       // So I will just put 'Password is invalid' for now

@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/src/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:hotfoot/src/blocs/register_bloc/bloc.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
+import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/registration/presentation/bloc/registration_event.dart';
+import 'package:hotfoot/features/registration/presentation/bloc/registration_state.dart';
+import 'package:hotfoot/features/registration/presentation/ui/widgets/registration_button.dart';
 
-class RegisterForm extends StatefulWidget {
-  State<RegisterForm> createState() => _RegisterFormState();
+class RegistrationForm extends StatefulWidget {
+  State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _RegistrationFormState extends State<RegistrationForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  RegisterBloc _registerBloc;
+  RegistrationBloc _registrationBloc;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
-  bool isRegisterButtonEnabled(RegisterState state) {
+  bool isRegistrationButtonEnabled(RegistrationState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
   @override
   void initState() {
     super.initState();
-    _registerBloc = BlocProvider.of<RegisterBloc>(context);
+    _registrationBloc = BlocProvider.of<RegistrationBloc>(context);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(
+    return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
@@ -40,7 +44,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registering...'),
+                    Text('Registrationing...'),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -48,7 +52,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          BlocProvider.of<NavigationAuthBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
@@ -68,7 +72,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
       },
-      child: BlocBuilder<RegisterBloc, RegisterState>(
+      child: BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20),
@@ -85,7 +89,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return displayEmailErrorMessage(Text(_emailController.text).toString(), state);
+                      return displayEmailErrorMessage(
+                          Text(_emailController.text).toString(), state);
                     },
                   ),
                   TextFormField(
@@ -98,12 +103,15 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return displayPasswordErrorMessage(Text(_passwordController.text).toString(), state);
+                      return displayPasswordErrorMessage(
+                          Text(_passwordController.text).toString(), state);
                     },
                   ),
                   Padding(padding: EdgeInsets.all(12.0)),
-                  RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
+                  RegistrationButton(
+                    onPressed: isRegistrationButtonEnabled(state)
+                        ? _onFormSubmitted
+                        : null,
                   ),
                 ],
               ),
@@ -115,20 +123,20 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   // Function to help with displaying an appropriate message
-  String displayEmailErrorMessage(String _emailAddress, RegisterState _emailAddressState) {
+  String displayEmailErrorMessage(
+      String _emailAddress, RegistrationState _emailAddressState) {
     if (_emailAddressState.isEmailValid) {
       return null;
-    }
-    else {
+    } else {
       return 'john.doe@bison.howard.edu';
     }
   }
 
-  String displayPasswordErrorMessage(String _password, RegisterState _passwordState) {
+  String displayPasswordErrorMessage(
+      String _password, RegistrationState _passwordState) {
     if (_passwordState.isPasswordValid) {
       return null;
-    }
-    else {
+    } else {
       // Password needs to have at least 8 characters, one of which must be a number
       // I cannot think of an appropriate message to show here
       // So I will just put 'Password is invalid' for now
@@ -144,19 +152,19 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _onEmailChanged() {
-    _registerBloc.add(
+    _registrationBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
-    _registerBloc.add(
+    _registrationBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onFormSubmitted() {
-    _registerBloc.add(
+    _registrationBloc.add(
       Submitted(
         email: _emailController.text,
         password: _passwordController.text,
