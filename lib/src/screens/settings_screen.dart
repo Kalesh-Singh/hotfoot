@@ -64,7 +64,6 @@ Widget signOutButton(context) {
       BlocProvider.of<NavigationAuthBloc>(context).add(
         LoggedOut(),
       );
-      //Navigator.pushNamed(context, '/');
     },
     color: Colors.amber,
     child: Text('Signout'),
