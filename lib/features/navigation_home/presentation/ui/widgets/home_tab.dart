@@ -1,57 +1,65 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/places/data/repositories/places_repositories_impl.dart';
 
 import 'bottom_nav_bar.dart';
 
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('Popular Near You'),
-          ),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<NavigationScreenBloc>(context)
-                        .add(EnteredSettings());
-                  },
-                  child: Icon(
-                    Icons.settings,
-                    size: 26.0,
-                  ),
-                )),
-          ],
-          bottom: TabBar(tabs: [
-            Tab(
-              icon: Icon(Icons.local_dining),
-              text: 'Food',
-            ),
-            Tab(
-              icon: Icon(Icons.shopping_basket),
-              text: 'Grocery',
-            ),
-            Tab(
-              icon: Icon(Icons.local_convenience_store),
-              text: 'Misc',
-            )
-          ]),
+    final repository = PlacesRepository(firestore: Firestore.instance);
+    repository.getPlacesIds();
+
+//    return DefaultTabController(
+//      length: 3,
+//      child: Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text('Popular Near You'),
         ),
-        body: TabBarView(children: [
-          buildNearbyFoodList(context),
-          buildNearbyGroceryList(context),
-          buildNearbyMiscList(context),
-        ]),
-        bottomNavigationBar: BottomNavBar(),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  BlocProvider.of<NavigationScreenBloc>(context)
+                      .add(EnteredSettings());
+                },
+                child: Icon(
+                  Icons.settings,
+                  size: 26.0,
+                ),
+              )),
+        ],
+//          bottom: TabBar(tabs: [
+//            Tab(
+//              icon: Icon(Icons.local_dining),
+//              text: 'Food',
+//            ),
+//            Tab(
+//              icon: Icon(Icons.shopping_basket),
+//              text: 'Grocery',
+//            ),
+//            Tab(
+//              icon: Icon(Icons.local_convenience_store),
+//              text: 'Misc',
+//            )
+//          ]),
       ),
+//        body: TabBarView(children: [
+//          buildNearbyFoodList(context),
+//          buildNearbyGroceryList(context),
+//          buildNearbyMiscList(context),
+//        ]),
+      body: Container(child: Text('Places List')),
+      bottomNavigationBar: BottomNavBar(),
+//      ),
     );
+//    );
   }
 }
 
