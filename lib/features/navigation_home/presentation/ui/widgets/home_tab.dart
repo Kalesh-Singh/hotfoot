@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
-import '../navigation/nav_bar.dart';
-import '../blocs/navigation_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'bottom_nav_bar.dart';
+
+class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
           title: Center(
             child: Text('Popular Near You'),
           ),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    BlocProvider.of<NavigationScreenBloc>(context)
+                        .add(EnteredSettings());
+                  },
+                  child: Icon(
+                    Icons.settings,
+                    size: 26.0,
+                  ),
+                )),
+          ],
           bottom: TabBar(tabs: [
             Tab(
               icon: Icon(Icons.local_dining),
@@ -34,7 +49,7 @@ class HomeScreen extends StatelessWidget {
           buildNearbyGroceryList(context),
           buildNearbyMiscList(context),
         ]),
-        bottomNavigationBar: NavBar.build(),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
@@ -116,7 +131,8 @@ Widget buildCard(BuildContext context, PlaceModel place) {
             title: Text(place.name),
             subtitle: Text(place.address),
             onTap: () {
-              navBloc.changeNavigationIndex(Navigation.RUN);
+              BlocProvider.of<NavigationScreenBloc>(context)
+                  .add(EnteredPurchaseFlow());
             },
           ),
         ],
