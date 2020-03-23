@@ -37,6 +37,12 @@ dependencies:
   dartz: ^0.8.9
   # Service Locator for Dependency Injection
   get_it: ^4.0.0
+  # Local Database
+  sembast: ^2.3.0
+  # For getting platform dependent paths
+  path_provider: ^1.6.5
+
+
   # ????
   font_awesome_flutter: ^8.4.0
 
