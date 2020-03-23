@@ -10,8 +10,6 @@ import 'bottom_nav_bar.dart';
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final repository = PlacesRepository(firestore: Firestore.instance);
-    repository.getPlacesIds();
 
 //    return DefaultTabController(
 //      length: 3,
