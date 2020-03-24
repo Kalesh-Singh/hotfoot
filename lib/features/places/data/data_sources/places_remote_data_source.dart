@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hotfoot/features/places/data/data_sources/data_access_objects/place_photo_dao.dart';
 import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
@@ -6,15 +9,20 @@ abstract class IPlacesRemoteDataSource {
   Future<List<String>> getPlacesIds();
 
   Future<PlaceModel> getPlaceById({@required String id});
+
+  Future<File> getPhoto({@required PlaceModel placeModel});
 }
 
 class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
   final Firestore firestore;
+  final IPlacePhotoDao placePhotoDao;
   CollectionReference _placesCollection;
 
   PlacesRemoteDataSource({
     @required this.firestore,
+    @required this.placePhotoDao,
   })  : assert(firestore != null),
+        assert(placePhotoDao != null),
         this._placesCollection = firestore.collection('places');
 
   @override
@@ -36,5 +44,10 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
     });
 
     return placesIds;
+  }
+
+  @override
+  Future<File> getPhoto({PlaceModel placeModel}) async {
+    return await placePhotoDao.downloadPhoto(url: placeModel.photoUrl);
   }
 }

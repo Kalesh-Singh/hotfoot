@@ -43,7 +43,8 @@ dependencies:
   path_provider: ^1.6.5
   # To check for internet connection
   data_connection_checker: ^0.3.4
-
+  # For downloading images to Files.
+  flutter_cache_manager: ^1.1.3
 
   # ????
   font_awesome_flutter: ^8.4.0
