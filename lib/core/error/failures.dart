@@ -15,3 +15,5 @@ class GoogleSignInFailure extends Failure {}
 class DatabaseFailure extends Failure {}
 
 class FirestoreFailure extends Failure {}
+
+class FirebaseStorageFailure extends Failure {}

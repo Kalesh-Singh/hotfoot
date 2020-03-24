@@ -51,9 +51,26 @@ class PlacesRepository implements IPlacesRepository {
   }
 
   @override
-  Future<Either<Failure, File>> getPlacePhotoById({@required String id}) {
-    // TODO: implement getPlacePhotoById
-    return null;
+  Future<Either<Failure, File>> getPlacePhoto({PlaceModel placeModel}) async {
+    // Only reach out to remote repository if there is no image
+    // cached locally
+
+    File photoFile = await placesLocalDataSource.getPhoto(id: placeModel.id);
+
+    if (photoFile != null) {
+      return Right(photoFile);
+    }
+
+    try {
+      photoFile = await placesRemoteDataSource.getPhoto(placeModel: placeModel);
+      await placesLocalDataSource.insertOrUpdatePhoto(
+        id: placeModel.id,
+        photoFile: photoFile,
+      );
+      return Right(photoFile);
+    } catch (e) {
+      return Left(FirebaseStorageFailure());
+    }
   }
 
   @override
