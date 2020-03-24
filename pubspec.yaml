@@ -41,6 +41,8 @@ dependencies:
   sembast: ^2.3.0
   # For getting platform dependent paths
   path_provider: ^1.6.5
+  # To check for internet connection
+  data_connection_checker: ^0.3.4
 
 
   # ????
@@ -57,7 +59,7 @@ dependencies:
   geolocator: ^5.1.5
   rxdart: ^0.23.0
   flutter_speed_dial: ^1.2.4
-  flutter_barcode_scanner : ^0.1.7
+  flutter_barcode_scanner: ^0.1.7
 
 dev_dependencies:
   # Flutter Unit Tests
