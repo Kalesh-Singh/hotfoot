@@ -1,3 +1,4 @@
+import 'package:hotfoot/features/places/data/data_sources/data_access_objects/place_dao.dart';
 import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
@@ -5,29 +6,21 @@ abstract class IPlacesLocalDataSource {
   Future<List<String>> getPlacesIds();
 
   Future<PlaceModel> getPlaceById({@required String id});
-
-  Future<void> savePlace({@required PlaceModel placeModel});
 }
 
 class PlacesLocalDataSource implements IPlacesLocalDataSource {
+  final PlaceDao placeDao;
 
-  // TODO: Add sembast dependency
+  const PlacesLocalDataSource({@required this.placeDao});
 
   @override
-  Future<PlaceModel> getPlaceById({String id}) {
-    // TODO: implement getPlaceById
-    return null;
+  Future<PlaceModel> getPlaceById({String id}) async {
+    return await placeDao.get(id: id);
   }
 
   @override
-  Future<List<String>> getPlacesIds() {
-    // TODO: implement getPlacesIds
-    return null;
-  }
-
-  @override
-  Future<void> savePlace({PlaceModel placeModel}) {
-    // TODO: implement savePlace
-    return null;
+  Future<List<String>> getPlacesIds() async {
+    List<PlaceModel> places = await placeDao.getAll();
+    return places.map((place) => place.id).toList();
   }
 }
