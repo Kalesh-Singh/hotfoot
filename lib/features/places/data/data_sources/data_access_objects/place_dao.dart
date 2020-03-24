@@ -9,6 +9,7 @@ abstract class IPlaceDao {
 
   Future<void> insertOrUpdate({@required PlaceModel placeModel});
 
+  /// Returns [null] if key is not found.
   Future<PlaceModel> get({@required String id});
 
   Future<void> delete({@required String id});
@@ -74,8 +75,18 @@ class PlaceDao implements IPlaceDao {
 
   @override
   Future<PlaceModel> get({String id}) async {
-    final record = await _placeStore.record(id).get(db);
-    return PlaceModel.fromJson(record);
+    final finder = Finder(filter: Filter.byKey(id));
+    final recordSnapshots = await _placeStore.find(
+      db,
+      finder: finder,
+    );
+
+    if (recordSnapshots.length == 0) {
+      return null;
+    }
+
+    final record = recordSnapshots[0];
+    return PlaceModel.fromJson(record.value);
   }
 
   @override

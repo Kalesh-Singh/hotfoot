@@ -11,3 +11,7 @@ abstract class Failure extends Equatable {
 class FirebaseAuthFailure extends Failure {}
 
 class GoogleSignInFailure extends Failure {}
+
+class DatabaseFailure extends Failure {}
+
+class FirestoreFailure extends Failure {}

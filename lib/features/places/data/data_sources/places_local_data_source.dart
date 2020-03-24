@@ -5,7 +5,10 @@ import 'package:meta/meta.dart';
 abstract class IPlacesLocalDataSource {
   Future<List<String>> getPlacesIds();
 
+  /// Returns null if key is not found
   Future<PlaceModel> getPlaceById({@required String id});
+
+  Future<void> insertOrUpdatePlace({@required PlaceModel placeModel});
 }
 
 class PlacesLocalDataSource implements IPlacesLocalDataSource {
@@ -22,5 +25,10 @@ class PlacesLocalDataSource implements IPlacesLocalDataSource {
   Future<List<String>> getPlacesIds() async {
     List<PlaceModel> places = await placeDao.getAll();
     return places.map((place) => place.id).toList();
+  }
+
+  @override
+  Future<void> insertOrUpdatePlace({PlaceModel placeModel}) async {
+    return await placeDao.insertOrUpdate(placeModel: placeModel);
   }
 }
