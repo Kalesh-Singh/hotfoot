@@ -18,12 +18,9 @@ class PlacesRepository implements IPlacesRepository {
     @required this.placesLocalDataSource,
     @required this.placesRemoteDataSource,
     @required this.networkInfo,
-    // TODO: Add flutter store dependency here
   })  : assert(placesLocalDataSource != null),
         assert(placesRemoteDataSource != null),
         assert(networkInfo != null);
-
-  // TODO: Assert flutter store != null
 
   @override
   Future<Either<Failure, PlaceModel>> getPlaceById(

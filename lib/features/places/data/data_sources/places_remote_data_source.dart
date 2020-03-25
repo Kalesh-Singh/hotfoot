@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hotfoot/features/places/data/data_sources/data_access_objects/place_photo_dao.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
@@ -15,15 +15,18 @@ abstract class IPlacesRemoteDataSource {
 
 class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
   final Firestore firestore;
-  final IPlacePhotoDao placePhotoDao;
+  final DefaultCacheManager cacheManager;
+
   CollectionReference _placesCollection;
 
   PlacesRemoteDataSource({
     @required this.firestore,
-    @required this.placePhotoDao,
+    @required this.cacheManager,
   })  : assert(firestore != null),
-        assert(placePhotoDao != null),
+        assert(cacheManager != null),
         this._placesCollection = firestore.collection('places');
+
+  // TODO: Register default cache manager in service locator.
 
   @override
   Future<PlaceModel> getPlaceById({String id}) async {
@@ -48,6 +51,7 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
 
   @override
   Future<File> getPhoto({String url}) async {
-    return await placePhotoDao.downloadPhoto(url: url);
+    final fileInfo = await cacheManager.downloadFile(url);
+    return fileInfo.file;
   }
 }

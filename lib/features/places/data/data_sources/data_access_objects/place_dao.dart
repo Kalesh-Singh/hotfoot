@@ -21,7 +21,7 @@ abstract class IPlaceDao {
 }
 
 class PlaceDao implements IPlaceDao {
-  final Database db;
+  final Database database;
 
   static const String _PLACE_STORE_NAME = 'places';
 
@@ -29,7 +29,7 @@ class PlaceDao implements IPlaceDao {
   // This Store acts like a persistent map, values of which are Fruit objects converted to Map
   final _placeStore = stringMapStoreFactory.store(_PLACE_STORE_NAME);
 
-  PlaceDao({@required this.db});
+  PlaceDao({@required this.database});
 
   // Private getter to shorten the amount of code needed to get the
   // singleton instance of an opened database.
@@ -38,7 +38,7 @@ class PlaceDao implements IPlaceDao {
 
   @override
   Future<void> insert({@required PlaceModel placeModel}) async {
-    return await _placeStore.record(placeModel.id).put(db, placeModel.toJson());
+    return await _placeStore.record(placeModel.id).put(database, placeModel.toJson());
   }
 
   @override
@@ -47,7 +47,7 @@ class PlaceDao implements IPlaceDao {
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(placeModel.id));
     return await _placeStore.update(
-      db,
+      database,
       placeModel.toJson(),
       finder: finder,
     );
@@ -55,12 +55,12 @@ class PlaceDao implements IPlaceDao {
 
   @override
   Future<void> delete({@required String id}) async {
-    return await _placeStore.record(id).delete(db);
+    return await _placeStore.record(id).delete(database);
   }
 
   @override
   Future<List<PlaceModel>> getAll() async {
-    final recordSnapshots = await _placeStore.find(db);
+    final recordSnapshots = await _placeStore.find(database);
 
     // Making a List<PlaceModel> out of List<RecordSnapshot>
     return recordSnapshots
@@ -70,14 +70,14 @@ class PlaceDao implements IPlaceDao {
 
   @override
   Future<int> deleteAll() async {
-    return await _placeStore.delete(db);
+    return await _placeStore.delete(database);
   }
 
   @override
   Future<PlaceModel> get({String id}) async {
     final finder = Finder(filter: Filter.byKey(id));
     final recordSnapshots = await _placeStore.find(
-      db,
+      database,
       finder: finder,
     );
 
@@ -93,7 +93,7 @@ class PlaceDao implements IPlaceDao {
   Future<void> insertOrUpdate({PlaceModel placeModel}) async {
     final finder = Finder(filter: Filter.byKey(placeModel.id));
     final key = await _placeStore.findKey(
-      db,
+      database,
       finder: finder,
     );
     if (key != null) {
