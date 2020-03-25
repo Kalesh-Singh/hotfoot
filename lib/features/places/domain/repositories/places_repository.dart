@@ -10,5 +10,8 @@ abstract class IPlacesRepository {
 
   Future<Either<Failure, PlaceModel>> getPlaceById({@required String id});
 
-  Future<Either<Failure, File>> getPlacePhoto({@required PlaceModel placeModel});
+  Future<Either<Failure, File>> getPlacePhoto({
+    @required String id,
+    @required String url,
+  });
 }

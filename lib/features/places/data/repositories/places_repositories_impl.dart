@@ -51,20 +51,20 @@ class PlacesRepository implements IPlacesRepository {
   }
 
   @override
-  Future<Either<Failure, File>> getPlacePhoto({PlaceModel placeModel}) async {
+  Future<Either<Failure, File>> getPlacePhoto({String id, String url}) async {
     // Only reach out to remote repository if there is no image
     // cached locally
 
-    File photoFile = await placesLocalDataSource.getPhoto(id: placeModel.id);
+    File photoFile = await placesLocalDataSource.getPhoto(id: id);
 
     if (photoFile != null) {
       return Right(photoFile);
     }
 
     try {
-      photoFile = await placesRemoteDataSource.getPhoto(placeModel: placeModel);
+      photoFile = await placesRemoteDataSource.getPhoto(url: url);
       await placesLocalDataSource.insertOrUpdatePhoto(
-        id: placeModel.id,
+        id: id,
         photoFile: photoFile,
       );
       return Right(photoFile);

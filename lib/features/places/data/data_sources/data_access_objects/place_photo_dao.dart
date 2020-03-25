@@ -12,6 +12,8 @@ abstract class IPlacePhotoDao {
     @required File photoFile,
   });
 
+  //TODO: Move this into remote data source getPhoto
+  // Than way the Dao only deals with the local data source.
   /// Downloads the photo and returns the File.
   Future<File> downloadPhoto({@required String url});
 

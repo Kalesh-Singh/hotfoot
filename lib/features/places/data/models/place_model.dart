@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 import 'location_model.dart';
 
-class PlaceModel extends Place {
+class PlaceModel extends PlaceEntity {
   final LocationModel locationModel;
 
   const PlaceModel({

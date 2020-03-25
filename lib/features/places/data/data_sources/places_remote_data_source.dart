@@ -10,7 +10,7 @@ abstract class IPlacesRemoteDataSource {
 
   Future<PlaceModel> getPlaceById({@required String id});
 
-  Future<File> getPhoto({@required PlaceModel placeModel});
+  Future<File> getPhoto({@required String url});
 }
 
 class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
@@ -47,7 +47,7 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
   }
 
   @override
-  Future<File> getPhoto({PlaceModel placeModel}) async {
-    return await placePhotoDao.downloadPhoto(url: placeModel.photoUrl);
+  Future<File> getPhoto({String url}) async {
+    return await placePhotoDao.downloadPhoto(url: url);
   }
 }

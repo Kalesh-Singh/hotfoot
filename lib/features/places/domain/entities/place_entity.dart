@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
 import 'package:meta/meta.dart';
 
-class Place extends Equatable {
+class PlaceEntity extends Equatable {
   final String id;
   final String name;
   final String address;
@@ -10,7 +10,7 @@ class Place extends Equatable {
   final String photoUrl;
   final int orders;
 
-  const Place({
+  const PlaceEntity({
     @required this.id,
     @required this.name,
     @required this.address,
