@@ -26,8 +26,6 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
         assert(cacheManager != null),
         this._placesCollection = firestore.collection('places');
 
-  // TODO: Register default cache manager in service locator.
-
   @override
   Future<PlaceModel> getPlaceById({String id}) async {
     final placeJson = (await _placesCollection.document(id).get()).data;
@@ -36,14 +34,16 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
 
   @override
   Future<List<String>> getPlacesIds() async {
-    final Stream<QuerySnapshot> placesStream = _placesCollection.snapshots();
+    print('Getting place ids from firestore');
+    final QuerySnapshot placesSnapshot = await _placesCollection.getDocuments();
     List<String> placesIds = List<String>();
 
-    placesStream.listen((snapshot) {
-      snapshot.documents.forEach((document) {
-        placesIds.add(document.documentID);
-      });
+    placesSnapshot.documents.forEach((document) {
+      placesIds.add(document.documentID);
     });
+
+    print('got place ids from firestore');
+    print('Number of places ${placesIds.length}');
 
     return placesIds;
   }

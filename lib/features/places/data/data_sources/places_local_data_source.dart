@@ -40,7 +40,10 @@ class PlacesLocalDataSource implements IPlacesLocalDataSource {
 
   @override
   Future<List<String>> getPlacesIds() async {
+    print('Getting place ids from sembast');
     List<PlaceModel> places = await placeDao.getAll();
+    print('Got place ids from sembast');
+    print('Number of places ${places.length}');
     return places.map((place) => place.id).toList();
   }
 

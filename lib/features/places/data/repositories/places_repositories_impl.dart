@@ -80,6 +80,7 @@ class PlacesRepository implements IPlacesRepository {
         print('getting places ids from remote data source');
         final placesIds = await placesRemoteDataSource.getPlacesIds();
         print('got places ids from remote data source');
+        print('Number of places ${placesIds.length}');
         return Right(placesIds);
       } catch (e) {
         print('Exception $e');
@@ -88,6 +89,7 @@ class PlacesRepository implements IPlacesRepository {
     } else {
       print('getting places ids from local datasource');
       final placesIds = await placesLocalDataSource.getPlacesIds();
+      print('Number of places ${placesIds.length}');
       if (placesIds.length == 0) {
         return Left(DatabaseFailure());
       }
