@@ -42,7 +42,7 @@ class PlacesRepository implements IPlacesRepository {
       await placesLocalDataSource.insertOrUpdatePlace(placeModel: placeModel);
       return Right(placeModel);
     } catch (e) {
-      print(e);
+      print('Exception $e');
       return Left(FirestoreFailure());
     }
   }
@@ -66,6 +66,7 @@ class PlacesRepository implements IPlacesRepository {
       );
       return Right(photoFile);
     } catch (e) {
+      print('Exception: $e');
       return Left(FirebaseStorageFailure());
     }
   }
@@ -76,14 +77,21 @@ class PlacesRepository implements IPlacesRepository {
     // to provide up to date data.
     if (await networkInfo.isConnected) {
       try {
+        print('getting places ids from remote data source');
         final placesIds = await placesRemoteDataSource.getPlacesIds();
+        print('got places ids from remote data source');
         return Right(placesIds);
       } catch (e) {
-        print(e);
+        print('Exception $e');
         return Left(FirestoreFailure());
       }
     } else {
+      print('getting places ids from local datasource');
       final placesIds = await placesLocalDataSource.getPlacesIds();
+      if (placesIds.length == 0) {
+        return Left(DatabaseFailure());
+      }
+      print('got places ids from local data source');
       return Right(placesIds);
     }
   }

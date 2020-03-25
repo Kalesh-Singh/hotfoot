@@ -1,16 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/data/repositories/places_repositories_impl.dart';
+import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_event.dart';
+import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_state.dart';
+import 'package:hotfoot/features/places/presentation/ui/place_list_temp.dart';
+import 'package:hotfoot/injection_container.dart';
 
 import 'bottom_nav_bar.dart';
 
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
 //    return DefaultTabController(
 //      length: 3,
 //      child: Scaffold(
@@ -53,11 +59,58 @@ class HomeTab extends StatelessWidget {
 //          buildNearbyGroceryList(context),
 //          buildNearbyMiscList(context),
 //        ]),
-      body: Container(child: Text('Places List')),
+      body: _buildBody(context),
       bottomNavigationBar: BottomNavBar(),
 //      ),
     );
 //    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<PlacesIdsBloc>(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: BlocBuilder<PlacesIdsBloc, PlacesIdsState>(
+              builder: (BuildContext context, state) {
+                final placesIdsBloc = BlocProvider.of<PlacesIdsBloc>(context);
+                print('PlacesIDsCloc: ${placesIdsBloc.state}');
+                if (state is PlacesIdsUninitialized) {
+                  print('requested places');
+                  placesIdsBloc.add(PlacesRequested());
+                  return CircularProgressIndicator();
+                } else if (state is PlacesIdsLoadFailure) {
+                  print('places load failure');
+                  return Text(state.message);
+                } else if (state is PlacesIdsLoadSuccess) {
+                  print('places load success');
+                  return _buildPlacesList(state.placesIds);
+                } else {
+                  print('unknown bloc state');
+                  return Container();
+                }
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlacesList(List<String> placesIds) {
+    return ListView.builder(
+      itemCount: placesIds.length,
+      itemBuilder: (context, index) {
+        return Container(
+          height: 50,
+          child: Center(
+            child: Text(placesIds[index]),
+          ),
+        );
+      },
+    );
   }
 }
 

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotfoot/core/database/app_database.dart';
@@ -129,6 +131,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => GoogleSignIn());
   sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(() => Firestore.instance);
+  sl.registerLazySingleton(() => DefaultCacheManager());
 
   // Core
   sl.registerLazySingleton(() => Validators());

@@ -43,7 +43,6 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
       snapshot.documents.forEach((document) {
         placesIds.add(document.documentID);
       });
-      print(placesIds);
     });
 
     return placesIds;
