@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
-import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
-import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
 
@@ -18,7 +16,7 @@ class PlaceCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         BlocProvider.of<NavigationScreenBloc>(context)
-            .add(EnteredPurchaseFlow());
+            .add(EnteredPurchaseFlow(placeEntity: placeEntity));
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),

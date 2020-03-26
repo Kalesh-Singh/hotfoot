@@ -16,6 +16,10 @@ class NavigationScreenBloc
     } else if (event is EnteredHome) {
       yield Home();
     } else if (event is EnteredPurchaseFlow) {
+      // TODO: place details is available in EnteredPurchaseFlow event
+      // as a PlaceEntity.
+      // The pin location screen should also pass place info as a
+      // PlaceEntity even though all the fields may not be necessary.
       yield RequestRun();
     } else if (event is EnteredSettings) {
       yield Settings();
