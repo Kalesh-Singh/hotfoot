@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_state.dart';
-import 'package:hotfoot/features/places/presentation/ui/place_list_tile.dart';
+import 'package:hotfoot/features/places/presentation/ui/widgets/place_list_tile.dart';
 
 class PlacesList extends StatelessWidget {
   @override

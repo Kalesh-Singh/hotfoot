@@ -5,7 +5,7 @@ import 'package:hotfoot/features/places/presentation/blocs/place_details/place_d
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_event.dart';
-import 'package:hotfoot/features/places/presentation/ui/place_card.dart';
+import 'package:hotfoot/features/places/presentation/ui/widgets/place_card.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class PlaceListTile extends StatelessWidget {

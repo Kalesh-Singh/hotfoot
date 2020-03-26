@@ -60,6 +60,10 @@ class PlacesRepository implements IPlacesRepository {
       return Right(photoFile);
     }
 
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+
     try {
       print('Getting photo form remote repo');
       photoFile = await placesRemoteDataSource.getPhoto(id: id);

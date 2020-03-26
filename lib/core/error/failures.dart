@@ -17,3 +17,5 @@ class DatabaseFailure extends Failure {}
 class FirestoreFailure extends Failure {}
 
 class FirebaseStorageFailure extends Failure {}
+
+class NetworkFailure extends Failure {}

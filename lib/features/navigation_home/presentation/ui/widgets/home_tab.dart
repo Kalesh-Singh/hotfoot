@@ -4,7 +4,7 @@ import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
-import 'package:hotfoot/features/places/presentation/ui/place_list.dart';
+import 'package:hotfoot/features/places/presentation/ui/widgets/place_list.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class HomeTab extends StatelessWidget {
