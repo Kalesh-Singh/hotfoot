@@ -60,10 +60,12 @@ class PlacesRepository implements IPlacesRepository {
 
     try {
       photoFile = await placesRemoteDataSource.getPhoto(id: id);
-      await placesLocalDataSource.insertOrUpdatePhoto(
+      photoFile = await placesLocalDataSource.insertOrUpdatePhoto(
         id: id,
         photoFile: photoFile,
       );
+      final bytes = photoFile.lengthSync();
+      print('PHOTO SIZE REPO: $bytes');
       return Right(photoFile);
     } catch (e) {
       print('Exception: $e');

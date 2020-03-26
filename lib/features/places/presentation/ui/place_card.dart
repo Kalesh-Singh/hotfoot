@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;
@@ -21,17 +23,34 @@ class PlaceCard extends StatelessWidget {
           children: <Widget>[
             Flexible(
               flex: 2,
-
-              child: Image.asset('assets/place-photo-placeholder.png'),
-//              child: BlocBuilder<PlaceDetailsBloc, PlaceDetailsState>(
-//                builder: (BuildContext context, PlaceDetailsState state) {
-//                  if (state is PlacePhotoLoadSuccess) {
-//                    return Image.file(state.placePhoto);
-//                  } else {
-//                    return Image.asset('assets/place-photo-placeholder.png');
-//                  }
-//                },
-//              ),
+              child: BlocBuilder<PlacePhotoBloc, PlacePhotoState>(
+                builder: (BuildContext context, PlacePhotoState state) {
+                  if (state is PlacePhotoLoadSuccess) {
+                    final photoSize = state.placePhoto.lengthSync();
+                    print('PHOTO SIZE UI: $photoSize');
+                    final photoBytes = state.placePhoto.readAsBytesSync();
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image.memory(
+                        photoBytes,
+                        width: 140,
+                        height: 140,
+                        fit: BoxFit.fill,
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image.asset(
+                        'assets/place-photo-placeholder.png',
+                        width: 140,
+                        height: 140,
+                        fit: BoxFit.fill,
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
             Flexible(
               flex: 3,

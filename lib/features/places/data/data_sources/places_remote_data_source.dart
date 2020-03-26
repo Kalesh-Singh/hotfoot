@@ -74,6 +74,9 @@ class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
       print('NOTHING DONWLOADED');
     }
 
+    final size = tempPhotoFile.lengthSync();
+    print('PHOTO SIZE DATA SOURCE: $size');
+
     return tempPhotoFile;
   }
 }

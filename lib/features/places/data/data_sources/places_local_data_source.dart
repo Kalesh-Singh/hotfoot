@@ -17,7 +17,8 @@ abstract class IPlacesLocalDataSource {
   /// Returns [null] if id is not found.
   Future<File> getPhoto({@required String id});
 
-  Future<void> insertOrUpdatePhoto({
+  /// Returns the inserted photo File
+  Future<File> insertOrUpdatePhoto({
     @required String id,
     @required File photoFile,
   });
@@ -58,7 +59,7 @@ class PlacesLocalDataSource implements IPlacesLocalDataSource {
   }
 
   @override
-  Future<void> insertOrUpdatePhoto({String id, File photoFile}) async {
+  Future<File> insertOrUpdatePhoto({String id, File photoFile}) async {
     return await placePhotoDao.insertOrUpdate(
       id: id,
       photoFile: photoFile,
