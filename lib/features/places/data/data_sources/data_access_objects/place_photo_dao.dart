@@ -28,8 +28,6 @@ class PlacePhotoDao implements IPlacePhotoDao {
   })  : assert(photosDir != null),
         this._photosDir = join(photosDir.path, _PLACE_PHOTO_DIR);
 
-  // TODO: Register application tempDir as the photoDir to be injected
-
   @override
   Future<void> delete({String id}) async {
     final String photoPath = join(_photosDir, id);

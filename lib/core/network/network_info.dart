@@ -11,5 +11,4 @@ class NetworkInfo implements INetworkInfo {
 
   @override
   Future<bool> get isConnected => connectionChecker.hasConnection;
-
 }

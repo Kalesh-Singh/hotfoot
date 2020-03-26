@@ -12,13 +12,7 @@ import 'package:hotfoot/src/screens/request_run_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/login/presentation/ui/screen/splash_screen.dart';
 
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> with WidgetsBindingObserver {
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -57,27 +51,4 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       ),
     );
   }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
-    if (state == AppLifecycleState.paused) {
-      // TODO: Delete all cached images.
-      print('DELETED ALL CACHED IMAGES');
-    }
-  }
-
-
 }

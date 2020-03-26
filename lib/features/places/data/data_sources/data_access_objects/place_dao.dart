@@ -31,14 +31,11 @@ class PlaceDao implements IPlaceDao {
 
   PlaceDao({@required this.database});
 
-  // Private getter to shorten the amount of code needed to get the
-  // singleton instance of an opened database.
-  // TODO: Register this in the Service Locator
-  //Future<Database> get _db async => await AppDatabase.instance.database;
-
   @override
   Future<void> insert({@required PlaceModel placeModel}) async {
-    return await _placeStore.record(placeModel.id).put(database, placeModel.toJson());
+    return await _placeStore
+        .record(placeModel.id)
+        .put(database, placeModel.toJson());
   }
 
   @override
