@@ -52,14 +52,18 @@ class PlacesRepository implements IPlacesRepository {
     // Only reach out to remote repository if there is no image
     // cached locally
 
+    print('Getting photo from local repo');
     File photoFile = await placesLocalDataSource.getPhoto(id: id);
 
     if (photoFile != null) {
+      print('Got photo form local repo');
       return Right(photoFile);
     }
 
     try {
+      print('Getting photo form remote repo');
       photoFile = await placesRemoteDataSource.getPhoto(id: id);
+      print('Got photo from remote repo');
       photoFile = await placesLocalDataSource.insertOrUpdatePhoto(
         id: id,
         photoFile: photoFile,

@@ -45,7 +45,7 @@ class PlacePhotoDao implements IPlacePhotoDao {
 
   @override
   Future<File> get({String id}) async {
-    final String photoPath = join(_photosDir, id);
+    final String photoPath = _getPhotoPath(id: id);
     final File photoFile = File(photoPath);
 
     if (await photoFile.exists()) {
@@ -57,7 +57,11 @@ class PlacePhotoDao implements IPlacePhotoDao {
 
   @override
   Future<File> insertOrUpdate({String id, File photoFile}) async {
-    final String photoPath = join('$_photosDir/$id.png');
+    final String photoPath = _getPhotoPath(id: id);
     return await photoFile.rename(photoPath);
+  }
+
+  String _getPhotoPath({@required id}) {
+    return '$_photosDir/$id.png';
   }
 }
