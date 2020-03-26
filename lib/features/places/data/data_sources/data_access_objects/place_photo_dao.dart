@@ -21,31 +21,31 @@ abstract class IPlacePhotoDao {
 
 class PlacePhotoDao implements IPlacePhotoDao {
   static const String _PLACE_PHOTO_DIR = 'photos';
-  final String photosDir;
+  final String _photosDir;
 
   PlacePhotoDao({
     @required Directory photosDir,
   })  : assert(photosDir != null),
-        this.photosDir = join(photosDir.path, _PLACE_PHOTO_DIR);
+        this._photosDir = join(photosDir.path, _PLACE_PHOTO_DIR);
 
   // TODO: Register application tempDir as the photoDir to be injected
 
   @override
   Future<void> delete({String id}) async {
-    final String photoPath = join(photosDir, id);
+    final String photoPath = join(_photosDir, id);
     final File photoFile = File(photoPath);
     return await photoFile.delete(recursive: false);
   }
 
   @override
   Future<void> deleteAll() async {
-    final File photosDirFile = File(photosDir);
+    final File photosDirFile = File(_photosDir);
     return await photosDirFile.delete(recursive: true);
   }
 
   @override
   Future<File> get({String id}) async {
-    final String photoPath = join(photosDir, id);
+    final String photoPath = join(_photosDir, id);
     final File photoFile = File(photoPath);
 
     if (await photoFile.exists()) {
@@ -57,7 +57,7 @@ class PlacePhotoDao implements IPlacePhotoDao {
 
   @override
   Future<File> insertOrUpdate({String id, File photoFile}) async {
-    final String photoPath = join('$photosDir/$id.png');
+    final String photoPath = join('$_photosDir/$id.png');
     await photoFile.rename(photoPath);
     return await photoFile.create(recursive: true);
   }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
@@ -31,20 +29,3 @@ class PlaceDetailsLoadFailure extends PlaceDetailsState {
   List<Object> get props => [message];
 }
 
-class PlacePhotoLoadFailure extends PlaceDetailsState {
-  final String message;
-
-  const PlacePhotoLoadFailure({@required this.message});
-
-  @override
-  List<Object> get props => [message];
-}
-
-class PlacePhotoLoadSuccess extends PlaceDetailsState {
-  final File placePhoto;
-
-  const PlacePhotoLoadSuccess({@required this.placePhoto});
-
-  @override
-  List<Object> get props => [placePhoto];
-}

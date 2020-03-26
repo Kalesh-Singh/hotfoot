@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_event.dart';
 import 'package:hotfoot/features/places/presentation/ui/place_card.dart';
 import 'package:hotfoot/injection_container.dart';
 
@@ -13,8 +15,15 @@ class PlaceListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PlaceDetailsBloc>(
-      create: (context) => sl<PlaceDetailsBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PlaceDetailsBloc>(
+          create: (context) => sl<PlaceDetailsBloc>(),
+        ),
+        BlocProvider<PlacePhotoBloc>(
+          create: (context) => sl<PlacePhotoBloc>(),
+        ),
+      ],
       child: Container(
         child: BlocBuilder<PlaceDetailsBloc, PlaceDetailsState>(
           builder: (BuildContext context, PlaceDetailsState state) {
@@ -28,7 +37,7 @@ class PlaceListTile extends StatelessWidget {
                 ),
               );
             } else if (state is PlaceDetailsLoadSuccess) {
-              BlocProvider.of<PlaceDetailsBloc>(context)
+              BlocProvider.of<PlacePhotoBloc>(context)
                   .add(PlacePhotoRequested(placeEntity: state.placeEntity));
               return PlaceCard(placeEntity: state.placeEntity);
             } else {

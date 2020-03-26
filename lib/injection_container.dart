@@ -31,6 +31,7 @@ import 'package:hotfoot/features/places/domain/use_cases/get_place_by_id.dart';
 import 'package:hotfoot/features/places/domain/use_cases/get_place_photo.dart';
 import 'package:hotfoot/features/places/domain/use_cases/get_places_ids.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/registration/data/repositories/registration_repository_impl.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
@@ -63,6 +64,8 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => PlaceDetailsBloc(
         getPlaceById: sl(),
+      ));
+  sl.registerFactory(() => PlacePhotoBloc(
         getPlacePhoto: sl(),
       ));
 
