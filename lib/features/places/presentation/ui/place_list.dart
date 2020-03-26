@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_state.dart';
+import 'package:hotfoot/features/places/presentation/ui/place_list_tile.dart';
 
 class PlacesList extends StatelessWidget {
   @override
@@ -34,12 +35,7 @@ class PlacesList extends StatelessWidget {
     return ListView.builder(
       itemCount: placesIds.length,
       itemBuilder: (context, index) {
-        return Container(
-          height: 50,
-          child: Center(
-            child: Text(placesIds[index]),
-          ),
-        );
+        return PlaceListTile();
       },
     );
   }

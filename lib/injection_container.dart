@@ -26,7 +26,10 @@ import 'package:hotfoot/features/places/data/data_sources/places_local_data_sour
 import 'package:hotfoot/features/places/data/data_sources/places_remote_data_source.dart';
 import 'package:hotfoot/features/places/data/repositories/places_repositories_impl.dart';
 import 'package:hotfoot/features/places/domain/repositories/places_repository.dart';
+import 'package:hotfoot/features/places/domain/use_cases/get_place_by_id.dart';
+import 'package:hotfoot/features/places/domain/use_cases/get_place_photo.dart';
 import 'package:hotfoot/features/places/domain/use_cases/get_places_ids.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/registration/data/repositories/registration_repository_impl.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
@@ -57,6 +60,10 @@ Future<void> init() async {
   sl.registerFactory(() => PlacesIdsBloc(
         getPlacesIds: sl(),
       ));
+  sl.registerFactory(() => PlaceDetailsBloc(
+        getPlaceById: sl(),
+        getPlacePhoto: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -78,6 +85,12 @@ Future<void> init() async {
         navigationAuthRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetPlacesIds(
+        placesRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetPlaceById(
+        placesRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetPlacePhoto(
         placesRepository: sl(),
       ));
 
