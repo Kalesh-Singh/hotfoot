@@ -28,6 +28,8 @@ class PlaceListTile extends StatelessWidget {
                 ),
               );
             } else if (state is PlaceDetailsLoadSuccess) {
+              BlocProvider.of<PlaceDetailsBloc>(context)
+                  .add(PlacePhotoRequested(placeEntity: state.placeEntity));
               return PlaceCard(placeEntity: state.placeEntity);
             } else {
               return Container();

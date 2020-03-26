@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;
@@ -18,7 +21,17 @@ class PlaceCard extends StatelessWidget {
           children: <Widget>[
             Flexible(
               flex: 2,
+
               child: Image.asset('assets/place-photo-placeholder.png'),
+//              child: BlocBuilder<PlaceDetailsBloc, PlaceDetailsState>(
+//                builder: (BuildContext context, PlaceDetailsState state) {
+//                  if (state is PlacePhotoLoadSuccess) {
+//                    return Image.file(state.placePhoto);
+//                  } else {
+//                    return Image.asset('assets/place-photo-placeholder.png');
+//                  }
+//                },
+//              ),
             ),
             Flexible(
               flex: 3,

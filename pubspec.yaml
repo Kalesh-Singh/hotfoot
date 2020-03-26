@@ -45,6 +45,10 @@ dependencies:
   data_connection_checker: ^0.3.4
   # For downloading images to Files.
   flutter_cache_manager: ^1.1.3
+  # For getting photo images.
+  firebase_storage: ^3.1.3
+  # For making http requests
+  http: ^0.12.0
 
   # ????
   font_awesome_flutter: ^8.4.0

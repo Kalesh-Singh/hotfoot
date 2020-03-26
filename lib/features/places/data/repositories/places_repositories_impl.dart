@@ -59,7 +59,7 @@ class PlacesRepository implements IPlacesRepository {
     }
 
     try {
-      photoFile = await placesRemoteDataSource.getPhoto(url: url);
+      photoFile = await placesRemoteDataSource.getPhoto(id: id);
       await placesLocalDataSource.insertOrUpdatePhoto(
         id: id,
         photoFile: photoFile,

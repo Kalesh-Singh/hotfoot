@@ -57,7 +57,7 @@ class PlacePhotoDao implements IPlacePhotoDao {
 
   @override
   Future<File> insertOrUpdate({String id, File photoFile}) async {
-    final String photoPath = join(photosDir, id);
+    final String photoPath = join('$photosDir/$id.png');
     await photoFile.rename(photoPath);
     return await photoFile.create(recursive: true);
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -122,6 +123,8 @@ Future<void> init() async {
   sl.registerLazySingleton<IPlacesRemoteDataSource>(
       () => PlacesRemoteDataSource(
             firestore: sl(),
+            firebaseStorage: sl(),
+            tempPhotosDir: sl(),
             cacheManager: sl(),
           ));
 
@@ -137,7 +140,7 @@ Future<void> init() async {
   final appDatabase = await AppDatabase.instance.database;
   sl.registerLazySingleton(() => appDatabase);
 
-  final photosDir = await getTemporaryDirectory();
+  final photosDir = await getApplicationDocumentsDirectory();
   sl.registerLazySingleton(() => photosDir);
 
   // External Dependencies
@@ -145,6 +148,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GoogleSignIn());
   sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton(() => Firestore.instance);
+  sl.registerLazySingleton(() => FirebaseStorage.instance);
   sl.registerLazySingleton(() => DefaultCacheManager());
 
   // Core
