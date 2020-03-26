@@ -35,7 +35,9 @@ class PlacesList extends StatelessWidget {
     return ListView.builder(
       itemCount: placesIds.length,
       itemBuilder: (context, index) {
-        return PlaceListTile();
+        return PlaceListTile(
+          placeId: placesIds[index],
+        );
       },
     );
   }
