@@ -8,8 +8,8 @@ class OpenCloseChatButton extends StatelessWidget {
     return 
     Column(children: <Widget>[
       Expanded(
-        child: ChatSection(),
-      )
+          child: ChatSection(),
+        ),
       ],
     );
   }
@@ -40,16 +40,16 @@ class OpenCloseChatButton extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(10),
                     topRight: const Radius.circular(10),
-                  )
+                  ),
                 ),
-              )
+              ),
             );
-          }
+          },
         );
       },
       label: Text('Contact Runner', style: TextStyle(color: Colors.white)),
       color: Colors.blueAccent,
-    )
+      ),
     );
   }
 }

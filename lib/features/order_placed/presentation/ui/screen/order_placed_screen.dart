@@ -30,20 +30,18 @@ class OrderPlacedScreen extends StatelessWidget {
               SizedBox(width: 40),
               Text("Status", style: TextStyle(fontSize: 24.0)),
               SizedBox(width: 110),
-              OpenCloseChatButton()
+              OpenCloseChatButton(),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CancelDeliveryButton(),
-              AcceptDeliveryButton()
+              AcceptDeliveryButton(),
             ],
           ),
         ],),
-      )
+      ),
     );
   }
 }
-
-// TODO Return to this 

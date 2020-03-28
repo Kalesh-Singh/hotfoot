@@ -99,7 +99,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                     onPressed: _isWriting
                       ? () => _submitMsg(_textController.text)
                         : null,
-                )
+                ),
               ),
             ],
           ),
