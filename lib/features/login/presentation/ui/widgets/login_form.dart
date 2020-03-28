@@ -91,6 +91,10 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
+                      // Clear Text Field
+                      _emailController.clear();
+                      // Hide keyboard
+                      FocusScope.of(context).requestFocus(FocusNode());
                       return displayEmailErrorMessage(
                           Text(_emailController.text).toString(), state);
                     },
@@ -105,6 +109,10 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
+                      // Clear Text Field
+                      _passwordController.clear();
+                      // Hide keyboard
+                      FocusScope.of(context).requestFocus(FocusNode());
                       return displayPasswordErrorMessage(
                           Text(_passwordController.text).toString(), state);
                     },
