@@ -14,7 +14,7 @@ class OrderPlacedScreen extends StatelessWidget {
         child: Column(children: <Widget>[
           LinearProgressIndicator(
             backgroundColor: Colors.lightBlueAccent,
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor:  AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
           Container(
             height: MediaQuery.of(context).size.height / 1.5,
