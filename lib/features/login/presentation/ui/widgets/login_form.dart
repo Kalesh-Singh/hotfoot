@@ -34,6 +34,9 @@ class _LoginFormState extends State<LoginForm> {
     _passwordController.addListener(_onPasswordChanged);
   }
 
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -72,8 +75,6 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          final FocusNode _emailFocus = FocusNode();
-          final FocusNode _passwordFocus = FocusNode();
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(
