@@ -107,7 +107,9 @@ class _LoginFormState extends State<LoginForm> {
                     textInputAction: TextInputAction.done,
                     focusNode: _passwordFocus,
                     onFieldSubmitted: (_) {
-                      _onFormSubmitted();
+                      if (isLoginButtonEnabled(state)) {
+                        _onFormSubmitted();
+                      }
                     },
                     controller: _passwordController,
                     decoration: InputDecoration(
