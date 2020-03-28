@@ -34,6 +34,9 @@ class _LoginFormState extends State<LoginForm> {
     _passwordController.addListener(_onPasswordChanged);
   }
 
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -82,6 +85,12 @@ class _LoginFormState extends State<LoginForm> {
                     child: Image.asset('assets/flutter_logo.png', height: 200),
                   ),
                   TextFormField(
+                    textInputAction: TextInputAction.next,
+                    focusNode: _emailFocus,
+                    onFieldSubmitted: (_) {
+                      _emailFocus.unfocus();
+                      FocusScope.of(context).requestFocus(_passwordFocus);
+                    },
                     controller: _emailController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
@@ -91,15 +100,18 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      // Clear Text Field
-                      _emailController.clear();
-                      // Hide keyboard
-                      FocusScope.of(context).requestFocus(FocusNode());
                       return displayEmailErrorMessage(
                           Text(_emailController.text).toString(), state);
                     },
                   ),
                   TextFormField(
+                    textInputAction: TextInputAction.done,
+                    focusNode: _passwordFocus,
+                    onFieldSubmitted: (_) {
+                      if (isLoginButtonEnabled(state)) {
+                        _onFormSubmitted();
+                      }
+                    },
                     controller: _passwordController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
@@ -109,10 +121,6 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      // Clear Text Field
-                      _passwordController.clear();
-                      // Hide keyboard
-                      FocusScope.of(context).requestFocus(FocusNode());
                       return displayPasswordErrorMessage(
                           Text(_passwordController.text).toString(), state);
                     },
