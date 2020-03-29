@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class Location extends Equatable {
+class LocationEntity extends Equatable {
   final double lat;
   final double lng;
 
-  const Location({
+  const LocationEntity({
     @required this.lat,
     @required this.lng,
   });
