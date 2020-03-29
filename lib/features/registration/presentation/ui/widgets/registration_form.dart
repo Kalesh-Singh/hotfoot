@@ -32,6 +32,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     _passwordController.addListener(_onPasswordChanged);
   }
 
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegistrationBloc, RegistrationState>(
@@ -44,7 +46,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registrationing...'),
+                    Text('Registration in Progress...'),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -80,6 +82,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
               child: ListView(
                 children: <Widget>[
                   TextFormField(
+                    textInputAction: TextInputAction.next,
+                    focusNode: _emailFocus,
+                    onFieldSubmitted: (_) {
+                      _emailFocus.unfocus();
+                      FocusScope.of(context).requestFocus(_passwordFocus);
+                    },
                     controller: _emailController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
@@ -94,6 +102,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     },
                   ),
                   TextFormField(
+                    textInputAction: TextInputAction.done,
+                    focusNode: _passwordFocus,
+                    onFieldSubmitted: (_) {
+                      if (isRegistrationButtonEnabled(state)) {
+                        _onFormSubmitted();
+                      }
+                    },
                     controller: _passwordController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
