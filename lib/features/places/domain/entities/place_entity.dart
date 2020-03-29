@@ -6,7 +6,7 @@ class PlaceEntity extends Equatable {
   final String id;
   final String name;
   final String address;
-  final Location location;
+  final LocationEntity location;
   final String photoUrl;
   final int orders;
 
