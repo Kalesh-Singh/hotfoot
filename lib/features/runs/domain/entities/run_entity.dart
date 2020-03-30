@@ -21,11 +21,8 @@ import 'package:meta/meta.dart';
 /// and present in the "users" firestore.
 /// [timePlaced] cannot be null.
 /// [timeDelivered] can be null, will be populated once run is completed.
-/// Both [timePlaced] and [timeDelivered] must be anchored in the UTC time zone,
-/// and not allowed to default to the device local time zone.
-/// This way we don't have to deal with time zones in the database and
-/// can convert  from the pulled UTC times back to the device local time
-/// on the client.
+/// Both [timePlaced] and [timeDelivered] must include UTC time zone,
+/// in the string.
 /// [cost] can be null, will only be populated in completed orders,
 /// inorder to provide a price estimate to customers.
 /// Initially [status] should be initialized with "Pending message".
@@ -33,6 +30,9 @@ import 'package:meta/meta.dart';
 /// NOTE: This must be a subcollection in the run document. Since we will need
 /// to listen to the changes as a stream. Currently I believe this is only
 /// supported for firestore collections and not documents.
+/// NOTE; No need for runnerLocation to be in the local objects.
+/// But it will exist temporarily in the firestore, whilst the
+/// run is being made.
 
 class RunEntity extends Equatable {
   final String id;
@@ -45,20 +45,21 @@ class RunEntity extends Equatable {
   final DateTime timeDelivered;
   final double cost;
   final String status;
-  final LocationEntity runnerLocation;
+
+//  final LocationEntity runnerLocation;
 
   const RunEntity({
     @required this.id,
     @required this.order,
     @required this.pickupPlaceIdOrCustomPlace,
-    @required this.destinationPlaceId, // Will be pulled from addresses store.
+    @required this.destinationPlaceId,
     @required this.customerId,
     @required this.runnerId,
     @required this.timePlaced,
     @required this.timeDelivered,
     @required this.cost,
     @required this.status,
-    @required this.runnerLocation,
+//    @required this.runnerLocation,
   })  : assert(id != null),
         assert(order != null),
         assert(pickupPlaceIdOrCustomPlace != null),
@@ -78,7 +79,7 @@ class RunEntity extends Equatable {
     DateTime timeDelivered,
     double cost,
     String status,
-    LocationEntity runnerLocation,
+//    LocationEntity runnerLocation,
   }) {
     return RunEntity(
       id: id ?? this.id,
@@ -92,7 +93,7 @@ class RunEntity extends Equatable {
       timeDelivered: timeDelivered ?? this.timeDelivered,
       cost: cost ?? this.cost,
       status: status ?? this.status,
-      runnerLocation: runnerLocation ?? this.runnerLocation,
+//      runnerLocation: runnerLocation ?? this.runnerLocation,
     );
   }
 
@@ -108,6 +109,6 @@ class RunEntity extends Equatable {
         timeDelivered,
         cost,
         status,
-        runnerLocation,
+//        runnerLocation,
       ];
 }
