@@ -37,6 +37,7 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
@@ -106,6 +107,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRegistrationRepository>(
       () => RegistrationRepository(
             firebaseAuth: sl(),
+            userRemoteDataSource: sl(),
           ));
   sl.registerLazySingleton<INavigationAuthRepository>(
       () => NavigationAuthRepository(
@@ -131,6 +133,11 @@ Future<void> init() async {
             cacheManager: sl(),
           ));
 
+  sl.registerLazySingleton<IUserRemoteDataSource>(
+    () => UserRemoteDataSource(
+      firestore: sl(),
+    )
+  );
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
         database: sl(),

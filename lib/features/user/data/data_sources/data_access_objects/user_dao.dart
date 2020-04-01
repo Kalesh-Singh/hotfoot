@@ -14,14 +14,14 @@ abstract class IUserDao {
 
 class UserDao implements IUserDao {
   final Database database;
-  static const String _PLACE_ORDER_NAME = 'orders';
-  final _orderStore = stringMapStoreFactory.store(_PLACE_ORDER_NAME);
+  static const String _USER_STORE_NAME = 'orders';
+  final _userStore = stringMapStoreFactory.store(_USER_STORE_NAME);
 
   UserDao({@required this.database});
 
   @override
   Future<void> insert({@required UserModel userModel}) async {
-    return await _orderStore
+    return await _userStore
       .record(userModel.id)
       .put(database, userModel.toJson());
   }
@@ -29,7 +29,7 @@ class UserDao implements IUserDao {
   @override
   Future<void> update({@required UserModel userModel}) async {
     final finder = Finder(filter: Filter.byKey(userModel.id));
-    return await _orderStore.update(
+    return await _userStore.update(
       database,
       userModel.toJson(),
       finder: finder,
@@ -38,12 +38,12 @@ class UserDao implements IUserDao {
 
   @override
   Future<void> delete({@required String id}) async {
-    return await _orderStore.record(id).delete(database);
+    return await _userStore.record(id).delete(database);
   }
 
   @override
   Future<List<String>> getPastOrderIds() async {
-    final recordSnapshots = await _orderStore.find(database);
+    final recordSnapshots = await _userStore.find(database);
     if (recordSnapshots.length == 0) {
       return null;
     }
@@ -53,12 +53,12 @@ class UserDao implements IUserDao {
 
   @override
   Future<int> deleteAll() async {
-    return await _orderStore.delete(database);
+    return await _userStore.delete(database);
   }
 
   @override
   Future<UserModel> getUserInformation() async {
-    final recordSnapshots = await _orderStore.find(database);
+    final recordSnapshots = await _userStore.find(database);
     if (recordSnapshots.length == 0) {
       return null;
     }
@@ -69,7 +69,7 @@ class UserDao implements IUserDao {
   @override
   Future<void> insertOrUpdate({UserModel userModel}) async {
     final finder = Finder(filter: Filter.byKey(userModel.id));
-    final key = await _orderStore.findKey(
+    final key = await _userStore.findKey(
       database,
       finder: finder,
     );
@@ -79,5 +79,4 @@ class UserDao implements IUserDao {
       await insert(userModel: userModel);
     }
   }
-
 }
