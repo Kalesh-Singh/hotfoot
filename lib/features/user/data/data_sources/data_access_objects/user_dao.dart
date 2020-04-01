@@ -14,7 +14,7 @@ abstract class IUserDao {
 
 class UserDao implements IUserDao {
   final Database database;
-  static const String _USER_STORE_NAME = 'orders';
+  static const String _USER_STORE_NAME = 'users';
   final _userStore = stringMapStoreFactory.store(_USER_STORE_NAME);
 
   UserDao({@required this.database});
