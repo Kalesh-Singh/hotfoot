@@ -4,12 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
+import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockRegistrationRepository extends Mock
     implements IRegistrationRepository {}
 
 class MockAuthResult extends Mock implements AuthResult {}
+
+class MockUserModel extends Mock implements UserModel {}
 
 void main() {
   SignUp useCase;
@@ -23,13 +26,13 @@ void main() {
   final String tEmail = 'email';
   final String tPassword = 'password';
 
-  test('should return Future<void> on registration success', () async {
+  test('should return Future<UserModel> on registration success', () async {
     // arrange
-    final MockAuthResult tAuthResult = MockAuthResult();
+    final MockUserModel tUserModelResult = MockUserModel();
     when(mockRegistrationRepository.signUp(
       email: anyNamed('email'),
       password: anyNamed('password'),
-    )).thenAnswer((_) async => Right(tAuthResult));
+    )).thenAnswer((_) async => Right(tUserModelResult));
 
     // act
     final result = await useCase(SignUpParams(
@@ -38,7 +41,7 @@ void main() {
     ));
 
     // assert
-    expect(result, Right(tAuthResult));
+    expect(result, Right(tUserModelResult));
     verify(mockRegistrationRepository.signUp(
       email: tEmail,
       password: tPassword,

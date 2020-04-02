@@ -8,11 +8,13 @@ class UserModel extends UserEntity {
     @required String name,
     @required String email,
     @required List<String> pastOrderIds,
+    @required List<String> pastOrderAddresses,
   }) : super(
           id: id,
           name: name,
           email: email,
           pastOrderIds: pastOrderIds,
+          pastOrderAddresses: pastOrderAddresses,
         );
 
   factory UserModel.fromJson(Map json) => json != null
@@ -21,6 +23,7 @@ class UserModel extends UserEntity {
         name: (json['name'] as String),
         email: (json['email'] as String),
         pastOrderIds: (json['pastOrderIds'] as List<String>),
+        pastOrderAddresses: (json['pastOrderAddresses'] as List<String>),
       )
     : null;
   
@@ -30,6 +33,7 @@ class UserModel extends UserEntity {
     map['name'] = name;
     map['email'] = email;
     map['pastOrderIds'] = pastOrderIds;
+    map['pastOrderAddresses'] = pastOrderAddresses;
     return map;
   }
 }

@@ -7,6 +7,7 @@ abstract class IUserDao {
   Future<void> update({@required UserModel userModel});
   Future<void> delete({@required String id});
   Future<List<String>> getPastOrderIds();
+  Future<List<String>> getPastOrderAddresses();
   Future<int> deleteAll();
   Future<UserModel> getUserInformation();
   Future<void> insertOrUpdate({UserModel userModel});
@@ -49,6 +50,16 @@ class UserDao implements IUserDao {
     }
     final record = recordSnapshots[0];
     return UserModel.fromJson(record.value).pastOrderIds;
+  }
+
+  @override
+  Future<List<String>> getPastOrderAddresses() async {
+    final recordSnapshots = await _userStore.find(database);
+    if (recordSnapshots.length == 0) {
+      return null;
+    }
+    final record = recordSnapshots[0];
+    return UserModel.fromJson(record.value).pastOrderAddresses;
   }
 
   @override

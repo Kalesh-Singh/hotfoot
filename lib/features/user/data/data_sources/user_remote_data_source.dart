@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 abstract class IUserRemoteDataSource {
   Future<UserModel> initializeFirestore({@required String email, @required FirebaseUser firebaseUser});
   Future<List<String>> getPastOrderIds();
+  Future<List<String>> getPastOrderAddresses();
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -34,8 +35,9 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       // Howard sometimes makes emails weird with numbers or abbreviations etc
       'name': email,
       'pastOrderIds': [],
+      'pastOrderAddresses': []
     });
-    UserModel userModel = UserModel(email: email, id: firebaseUser.uid, name: email, pastOrderIds: []);
+    UserModel userModel = UserModel(email: email, id: firebaseUser.uid, name: email, pastOrderIds: [], pastOrderAddresses: []);
     return userModel;
   }
 
@@ -46,7 +48,6 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     List<dynamic> documentOrderIds = List<dynamic>();
     // userId for right now is email
     await firestore.collection("users").document(userId).get().then((val){
-      print(val.data['email']);
       documentOrderIds = val.data['pastOrders'];
       documentOrderIds.forEach((element) => ordersIds.add(element));
     });
@@ -54,5 +55,21 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     print('got past order ids from firestore');
     print('Number of past orders customer has made ${ordersIds.length}');
     return ordersIds;
+  }
+
+  @override
+  Future<List<String>> getPastOrderAddresses({String userId}) async {
+    print('Getting addresses from firestore');
+    List<String> addresses = List<String>();
+    List<dynamic> documentAddresses = List<dynamic>();
+    // userId for right now is email
+    await firestore.collection("users").document(userId).get().then((val){
+      documentAddresses = val.data['addresses'];
+      documentAddresses.forEach((element) => addresses.add(element));
+    });
+
+    print('got past order addresses from firestore');
+    print('Number of past addresses customer has used ${addresses.length}');
+    return addresses;
   }
 }

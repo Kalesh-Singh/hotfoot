@@ -3,19 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/registration/data/repositories/registration_repository_impl.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockAuthResult extends Mock implements AuthResult {}
 
+class MockRemoteDataSource extends Mock implements IUserRemoteDataSource {}
+
 void main() {
   MockFirebaseAuth mockFirebaseAuth;
+  MockRemoteDataSource mockRemoteDataSource;
   RegistrationRepository repository;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
-    repository = RegistrationRepository(firebaseAuth: mockFirebaseAuth);
+    mockRemoteDataSource = MockRemoteDataSource();
+    repository = RegistrationRepository(firebaseAuth: mockFirebaseAuth, userRemoteDataSource: mockRemoteDataSource);
   });
 
   final String tEmail = 'email';

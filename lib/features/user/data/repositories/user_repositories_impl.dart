@@ -61,4 +61,29 @@ class UserRepository implements IUserRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, List<String>>> getPastOrderAddresses() async {
+    if (await networkInfo.isConnected) {
+      try {
+        print('getting customers order addresses');
+        final pastOrderAddresses = await userRemoteDataSource.getPastOrderAddresses();
+        print('got past order addresses from remote data source');
+        print('number of past order addresses ${pastOrderAddresses.length}');
+        return Right(pastOrderAddresses);
+      } catch (e) {
+        print('Exception $e');
+        return Left(FirestoreFailure());
+      }
+    } else {
+      // Get data from local data source
+      print('getting past order addresses from local datasource');
+      final pastOrderAddresses = await userLocalDataSource.getPastOrderAddresses();
+      print('Number of past order addresses ${pastOrderAddresses.length}');
+      if (pastOrderAddresses.length == 0) {
+        return Left(DatabaseFailure());
+        }
+      print('Got order ids from local data source');
+      return Right(pastOrderAddresses);
+    }
+  }
 }

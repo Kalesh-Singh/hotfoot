@@ -7,12 +7,14 @@ class UserEntity extends Equatable {
   final String name;
   final String email;
   final List<String> pastOrderIds;
+  final List<String> pastOrderAddresses;
 
   const UserEntity({
     @required this.id,
     @required this.name,
     @required this.email,
     @required this.pastOrderIds,
+    @required this.pastOrderAddresses,
   });
 
   @override
@@ -24,6 +26,7 @@ class UserEntity extends Equatable {
     name,
     email,
     pastOrderIds,
+    pastOrderAddresses,
   ];
   
 }
