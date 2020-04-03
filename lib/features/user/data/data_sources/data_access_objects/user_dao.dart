@@ -8,6 +8,8 @@ abstract class IUserDao {
   Future<void> delete({@required String id});
   Future<List<String>> getPastOrderIds();
   Future<List<String>> getPastOrderAddresses();
+  Future<void> addOrderId({@required String orderId});
+  Future<void> addAddress({@required String address});
   Future<int> deleteAll();
   Future<UserModel> getUserInformation();
   Future<void> insertOrUpdate({UserModel userModel});
@@ -42,29 +44,32 @@ class UserDao implements IUserDao {
     return await _userStore.record(id).delete(database);
   }
 
+  // If you have a more optimal way of doing this please update this code
+  // Not sure exactly how I can access the specific list field we need to update
+  // Instead of fetching the entire user model object
+  // Get the user info, add the new address and update the usermodel
   @override
-  Future<List<String>> getPastOrderIds() async {
+  Future<void> addOrderId({@required String orderId}) async {
     final recordSnapshots = await _userStore.find(database);
     if (recordSnapshots.length == 0) {
       return null;
     }
     final record = recordSnapshots[0];
-    return UserModel.fromJson(record.value).pastOrderIds;
+    final userInfo = UserModel.fromJson(record.value);
+    userInfo.pastOrderIds.add(orderId);
+    update(userModel: userInfo);
   }
-
+  // Get the user info, add the new address and update the usermodel
   @override
-  Future<List<String>> getPastOrderAddresses() async {
+  Future<void> addAddress({@required String address}) async {
     final recordSnapshots = await _userStore.find(database);
     if (recordSnapshots.length == 0) {
       return null;
     }
     final record = recordSnapshots[0];
-    return UserModel.fromJson(record.value).pastOrderAddresses;
-  }
-
-  @override
-  Future<int> deleteAll() async {
-    return await _userStore.delete(database);
+    final userInfo = UserModel.fromJson(record.value);
+    userInfo.pastOrderAddresses.add(address);
+    update(userModel: userInfo);
   }
 
   @override
@@ -75,6 +80,23 @@ class UserDao implements IUserDao {
     }
     final record = recordSnapshots[0];
     return UserModel.fromJson(record.value);
+  }
+
+  @override
+  Future<List<String>> getPastOrderIds() async {
+    final result = await getUserInformation();
+    return result.pastOrderIds;
+  }
+
+  @override
+  Future<List<String>> getPastOrderAddresses() async {
+    final result = await getUserInformation();
+    return result.pastOrderAddresses;
+  }
+
+  @override
+  Future<int> deleteAll() async {
+    return await _userStore.delete(database);
   }
 
   @override
