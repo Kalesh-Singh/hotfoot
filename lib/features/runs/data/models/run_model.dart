@@ -60,8 +60,8 @@ class RunModel extends RunEntity {
   Map<String, dynamic> toJson() {
     Map map = Map<String, dynamic>();
 
-    map['id'] = id;
-    map['order'] = order;
+    map['id'] = this.id;
+    map['order'] = this.order;
     map['destinationPlaceId'] = destinationPlaceId;
     map['customerId'] = customerId;
     map['runnerId'] = runnerId;

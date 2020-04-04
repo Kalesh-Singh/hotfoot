@@ -11,6 +11,9 @@ abstract class IRunsRemoteDataSource {
   /// The returned model should now contain an id if it
   /// didn't have one before this call.
   Future<RunModel> insertOrUpdateRun({@required RunModel runModel});
+
+  /// Returns a stream that can be listened to for run updates.
+  Future<Stream<QuerySnapshot>> getRunStream(String runId);
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -24,15 +27,28 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   @override
   Future<RunModel> getRunById({String id}) async {
-    final runJson = (await _runsCollection.document(id).get()).data;
-    return RunModel.fromJson(runJson);
+    final CollectionReference _subCollection =
+        _runsCollection.document(id).collection('run');
+    final Map<String, dynamic> runJson = {};
+
+    final QuerySnapshot runSnapshot = await _subCollection.getDocuments();
+    runSnapshot.documents.forEach((document) {
+      runJson[document.documentID] = document.data;
+    });
+
+    final runModel = RunModel.fromJson(runJson);
+
+    print(runModel);
+
+    return runModel;
   }
 
   @override
   Future<List<String>> getRunsIds({String userId}) async {
+    // TODO: Get the ids from the user repo.
     print('Getting runs ids from firestore');
     final QuerySnapshot runsSnapshot = await _runsCollection
-        .where('customerId', isEqualTo: userId)
+        .where('run.customerId', isEqualTo: userId)
         .getDocuments();
     List<String> runsIds = List<String>();
 
@@ -62,7 +78,19 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     } else {
       runId = runModel.id;
     }
-    _runsCollection.document(runId).setData(runModel.toJson());
+
+    _runsCollection
+        .document(runId)
+        .collection('run')
+        .document(runId)
+        .setData(runModel.toJson());
+
+    // TODO: Add run id to user list if it is not present.
+
     return runModel;
+  }
+
+  Future<Stream<QuerySnapshot>> getRunStream(String runId) async {
+    return _runsCollection.document(runId).collection('run').snapshots();
   }
 }

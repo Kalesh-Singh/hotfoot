@@ -1,11 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class RequestRunScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final IRunsRemoteDataSource remoteDataSource =
+        RunsRemoteDataSource(firestore: Firestore.instance);
+
+    remoteDataSource.insertOrUpdateRun(
+      runModel: RunModel(
+        id: 'fakeId',
+        order: 'fake order',
+        destinationPlaceId: 'fake dest place id',
+        customerId: 'fake customer id',
+        runnerId: 'fake runner id',
+        timePlaced: DateTime.now().toUtc(),
+        timeDelivered: DateTime.now().toUtc(),
+        cost: 0,
+        status: 'Pending',
+        pickupPlaceIdOrCustomPlace: Left('Fake pick up place id'),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Run Request'),
