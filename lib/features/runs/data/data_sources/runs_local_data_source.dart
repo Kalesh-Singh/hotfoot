@@ -8,8 +8,8 @@ abstract class IRunsLocalDataSource {
   /// Returns null if key is not found
   Future<RunModel> getRunById({@required String id});
 
-  /// Returns the inserted RunModel
-  Future<void> insertOrUpdateRun({@required RunModel runModel});
+  /// Returns the RunModel of the inserted or updated data.
+  Future<RunModel> insertOrUpdateRun({@required RunModel runModel});
 }
 
 class PlacesLocalDataSource implements IRunsLocalDataSource {
@@ -34,7 +34,8 @@ class PlacesLocalDataSource implements IRunsLocalDataSource {
   }
 
   @override
-  Future<void> insertOrUpdateRun({RunModel runModel}) async {
-    return await runDao.insertOrUpdate(runModel: runModel);
+  Future<RunModel> insertOrUpdateRun({RunModel runModel}) async {
+    await runDao.insertOrUpdate(runModel: runModel);
+    return runModel;
   }
 }

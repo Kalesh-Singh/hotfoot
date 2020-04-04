@@ -5,6 +5,7 @@ import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
 /// [id] is the auto generated id from firestore.
+/// [id] can be null when the object is created on the client device.
 /// [order] is the input text with the user's request.
 /// Possibly in the future this will be itemized and and
 /// handled by an [OrderEntity] object in the future.
@@ -60,8 +61,7 @@ class RunEntity extends Equatable {
     @required this.cost,
     @required this.status,
 //    @required this.runnerLocation,
-  })  : assert(id != null),
-        assert(order != null),
+  })  : assert(order != null),
         assert(pickupPlaceIdOrCustomPlace != null),
         assert(destinationPlaceId != null),
         assert(customerId != null),
