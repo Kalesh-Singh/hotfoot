@@ -7,13 +7,18 @@ import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_event.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_state.dart';
+import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:mockito/mockito.dart';
+
+import '../../domain/use_cases/sign_up_test.dart';
 
 class MockSignUp extends Mock implements SignUp {}
 
 class MockValidators extends Mock implements Validators {}
 
 class MockAuthResult extends Mock implements AuthResult {}
+
+class MockUserResult extends Mock implements UserModel {}
 
 void main() {
   RegistrationBloc bloc;
@@ -34,6 +39,7 @@ void main() {
   final tInvalidEmail = 'invalid@email.com';
   final tValidEmail = 'valid@email.com';
   final tAuthResult = MockAuthResult();
+  final tMockUserResult = MockUserModel();
 
   test('should have initial state of [RegistrationState.empty()]', () async {
     // assert
@@ -171,7 +177,7 @@ void main() {
     test('should yield [RegistrationState.success()] if sign up was successful',
         () async {
       // arrange
-      when(mockSignUp(any)).thenAnswer((_) async => Right(tAuthResult));
+      when(mockSignUp(any)).thenAnswer((_) async => Right(tMockUserResult));
 
       // assert later
       final expectedStates = [

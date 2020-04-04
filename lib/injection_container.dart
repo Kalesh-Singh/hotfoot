@@ -37,6 +37,11 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
+import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
+import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
@@ -106,6 +111,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRegistrationRepository>(
       () => RegistrationRepository(
             firebaseAuth: sl(),
+            userRemoteDataSource: sl(),
           ));
   sl.registerLazySingleton<INavigationAuthRepository>(
       () => NavigationAuthRepository(
@@ -117,7 +123,12 @@ Future<void> init() async {
         placesRemoteDataSource: sl(),
         networkInfo: sl(),
       ));
-
+  sl.registerLazySingleton<IUserRepository>(() => UserRepository(
+        firebaseAuth: sl(),
+        networkInfo: sl(),
+        userLocalDataSource: sl(),
+        userRemoteDataSource: sl(),
+      ));
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
         placeDao: sl(),
@@ -130,7 +141,16 @@ Future<void> init() async {
             tempPhotosDir: sl(),
             cacheManager: sl(),
           ));
-
+  sl.registerLazySingleton<IUserLocalDataSource>(
+    () => UserLocalDataSource(
+      userDao: sl(),
+    )
+  );
+  sl.registerLazySingleton<IUserRemoteDataSource>(
+    () => UserRemoteDataSource(
+      firestore: sl(),
+    )
+  );
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
         database: sl(),
@@ -138,6 +158,10 @@ Future<void> init() async {
   sl.registerLazySingleton<IPlacePhotoDao>(() => PlacePhotoDao(
         photosDir: sl(),
       ));
+
+  sl.registerLazySingleton<IUserDao>(() => UserDao(
+    database: sl(),
+  ));
 
   // Local Dependencies
   final appDatabase = await AppDatabase.instance.database;
