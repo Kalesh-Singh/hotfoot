@@ -6,6 +6,8 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
+import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.dart';
+import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
@@ -51,9 +53,6 @@ class RequestRunScreen extends StatelessWidget {
 //    );
 
     final runIds = remoteDataSource.getRunsIds();
-//    runIds.then((value) {
-//     print('Run ids $value');
-//    });
 
     return Scaffold(
       appBar: AppBar(

@@ -7,11 +7,7 @@ abstract class IUserRemoteDataSource {
   Future<UserModel> initializeFirestore(
       {@required String email, @required FirebaseUser firebaseUser});
 
-  Future<List<String>> getPastOrderIds();
-
-  Future<List<String>> getPastOrderAddresses();
-
-  Future<UserModel> getUser();
+  Future<UserModel> getUserInfo();
 
   Future<void> insertOrUpdateUser({@required UserModel userModel});
 }
@@ -23,8 +19,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   UserRemoteDataSource({
     @required this.firestore,
     @required this.firebaseAuth,
-  })
-      : assert(firestore != null),
+  })  : assert(firestore != null),
         assert(firebaseAuth != null);
 
   // Make a collection with users email
@@ -41,7 +36,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       'id': firebaseUser.uid,
       'email': email,
       // ! kattenlaf =>
-      // Right now we will keep name as email, 
+      // Right now we will keep name as email,
       // if user wants to change their username we can implement that functionality
       // Or I can parse the email to get the names but like I said its not safe because
       // Howard sometimes makes emails weird with numbers or abbreviations etc
@@ -49,51 +44,20 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       'pastOrderIds': {},
       'pastOrderAddresses': []
     });
-    UserModel userModel = UserModel(email: email,
-        id: firebaseUser.uid,
-        name: email,
-        pastOrderIds: [],
-        pastOrderAddresses: []);
+    UserModel userModel = UserModel(
+      email: email,
+      id: firebaseUser.uid,
+      name: email,
+    );
     return userModel;
   }
 
   @override
-  Future<List<String>> getPastOrderIds({String userId}) async {
-    print('Getting order ids from firestore');
-    List<String> ordersIds = List<String>();
-    List<dynamic> documentOrderIds = List<dynamic>();
-    // userId for right now is email
-    await firestore.collection("users").document(userId).get().then((val) {
-      documentOrderIds = val.data['pastOrders'];
-      documentOrderIds.forEach((element) => ordersIds.add(element));
-    });
-
-    print('got past order ids from firestore');
-    print('Number of past orders customer has made ${ordersIds.length}');
-    return ordersIds;
-  }
-
-  @override
-  Future<List<String>> getPastOrderAddresses({String userId}) async {
-    print('Getting addresses from firestore');
-    List<String> addresses = List<String>();
-    List<dynamic> documentAddresses = List<dynamic>();
-    // userId for right now is email
-    await firestore.collection("users").document(userId).get().then((val) {
-      documentAddresses = val.data['addresses'];
-      documentAddresses.forEach((element) => addresses.add(element));
-    });
-
-    print('got past order addresses from firestore');
-    print('Number of past addresses customer has used ${addresses.length}');
-    return addresses;
-  }
-
-  @override
-  Future<UserModel> getUser() async {
+  Future<UserModel> getUserInfo() async {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
-    final userData = await (firestore.collection('users').document(userId).get());
+    final userData =
+        await (firestore.collection('users').document(userId).get());
     final userJson = userData.data;
     return UserModel.fromJson(userJson);
   }
