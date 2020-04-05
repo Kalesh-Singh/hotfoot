@@ -51,7 +51,7 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
   Future<List<String>> getRunsIds() async {
     final userEither = await (getUser(NoParams()));
     List<String> runsIds = List<String>();
-    userEither.fold(
+    await userEither.fold(
       (failure) {
         print('failed to getUser');
       },
@@ -67,6 +67,11 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         });
       },
     );
+
+    print('runs id');
+    for (final id in runsIds) {
+      print(id);
+    }
     return runsIds;
   }
 

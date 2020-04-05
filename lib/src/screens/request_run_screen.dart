@@ -35,20 +35,25 @@ class RequestRunScreen extends StatelessWidget {
       getUser: GetUser(userRepository: userRepository),
     );
 
-    remoteDataSource.insertOrUpdateRun(
-      runModel: RunModel(
-        id: null,
-        order: 'fake order',
-        destinationPlaceId: 'fake dest place id',
-        customerId: 'fake customer id',
-        runnerId: 'fake runner id',
-        timePlaced: DateTime.now().toUtc(),
-        timeDelivered: DateTime.now().toUtc(),
-        cost: 0,
-        status: 'Pending',
-        pickupPlaceIdOrCustomPlace: Left('Fake pick up place id'),
-      ),
-    );
+//    remoteDataSource.insertOrUpdateRun(
+//      runModel: RunModel(
+//        id: null,
+//        order: 'fake order',
+//        destinationPlaceId: 'fake dest place id',
+//        customerId: 'fake customer id',
+//        runnerId: 'fake runner id',
+//        timePlaced: DateTime.now().toUtc(),
+//        timeDelivered: DateTime.now().toUtc(),
+//        cost: 0,
+//        status: 'Pending',
+//        pickupPlaceIdOrCustomPlace: Left('Fake pick up place id'),
+//      ),
+//    );
+
+    final runIds = remoteDataSource.getRunsIds();
+//    runIds.then((value) {
+//     print('Run ids $value');
+//    });
 
     return Scaffold(
       appBar: AppBar(

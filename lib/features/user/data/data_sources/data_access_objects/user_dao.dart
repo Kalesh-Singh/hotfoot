@@ -6,7 +6,8 @@ abstract class IUserDao {
   Future<void> insert({@required UserModel userModel});
   Future<void> update({@required UserModel userModel});
   Future<void> delete({@required String id});
-  Future<List<String>> getPastOrderIds();
+  Future<List<String>> getRunsIds();
+  Future<void> updateRunsIds();
   Future<List<String>> getPastOrderAddresses();
   Future<void> addOrderId({@required String orderId});
   Future<void> addAddress({@required String address});
@@ -83,7 +84,7 @@ class UserDao implements IUserDao {
   }
 
   @override
-  Future<List<String>> getPastOrderIds() async {
+  Future<List<String>> getRunsIds() async {
     final result = await getUserInformation();
     return result.pastOrderIds;
   }
@@ -111,5 +112,11 @@ class UserDao implements IUserDao {
     } else {
       await insert(userModel: userModel);
     }
+  }
+
+  @override
+  Future<void> updateRunsIds() {
+    // TODO: implement updateRunsIds
+    return null;
   }
 }

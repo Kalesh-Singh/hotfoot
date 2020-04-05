@@ -7,6 +7,8 @@ abstract class IUserLocalDataSource {
   Future<List<String>> getPastOrderAddresses();
   Future<void> insertOrUpdateUser({@required UserModel userModel});
   Future<UserModel> getUser();
+  Future<void> updateRunsIds({@required List<String> runsIds});
+  Future<List<String>> getRunsIds();
 }
 
 class UserLocalDataSource implements IUserLocalDataSource {
@@ -19,7 +21,7 @@ class UserLocalDataSource implements IUserLocalDataSource {
   @override
   Future<List<String>> getPastOrderIds() async {
     print('Getting all order ids of the current user');
-    List<String> orderIds = await userDao.getPastOrderIds();
+    List<String> orderIds = await userDao.getRunsIds();
     print('Number of orders ${orderIds.length}');
     return orderIds;
   }
@@ -40,5 +42,17 @@ class UserLocalDataSource implements IUserLocalDataSource {
   @override
   Future<UserModel> getUser() async {
     return await userDao.getUserInformation();
+  }
+
+  @override
+  Future<List<String>> getRunsIds() {
+    // TODO: implement getRunsIds
+    return null;
+  }
+
+  @override
+  Future<void> updateRunsIds({List<String> runsIds}) {
+    // TODO: implement updateRunsIds
+    return null;
   }
 }
