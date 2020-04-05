@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -67,8 +66,6 @@ class RunEntity extends Equatable {
         assert(customerId != null),
         assert(timePlaced != null),
         assert(status != null);
-
-
 
   @override
   List<Object> get props => [

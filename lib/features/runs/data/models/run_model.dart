@@ -99,7 +99,7 @@ class RunModel extends RunEntity {
       id: id ?? this.id,
       order: order ?? this.order,
       pickupPlaceIdOrCustomPlace:
-      pickupPlaceIdOrCustomPlace ?? this.pickupPlaceIdOrCustomPlace,
+          pickupPlaceIdOrCustomPlace ?? this.pickupPlaceIdOrCustomPlace,
       destinationPlaceId: destinationPlaceId ?? this.destinationPlaceId,
       customerId: customerId ?? this.customerId,
       runnerId: runnerId ?? this.runnerId,
