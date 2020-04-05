@@ -4,12 +4,13 @@ import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class IUserRemoteDataSource {
-  Future<UserModel> initializeFirestore(
-      {@required String email, @required FirebaseUser firebaseUser});
+  Future<UserModel> getUserFromFirebase();
+
+  Future<String> getUserId();
 
   Future<UserModel> getUserInfo();
 
-  Future<void> insertOrUpdateUser({@required UserModel userModel});
+  Future<UserModel> insertOrUpdateUser({@required UserModel userModel});
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -22,32 +23,19 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   })  : assert(firestore != null),
         assert(firebaseAuth != null);
 
-  // Make a collection with users email
-  // Could add other fields in the future
-  // Creates a document with email field with a randomly generated key for the name of the document
-  // DocumentReference reference = await databaseReference.collection("users").add({'email' : email});
-  // print(reference.documentID);
-  // Making the document id unique based on email address so it can be retrieved
   @override
-  Future<UserModel> initializeFirestore(
-      {@required String email, @required FirebaseUser firebaseUser}) async {
-    print("Setting data in firestore");
-    await firestore.collection("users").document(firebaseUser.uid).setData({
-      'id': firebaseUser.uid,
-      'email': email,
-      // ! kattenlaf =>
-      // Right now we will keep name as email,
-      // if user wants to change their username we can implement that functionality
-      // Or I can parse the email to get the names but like I said its not safe because
-      // Howard sometimes makes emails weird with numbers or abbreviations etc
-      'name': email,
-      'pastOrderIds': {},
-      'pastOrderAddresses': []
-    });
+  Future<UserModel> getUserFromFirebase() async {
+    // ! kattenlaf =>
+    // Right now we will keep name as email,
+    // if user wants to change their username we can implement that functionality
+    // Or I can parse the email to get the names but like I said its not safe because
+    // Howard sometimes makes emails weird with numbers or abbreviations etc
+
+    final firebaseUser = await firebaseAuth.currentUser();
     UserModel userModel = UserModel(
-      email: email,
+      email: firebaseUser.email,
       id: firebaseUser.uid,
-      name: email,
+      name: firebaseUser.email,
     );
     return userModel;
   }
@@ -63,9 +51,18 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   }
 
   @override
-  Future<void> insertOrUpdateUser({UserModel userModel}) async {
+  Future<UserModel> insertOrUpdateUser({UserModel userModel}) async {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
-    firestore.collection("users").document(userId).setData(userModel.toJson());
+    await firestore
+        .collection('users')
+        .document(userId)
+        .setData(userModel.toJson());
+    return userModel;
+  }
+
+  @override
+  Future<String> getUserId() async {
+    return (await firebaseAuth.currentUser()).uid;
   }
 }

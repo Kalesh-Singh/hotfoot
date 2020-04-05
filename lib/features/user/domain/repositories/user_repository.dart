@@ -5,9 +5,12 @@ import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class IUserRepository {
+  Future<Either<Failure, UserEntity>> initUser();
+
   Future<Either<Failure, String>> getUserId();
 
   Future<Either<Failure, UserEntity>> getUserInfo();
 
-  Future<Either<Failure, void>> insertOrUpdateUser({@required UserModel userModel});
+  Future<Either<Failure, UserEntity>> insertOrUpdateUser(
+      {@required UserModel userModel});
 }

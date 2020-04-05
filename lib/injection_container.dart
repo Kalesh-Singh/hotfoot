@@ -111,7 +111,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRegistrationRepository>(
       () => RegistrationRepository(
             firebaseAuth: sl(),
-            userRemoteDataSource: sl(),
+            userRepository: sl(),
           ));
   sl.registerLazySingleton<INavigationAuthRepository>(
       () => NavigationAuthRepository(
@@ -124,7 +124,6 @@ Future<void> init() async {
         networkInfo: sl(),
       ));
   sl.registerLazySingleton<IUserRepository>(() => UserRepository(
-        firebaseAuth: sl(),
         networkInfo: sl(),
         userLocalDataSource: sl(),
         userRemoteDataSource: sl(),

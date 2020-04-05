@@ -5,7 +5,7 @@ import 'package:sembast/sembast.dart';
 abstract class IUserDao {
   Future<UserModel> get();
 
-  Future<void> insertOrUpdate({UserModel userModel});
+  Future<UserModel> insertOrUpdate({UserModel userModel});
 
   Future<void> delete({@required String id});
 }
@@ -48,7 +48,7 @@ class UserDao implements IUserDao {
   }
 
   @override
-  Future<void> insertOrUpdate({UserModel userModel}) async {
+  Future<UserModel> insertOrUpdate({UserModel userModel}) async {
     final finder = Finder(filter: Filter.byKey(userModel.id));
     final key = await _userStore.findKey(
       database,
@@ -59,5 +59,6 @@ class UserDao implements IUserDao {
     } else {
       await _insert(userModel: userModel);
     }
+    return userModel;
   }
 }

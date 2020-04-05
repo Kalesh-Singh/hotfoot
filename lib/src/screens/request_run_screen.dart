@@ -20,7 +20,6 @@ class RequestRunScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final IUserRepository userRepository = UserRepository(
-      firebaseAuth: sl(),
       networkInfo: sl(),
       userRemoteDataSource: UserRemoteDataSource(
         firebaseAuth: sl(),
