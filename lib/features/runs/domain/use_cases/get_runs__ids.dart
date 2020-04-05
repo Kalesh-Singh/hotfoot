@@ -1,0 +1,16 @@
+import 'package:dartz/dartz.dart';
+import 'package:hotfoot/core/error/failures.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:meta/meta.dart';
+
+class GetRunsIds implements UseCase<List<String>, NoParams> {
+  final IRunsRepository runsRepository;
+
+  const GetRunsIds({@required this.runsRepository});
+
+  @override
+  Future<Either<Failure, List<String>>> call(NoParams params) async {
+    return await runsRepository.getRunsIds();
+  }
+}

@@ -3,10 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:sembast/sembast.dart';
 
 abstract class IRunDao {
-  Future<void> insert({@required RunModel runModel});
-
-  Future<void> update({@required RunModel runModel});
-
   /// NOTE: Only runs for this user should be cached on the device.
   Future<void> insertOrUpdate({@required RunModel runModel});
 
@@ -31,15 +27,13 @@ class RunDao implements IRunDao {
 
   RunDao({@required this.database});
 
-  @override
-  Future<void> insert({@required RunModel runModel}) async {
+  Future<void> _insert({@required RunModel runModel}) async {
     return await _runStore
         .record(runModel.id)
         .put(database, runModel.toJson());
   }
 
-  @override
-  Future<void> update({@required RunModel runModel}) async {
+  Future<void> _update({@required RunModel runModel}) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(runModel.id));
@@ -88,17 +82,15 @@ class RunDao implements IRunDao {
 
   @override
   Future<void> insertOrUpdate({RunModel runModel}) async {
-    
-    // TODO: If run.customer != getUser.uid() => Fail
     final finder = Finder(filter: Filter.byKey(runModel.id));
     final key = await _runStore.findKey(
       database,
       finder: finder,
     );
     if (key != null) {
-      await update(runModel: runModel);
+      await _update(runModel: runModel);
     } else {
-      await insert(runModel: runModel);
+      await _insert(runModel: runModel);
     }
   }
 }

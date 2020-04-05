@@ -52,7 +52,7 @@ class RunsRepository implements IRunsRepository {
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRunsIds({String userId}) async {
+  Future<Either<Failure, List<String>>> getRunsIds() async {
     // Always get from remote data source if possible, in order
     // to provide updated data.
     if (await networkInfo.isConnected) {
@@ -103,7 +103,7 @@ class RunsRepository implements IRunsRepository {
 
   @override
   Future<Either<Failure, Stream<QuerySnapshot>>> getRunStream(
-      String runId) async {
+      {String runId}) async {
     if (await networkInfo.isConnected) {
       final stream = await runsRemoteDataSource.getRunStream(runId);
       return Right(stream);

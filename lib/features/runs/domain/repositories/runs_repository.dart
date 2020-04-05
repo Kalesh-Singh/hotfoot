@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 
 abstract class IRunsRepository {
   /// Returns all runs that the user placed.
-  Future<Either<Failure, List<String>>> getRunsIds({@required String userId});
+  Future<Either<Failure, List<String>>> getRunsIds();
 
   /// Returns the updated or inserted run.
   Future<Either<Failure, RunEntity>> updateOrInsertRun(
@@ -17,5 +17,5 @@ abstract class IRunsRepository {
   Future<Either<Failure, RunEntity>> getRunById({@required String id});
 
   /// Returns a stream that can be listened to for run updates.
-  Future<Either<Failure, Stream<QuerySnapshot>>> getRunStream(String runId);
+  Future<Either<Failure, Stream<QuerySnapshot>>> getRunStream({@required String runId});
 }
