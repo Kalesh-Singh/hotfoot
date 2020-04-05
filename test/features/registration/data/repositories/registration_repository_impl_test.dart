@@ -6,14 +6,14 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
-import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
+import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockAuthResult extends Mock implements AuthResult {}
 
-class MockUserRepository extends Mock implements IUserRepository {}
+class MockInitUser extends Mock implements InitUser {}
 
 class MockUserModel extends Mock implements UserModel {}
 
@@ -22,17 +22,17 @@ class MockRegistrationRepository extends Mock
 
 void main() {
   MockFirebaseAuth mockFirebaseAuth;
-  MockUserRepository mockUserRepository;
+  MockInitUser mockInitUser;
   SignUp useCase;
   MockRegistrationRepository mockRegistrationRepository;
   RegistrationRepository repository;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
-    mockUserRepository = MockUserRepository();
+    mockInitUser= MockInitUser();
     repository = RegistrationRepository(
       firebaseAuth: mockFirebaseAuth,
-      userRepository: mockUserRepository,
+      initUser: mockInitUser,
     );
     mockRegistrationRepository = MockRegistrationRepository();
     useCase = SignUp(registrationRepository: mockRegistrationRepository);

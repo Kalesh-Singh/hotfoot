@@ -42,6 +42,7 @@ import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.d
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
@@ -102,6 +103,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPlacePhoto(
         placesRepository: sl(),
       ));
+  sl.registerLazySingleton(() => InitUser(
+    userRepository: sl(),
+  ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -111,7 +115,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRegistrationRepository>(
       () => RegistrationRepository(
             firebaseAuth: sl(),
-            userRepository: sl(),
+            initUser: sl(),
           ));
   sl.registerLazySingleton<INavigationAuthRepository>(
       () => NavigationAuthRepository(
@@ -128,6 +132,7 @@ Future<void> init() async {
         userLocalDataSource: sl(),
         userRemoteDataSource: sl(),
       ));
+
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
         placeDao: sl(),
