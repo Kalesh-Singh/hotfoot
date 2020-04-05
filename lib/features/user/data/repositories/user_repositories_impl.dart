@@ -24,19 +24,15 @@ class UserRepository implements IUserRepository {
         assert(userLocalDataSource != null),
         assert(userRemoteDataSource != null);
 
-  Future<Either<Failure, UserModel>> getUser() async {
-    if (await networkInfo.isConnected) {
+  Future<Either<Failure, String>> getUser() async {
       try {
-        final userModel = await userRemoteDataSource.getUser();
-        await userLocalDataSource.insertOrUpdateUser(userModel: userModel);
+        final user = await firebaseAuth.currentUser();
+        final userId = user.uid;
+        return Right(userId);
       } catch (e) {
         print(e);
-        return Left(FirestoreFailure());
+        return Left(FirebaseAuthFailure());
       }
-    } else {
-      final userModel = await userLocalDataSource.getUser();
-      return Right(userModel);
-    }
   }
 
   @override

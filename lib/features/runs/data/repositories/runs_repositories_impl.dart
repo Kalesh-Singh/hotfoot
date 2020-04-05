@@ -58,7 +58,7 @@ class RunsRepository implements IRunsRepository {
     if (await networkInfo.isConnected) {
       try {
         print('getting runs ids from remote data source');
-        final runsIds = await runsRemoteDataSource.getRunsIds(userId: userId);
+        final runsIds = await runsRemoteDataSource.getRunsIds();
         print('got runs ids from remote data source');
         print('Number of runs ${runsIds.length}');
         return Right(runsIds);

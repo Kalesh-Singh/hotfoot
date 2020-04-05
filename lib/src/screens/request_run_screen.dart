@@ -6,16 +6,38 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
+import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
+import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
+import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
+import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user.dart';
+import 'package:hotfoot/injection_container.dart';
 
 class RequestRunScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final IRunsRemoteDataSource remoteDataSource =
-        RunsRemoteDataSource(firestore: Firestore.instance);
+    final IUserRepository userRepository = UserRepository(
+      firebaseAuth: sl(),
+      networkInfo: sl(),
+      userRemoteDataSource: UserRemoteDataSource(
+        firebaseAuth: sl(),
+        firestore: sl(),
+      ),
+      userLocalDataSource: UserLocalDataSource(
+        userDao: UserDao(
+          database: sl(),
+        ),
+      ),
+    );
+    final IRunsRemoteDataSource remoteDataSource = RunsRemoteDataSource(
+      firestore: sl(),
+      getUser: GetUser(userRepository: userRepository),
+    );
 
     remoteDataSource.insertOrUpdateRun(
       runModel: RunModel(
-        id: 'fakeId',
+        id: null,
         order: 'fake order',
         destinationPlaceId: 'fake dest place id',
         customerId: 'fake customer id',

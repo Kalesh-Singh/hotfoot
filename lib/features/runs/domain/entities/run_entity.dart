@@ -68,34 +68,7 @@ class RunEntity extends Equatable {
         assert(timePlaced != null),
         assert(status != null);
 
-  RunEntity copyWith({
-    String id,
-    String order,
-    Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace,
-    String destinationPlaceId,
-    String customerId,
-    String runnerId,
-    DateTime timePlaced,
-    DateTime timeDelivered,
-    double cost,
-    String status,
-//    LocationEntity runnerLocation,
-  }) {
-    return RunEntity(
-      id: id ?? this.id,
-      order: order ?? this.order,
-      pickupPlaceIdOrCustomPlace:
-          pickupPlaceIdOrCustomPlace ?? this.pickupPlaceIdOrCustomPlace,
-      destinationPlaceId: destinationPlaceId ?? this.destinationPlaceId,
-      customerId: customerId ?? this.customerId,
-      runnerId: runnerId ?? this.runnerId,
-      timePlaced: timePlaced ?? this.timePlaced,
-      timeDelivered: timeDelivered ?? this.timeDelivered,
-      cost: cost ?? this.cost,
-      status: status ?? this.status,
-//      runnerLocation: runnerLocation ?? this.runnerLocation,
-    );
-  }
+
 
   @override
   List<Object> get props => [

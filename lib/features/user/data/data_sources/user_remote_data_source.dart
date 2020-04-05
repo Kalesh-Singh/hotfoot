@@ -46,7 +46,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       // Or I can parse the email to get the names but like I said its not safe because
       // Howard sometimes makes emails weird with numbers or abbreviations etc
       'name': email,
-      'pastOrderIds': [],
+      'pastOrderIds': {},
       'pastOrderAddresses': []
     });
     UserModel userModel = UserModel(email: email,

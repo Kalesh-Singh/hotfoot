@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRemoteDataSource {
-  Future<List<String>> getRunsIds({@required String userId});
+  Future<List<String>> getRunsIds();
 
   Future<RunModel> getRunById({@required String id});
 
@@ -19,24 +23,24 @@ abstract class IRunsRemoteDataSource {
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
   final Firestore firestore;
   final CollectionReference _runsCollection;
+  final GetUser getUser;
 
   RunsRemoteDataSource({
     @required this.firestore,
+    @required this.getUser,
   })  : assert(firestore != null),
+        assert(getUser != null),
         this._runsCollection = firestore.collection('runs');
 
   @override
   Future<RunModel> getRunById({String id}) async {
     final CollectionReference _subCollection =
         _runsCollection.document(id).collection('run');
-    final Map<String, dynamic> runJson = {};
 
-    final QuerySnapshot runSnapshot = await _subCollection.getDocuments();
-    runSnapshot.documents.forEach((document) {
-      runJson[document.documentID] = document.data;
-    });
+    final DocumentSnapshot runSnapshot =
+        await _subCollection.document(id).get();
 
-    final runModel = RunModel.fromJson(runJson);
+    final runModel = RunModel.fromJson(runSnapshot.data);
 
     print(runModel);
 
@@ -44,21 +48,25 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
   }
 
   @override
-  Future<List<String>> getRunsIds({String userId}) async {
-    // TODO: Get the ids from the user repo.
-    print('Getting runs ids from firestore');
-    final QuerySnapshot runsSnapshot = await _runsCollection
-        .where('run.customerId', isEqualTo: userId)
-        .getDocuments();
+  Future<List<String>> getRunsIds() async {
+    final userEither = await (getUser(NoParams()));
     List<String> runsIds = List<String>();
+    userEither.fold(
+      (failure) {
+        print('failed to getUser');
+      },
+      (userId) async {
+        final QuerySnapshot runsSnapshot = await firestore
+            .collection('users')
+            .document(userId)
+            .collection('runs')
+            .getDocuments();
 
-    runsSnapshot.documents.forEach((document) {
-      runsIds.add(document.documentID);
-    });
-
-    print('got run ids from firestore');
-    print('Number of runs ${runsIds.length}');
-
+        runsSnapshot.documents.forEach((document) {
+          runsIds.add(document.documentID);
+        });
+      },
+    );
     return runsIds;
   }
 
@@ -85,7 +93,21 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         .document(runId)
         .setData(runModel.toJson());
 
-    // TODO: Add run id to user list if it is not present.
+    // Add run id to user list if it is not present.
+    final userEither = await (getUser(NoParams()));
+    userEither.fold(
+      (failure) {
+        print('failed to getUser');
+      },
+      (userId) async {
+        firestore
+            .collection('users')
+            .document(userId)
+            .collection('runs')
+            .document(runId)
+            .setData({'runId': runId});
+      },
+    );
 
     return runModel;
   }

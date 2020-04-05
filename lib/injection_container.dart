@@ -141,16 +141,13 @@ Future<void> init() async {
             tempPhotosDir: sl(),
             cacheManager: sl(),
           ));
-  sl.registerLazySingleton<IUserLocalDataSource>(
-    () => UserLocalDataSource(
-      userDao: sl(),
-    )
-  );
-  sl.registerLazySingleton<IUserRemoteDataSource>(
-    () => UserRemoteDataSource(
-      firestore: sl(),
-    )
-  );
+  sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
+        userDao: sl(),
+      ));
+  sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
+        firestore: sl(),
+        firebaseAuth: sl(),
+      ));
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
         database: sl(),
@@ -160,8 +157,8 @@ Future<void> init() async {
       ));
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
-    database: sl(),
-  ));
+        database: sl(),
+      ));
 
   // Local Dependencies
   final appDatabase = await AppDatabase.instance.database;

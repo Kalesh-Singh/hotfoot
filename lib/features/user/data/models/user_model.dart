@@ -22,17 +22,18 @@ class UserModel extends UserEntity {
         id: (json['id'] as String),
         name: (json['name'] as String),
         email: (json['email'] as String),
-        pastOrderIds: (json['pastOrderIds'] as List<String>),
+        pastOrderIds: (json['runs'] as Map<String, dynamic>).keys,
         pastOrderAddresses: (json['pastOrderAddresses'] as List<String>),
       )
     : null;
-  
+
+
   Map<String, dynamic> toJson() {
     Map map = Map<String, dynamic>();
     map['id'] = id;
     map['name'] = name;
     map['email'] = email;
-    map['pastOrderIds'] = pastOrderIds;
+    map['runs'] = pastOrderIds;
     map['pastOrderAddresses'] = pastOrderAddresses;
     return map;
   }
