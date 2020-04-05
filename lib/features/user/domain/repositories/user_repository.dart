@@ -4,7 +4,7 @@ import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class IUserRepository {
-  Future<Either<Failure, String>> getUser();
+  Future<Either<Failure, String>> getUserId();
 
   Future<Either<Failure, void>> addUser({@required UserModel userModel});
 

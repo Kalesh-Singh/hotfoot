@@ -11,7 +11,7 @@ import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.d
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
-import 'package:hotfoot/features/user/domain/use_cases/get_user.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class RequestRunScreen extends StatelessWidget {
@@ -32,7 +32,7 @@ class RequestRunScreen extends StatelessWidget {
     );
     final IRunsRemoteDataSource remoteDataSource = RunsRemoteDataSource(
       firestore: sl(),
-      getUser: GetUser(userRepository: userRepository),
+      getUser: GetUserId(userRepository: userRepository),
     );
 
 //    remoteDataSource.insertOrUpdateRun(

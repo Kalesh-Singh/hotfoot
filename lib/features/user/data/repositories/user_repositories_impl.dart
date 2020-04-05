@@ -24,7 +24,7 @@ class UserRepository implements IUserRepository {
         assert(userLocalDataSource != null),
         assert(userRemoteDataSource != null);
 
-  Future<Either<Failure, String>> getUser() async {
+  Future<Either<Failure, String>> getUserId() async {
       try {
         final user = await firebaseAuth.currentUser();
         final userId = user.uid;

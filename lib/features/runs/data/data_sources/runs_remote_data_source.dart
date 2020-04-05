@@ -3,7 +3,7 @@ import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
-import 'package:hotfoot/features/user/domain/use_cases/get_user.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRemoteDataSource {
@@ -23,7 +23,7 @@ abstract class IRunsRemoteDataSource {
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
   final Firestore firestore;
   final CollectionReference _runsCollection;
-  final GetUser getUser;
+  final GetUserId getUser;
 
   RunsRemoteDataSource({
     @required this.firestore,
