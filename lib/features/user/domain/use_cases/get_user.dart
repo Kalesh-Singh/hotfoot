@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:meta/meta.dart';
 
-class GetUser implements UseCase<FirebaseUser, NoParams> {
+class GetUser implements UseCase<UserModel, NoParams> {
   final IUserRepository userRepository;
   const GetUser({@required this.userRepository});
 
   @override
-  Future<Either<Failure, FirebaseUser>> call(NoParams params) async {
+  Future<Either<Failure, UserModel>> call(NoParams params) async {
     return await userRepository.getUser();
   }
 }

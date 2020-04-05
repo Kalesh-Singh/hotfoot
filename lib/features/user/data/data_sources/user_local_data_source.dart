@@ -6,6 +6,7 @@ abstract class IUserLocalDataSource {
   Future<List<String>> getPastOrderIds();
   Future<List<String>> getPastOrderAddresses();
   Future<void> insertOrUpdateUser({@required UserModel userModel});
+  Future<UserModel> getUser();
 }
 
 class UserLocalDataSource implements IUserLocalDataSource {
@@ -34,5 +35,10 @@ class UserLocalDataSource implements IUserLocalDataSource {
   @override
   Future<void> insertOrUpdateUser({UserModel userModel}) async {
     return await userDao.insertOrUpdate(userModel: userModel);
+  }
+
+  @override
+  Future<UserModel> getUser() async {
+    return await userDao.getUserInformation();
   }
 }

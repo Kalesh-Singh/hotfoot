@@ -4,17 +4,28 @@ import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class IUserRemoteDataSource {
-  Future<UserModel> initializeFirestore({@required String email, @required FirebaseUser firebaseUser});
+  Future<UserModel> initializeFirestore(
+      {@required String email, @required FirebaseUser firebaseUser});
+
   Future<List<String>> getPastOrderIds();
+
   Future<List<String>> getPastOrderAddresses();
+
+  Future<UserModel> getUser();
+
+  Future<void> insertOrUpdateUser({@required UserModel userModel});
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
   final Firestore firestore;
+  final FirebaseAuth firebaseAuth;
 
   UserRemoteDataSource({
     @required this.firestore,
-  })  : assert(firestore != null);
+    @required this.firebaseAuth,
+  })
+      : assert(firestore != null),
+        assert(firebaseAuth != null);
 
   // Make a collection with users email
   // Could add other fields in the future
@@ -23,7 +34,8 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   // print(reference.documentID);
   // Making the document id unique based on email address so it can be retrieved
   @override
-  Future<UserModel> initializeFirestore({@required String email, @required FirebaseUser firebaseUser}) async {
+  Future<UserModel> initializeFirestore(
+      {@required String email, @required FirebaseUser firebaseUser}) async {
     print("Setting data in firestore");
     await firestore.collection("users").document(firebaseUser.uid).setData({
       'id': firebaseUser.uid,
@@ -37,7 +49,11 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       'pastOrderIds': [],
       'pastOrderAddresses': []
     });
-    UserModel userModel = UserModel(email: email, id: firebaseUser.uid, name: email, pastOrderIds: [], pastOrderAddresses: []);
+    UserModel userModel = UserModel(email: email,
+        id: firebaseUser.uid,
+        name: email,
+        pastOrderIds: [],
+        pastOrderAddresses: []);
     return userModel;
   }
 
@@ -47,7 +63,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     List<String> ordersIds = List<String>();
     List<dynamic> documentOrderIds = List<dynamic>();
     // userId for right now is email
-    await firestore.collection("users").document(userId).get().then((val){
+    await firestore.collection("users").document(userId).get().then((val) {
       documentOrderIds = val.data['pastOrders'];
       documentOrderIds.forEach((element) => ordersIds.add(element));
     });
@@ -63,7 +79,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     List<String> addresses = List<String>();
     List<dynamic> documentAddresses = List<dynamic>();
     // userId for right now is email
-    await firestore.collection("users").document(userId).get().then((val){
+    await firestore.collection("users").document(userId).get().then((val) {
       documentAddresses = val.data['addresses'];
       documentAddresses.forEach((element) => addresses.add(element));
     });
@@ -71,5 +87,21 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     print('got past order addresses from firestore');
     print('Number of past addresses customer has used ${addresses.length}');
     return addresses;
+  }
+
+  @override
+  Future<UserModel> getUser() async {
+    final user = await (firebaseAuth.currentUser());
+    final userId = user.uid;
+    final userData = await (firestore.collection('users').document(userId).get());
+    final userJson = userData.data;
+    return UserModel.fromJson(userJson);
+  }
+
+  @override
+  Future<void> insertOrUpdateUser({UserModel userModel}) async {
+    final user = await (firebaseAuth.currentUser());
+    final userId = user.uid;
+    firestore.collection("users").document(userId).setData(userModel.toJson());
   }
 }

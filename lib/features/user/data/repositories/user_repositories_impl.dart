@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -18,20 +19,23 @@ class UserRepository implements IUserRepository {
     @required this.networkInfo,
     @required this.userRemoteDataSource,
     @required this.userLocalDataSource,
-  }) :
-      assert(firebaseAuth != null), 
-      assert(networkInfo != null),
-      assert(userLocalDataSource != null),
-      assert(userRemoteDataSource != null);
+  })  : assert(firebaseAuth != null),
+        assert(networkInfo != null),
+        assert(userLocalDataSource != null),
+        assert(userRemoteDataSource != null);
 
-  @override
-  Future<Either<Failure, FirebaseUser>> getUser() async {
-    try{
-      final result = await firebaseAuth.currentUser();
-      return Right(result);
-    } catch (e) {
-      print(e);
-      return Left(FirebaseAuthFailure());
+  Future<Either<Failure, UserModel>> getUser() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final userModel = await userRemoteDataSource.getUser();
+        await userLocalDataSource.insertOrUpdateUser(userModel: userModel);
+      } catch (e) {
+        print(e);
+        return Left(FirestoreFailure());
+      }
+    } else {
+      final userModel = await userLocalDataSource.getUser();
+      return Right(userModel);
     }
   }
 
@@ -55,7 +59,7 @@ class UserRepository implements IUserRepository {
       print('Number of past orders ${orderIds.length}');
       if (orderIds.length == 0) {
         return Left(DatabaseFailure());
-        }
+      }
       print('Got order ids from local data source');
       return Right(orderIds);
     }
@@ -66,7 +70,8 @@ class UserRepository implements IUserRepository {
     if (await networkInfo.isConnected) {
       try {
         print('getting customers order addresses');
-        final pastOrderAddresses = await userRemoteDataSource.getPastOrderAddresses();
+        final pastOrderAddresses =
+            await userRemoteDataSource.getPastOrderAddresses();
         print('got past order addresses from remote data source');
         print('number of past order addresses ${pastOrderAddresses.length}');
         return Right(pastOrderAddresses);
@@ -77,13 +82,25 @@ class UserRepository implements IUserRepository {
     } else {
       // Get data from local data source
       print('getting past order addresses from local datasource');
-      final pastOrderAddresses = await userLocalDataSource.getPastOrderAddresses();
+      final pastOrderAddresses =
+          await userLocalDataSource.getPastOrderAddresses();
       print('Number of past order addresses ${pastOrderAddresses.length}');
       if (pastOrderAddresses.length == 0) {
         return Left(DatabaseFailure());
-        }
+      }
       print('Got order ids from local data source');
       return Right(pastOrderAddresses);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addUser({UserModel userModel}) async {
+    if (await networkInfo.isConnected) {
+      await userRemoteDataSource.insertOrUpdateUser(userModel: userModel);
+      await userLocalDataSource.insertOrUpdateUser(userModel: userModel);
+      return Right(Future.value());
+    } else {
+      return Left(NetworkFailure());
     }
   }
 }
