@@ -51,6 +51,10 @@ dependencies:
   # instead of using Icon() use FaIcon()
   # Find available icons here => https://fontawesome.com/icons?d=gallery&q
   font_awesome_flutter: ^8.4.0
+  # To get device's current location
+  geolocator: ^5.3.1
+  # For geocoding and reverse geocoding
+  geocoder: ^0.2.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the Cupertino Icons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -60,7 +64,7 @@ dependencies:
   google_maps_flutter: ^0.5.21
   flutter_google_places: ^0.2.3
   google_maps_webservice: ^0.0.16
-  geolocator: ^5.1.5
+
   rxdart: ^0.23.0
   flutter_speed_dial: ^1.2.4
   flutter_barcode_scanner: ^0.1.7

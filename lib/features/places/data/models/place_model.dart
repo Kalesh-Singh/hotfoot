@@ -1,5 +1,5 @@
-import 'package:hotfoot/features/places/data/models/location_model.dart';
-import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
+import 'package:hotfoot/features/location/data/models/location_model.dart';
+import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
