@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
@@ -23,9 +24,29 @@ class LocationRepository implements ILocationRepository {
   }
 
   @override
-  Future<Either<Failure, PlaceEntity>> getCurrentPlace({LocationEntity latLng}) {
-    // TODO: implement getCurrentPlace
-    return null;
+  Future<Either<Failure, PlaceEntity>> getCurrentPlace() async {
+    final currentLocation = await _getCurrentLocation();
+    final coordinates = new Coordinates(
+      currentLocation.lat,
+      currentLocation.lng,
+    );
+    final addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    final firstAddress = addresses.first;
+    print("${firstAddress.featureName} : ${firstAddress.addressLine}");
+    return Right(
+      PlaceEntity(
+        id: null,
+        name: firstAddress.addressLine,
+        address: firstAddress.addressLine,
+        locationEntity: LocationEntity(
+          lat: firstAddress.coordinates.latitude,
+          lng: firstAddress.coordinates.longitude,
+        ),
+        orders: null,
+        photoUrl: null,
+      ),
+    );
   }
 
   @override
