@@ -42,6 +42,7 @@ import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.d
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
@@ -102,6 +103,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPlacePhoto(
         placesRepository: sl(),
       ));
+  sl.registerLazySingleton(() => InitUser(
+    userRepository: sl(),
+  ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -111,7 +115,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRegistrationRepository>(
       () => RegistrationRepository(
             firebaseAuth: sl(),
-            userRemoteDataSource: sl(),
+            initUser: sl(),
           ));
   sl.registerLazySingleton<INavigationAuthRepository>(
       () => NavigationAuthRepository(
@@ -124,11 +128,11 @@ Future<void> init() async {
         networkInfo: sl(),
       ));
   sl.registerLazySingleton<IUserRepository>(() => UserRepository(
-        firebaseAuth: sl(),
         networkInfo: sl(),
         userLocalDataSource: sl(),
         userRemoteDataSource: sl(),
       ));
+
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
         placeDao: sl(),
@@ -141,16 +145,13 @@ Future<void> init() async {
             tempPhotosDir: sl(),
             cacheManager: sl(),
           ));
-  sl.registerLazySingleton<IUserLocalDataSource>(
-    () => UserLocalDataSource(
-      userDao: sl(),
-    )
-  );
-  sl.registerLazySingleton<IUserRemoteDataSource>(
-    () => UserRemoteDataSource(
-      firestore: sl(),
-    )
-  );
+  sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
+        userDao: sl(),
+      ));
+  sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
+        firestore: sl(),
+        firebaseAuth: sl(),
+      ));
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
         database: sl(),
@@ -160,8 +161,8 @@ Future<void> init() async {
       ));
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
-    database: sl(),
-  ));
+        database: sl(),
+      ));
 
   // Local Dependencies
   final appDatabase = await AppDatabase.instance.database;

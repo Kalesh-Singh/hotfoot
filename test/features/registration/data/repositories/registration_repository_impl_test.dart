@@ -4,16 +4,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/registration/data/repositories/registration_repository_impl.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
-import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
+import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockAuthResult extends Mock implements AuthResult {}
 
-class MockRemoteDataSource extends Mock implements IUserRemoteDataSource {}
+class MockInitUser extends Mock implements InitUser {}
 
 class MockUserModel extends Mock implements UserModel {}
 
@@ -22,15 +22,18 @@ class MockRegistrationRepository extends Mock
 
 void main() {
   MockFirebaseAuth mockFirebaseAuth;
-  MockRemoteDataSource mockRemoteDataSource;
+  MockInitUser mockInitUser;
   SignUp useCase;
   MockRegistrationRepository mockRegistrationRepository;
   RegistrationRepository repository;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
-    mockRemoteDataSource = MockRemoteDataSource();
-    repository = RegistrationRepository(firebaseAuth: mockFirebaseAuth, userRemoteDataSource: mockRemoteDataSource);
+    mockInitUser= MockInitUser();
+    repository = RegistrationRepository(
+      firebaseAuth: mockFirebaseAuth,
+      initUser: mockInitUser,
+    );
     mockRegistrationRepository = MockRegistrationRepository();
     useCase = SignUp(registrationRepository: mockRegistrationRepository);
   });
@@ -39,7 +42,7 @@ void main() {
   final String tPassword = 'password';
 
   group('Sign Up', () {
-    test('Should return usermodel upon sign in with registration repository',
+    test('Should return UserModel upon sign in with registration repository',
         () async {
       // arrange
       final MockUserModel tUserModelResult = MockUserModel();

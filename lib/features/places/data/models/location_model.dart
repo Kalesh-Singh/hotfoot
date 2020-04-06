@@ -1,7 +1,7 @@
 import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
 import 'package:meta/meta.dart';
 
-class LocationModel extends Location {
+class LocationModel extends LocationEntity {
   final double lat;
   final double lng;
 

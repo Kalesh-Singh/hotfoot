@@ -1,18 +1,23 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotfoot/core/error/failures.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
+import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:meta/meta.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 
 class RegistrationRepository implements IRegistrationRepository {
   final FirebaseAuth firebaseAuth;
-  final IUserRemoteDataSource userRemoteDataSource;
+  final InitUser initUser;
+
   const RegistrationRepository({
     @required this.firebaseAuth,
-    @required this.userRemoteDataSource,
-  });
+    @required this.initUser,
+  })  : assert(firebaseAuth != null),
+        assert(initUser != null);
 
   @override
   Future<Either<Failure, UserModel>> signUp({
@@ -28,8 +33,15 @@ class RegistrationRepository implements IRegistrationRepository {
       if (_firebaseUser == null) {
         print("firebase user is null");
       }
-      final userModel = await userRemoteDataSource.initializeFirestore(email: email, firebaseUser: _firebaseUser);
-      return Right(userModel);
+      final either = await initUser(NoParams());
+      return either.fold(
+        (failure) {
+          return Left(failure);
+        },
+        (success) {
+          return Right(success);
+        },
+      );
     } catch (e) {
       print(e);
       return Left(FirebaseAuthFailure());

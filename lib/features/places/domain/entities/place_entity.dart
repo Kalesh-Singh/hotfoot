@@ -6,7 +6,7 @@ class PlaceEntity extends Equatable {
   final String id;
   final String name;
   final String address;
-  final Location location;
+  final LocationEntity locationEntity;
   final String photoUrl;
   final int orders;
 
@@ -14,20 +14,20 @@ class PlaceEntity extends Equatable {
     @required this.id,
     @required this.name,
     @required this.address,
-    @required this.location,
+    @required this.locationEntity,
     @required this.photoUrl,
     @required this.orders,
   });
 
   @override
-  String toString() => "$name, $location";
+  String toString() => "$name, $locationEntity";
 
   @override
   List<Object> get props => [
         id,
         name,
         address,
-        location,
+        locationEntity,
         photoUrl,
         orders,
       ];

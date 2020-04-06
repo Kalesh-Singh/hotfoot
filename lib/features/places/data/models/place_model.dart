@@ -1,24 +1,22 @@
+import 'package:hotfoot/features/places/data/models/location_model.dart';
 import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
-import 'location_model.dart';
-
 class PlaceModel extends PlaceEntity {
-  final LocationModel locationModel;
 
   const PlaceModel({
     @required String id,
     @required String name,
     @required String address,
-    @required this.locationModel,
+    @required LocationEntity locationEntity,
     @required String photoUrl,
     @required int orders,
   }) : super(
           id: id,
           name: name,
           address: address,
-          location: locationModel,
+          locationEntity: locationEntity,
           photoUrl: photoUrl,
           orders: orders,
         );
@@ -28,7 +26,7 @@ class PlaceModel extends PlaceEntity {
           id: (json['id'] as String),
           name: (json['name'] as String),
           address: (json['address'] as String),
-          locationModel: LocationModel.fromJson(json['location']),
+          locationEntity: LocationModel.fromJson(json['location']),
           photoUrl: (json['photoUrl'] as String),
           orders: (json['orders'] as int),
         )
@@ -39,7 +37,7 @@ class PlaceModel extends PlaceEntity {
     map['id'] = id;
     map['name'] = name;
     map['address'] = address;
-    map['location'] = locationModel.toJson();
+    map['location'] = (locationEntity as LocationModel).toJson();
     map['photoUrl'] = photoUrl;
     map['orders'] = orders;
     return map;
