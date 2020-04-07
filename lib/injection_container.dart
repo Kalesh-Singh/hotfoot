@@ -3,11 +3,17 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotfoot/core/database/app_database.dart';
 import 'package:hotfoot/core/network/network_info.dart';
 import 'package:hotfoot/core/validators/validators.dart';
+import 'package:hotfoot/features/location/data/repositories/location_repository_impl.dart';
+import 'package:hotfoot/features/location/domain/repositories/location_repository.dart';
+import 'package:hotfoot/features/location/domain/use_cases/get_current_place.dart';
+import 'package:hotfoot/features/location/domain/use_cases/get_place_from_query.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/login/data/repositories/login_repository_impl.dart';
 import 'package:hotfoot/features/login/domain/repositories/login_repository.dart';
 import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_credentials.dart';
@@ -74,6 +80,10 @@ Future<void> init() async {
   sl.registerFactory(() => PlacePhotoBloc(
         getPlacePhoto: sl(),
       ));
+  sl.registerFactory(() => LocationBloc(
+        getCurrentPlace: sl(),
+        getPlaceFromQuery: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -104,8 +114,14 @@ Future<void> init() async {
         placesRepository: sl(),
       ));
   sl.registerLazySingleton(() => InitUser(
-    userRepository: sl(),
-  ));
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetCurrentPlace(
+        locationRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetPlaceFromQuery(
+        locationRepository: sl(),
+      ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -132,6 +148,9 @@ Future<void> init() async {
         userLocalDataSource: sl(),
         userRemoteDataSource: sl(),
       ));
+  sl.registerLazySingleton<ILocationRepository>(() => LocationRepository(
+        geolocator: sl(),
+      ));
 
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
@@ -152,6 +171,7 @@ Future<void> init() async {
         firestore: sl(),
         firebaseAuth: sl(),
       ));
+
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
         database: sl(),
@@ -178,6 +198,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Firestore.instance);
   sl.registerLazySingleton(() => FirebaseStorage.instance);
   sl.registerLazySingleton(() => DefaultCacheManager());
+  sl.registerLazySingleton(() => Geolocator());
 
   // Core
   sl.registerLazySingleton(() => Validators());

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/places/domain/entities/location_entity.dart';
+import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
 import 'package:meta/meta.dart';
 
 class PlaceEntity extends Equatable {

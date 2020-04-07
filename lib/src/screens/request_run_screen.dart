@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:hotfoot/features/location/data/repositories/location_repository_impl.dart';
+import 'package:hotfoot/features/location/domain/repositories/location_repository.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
@@ -52,6 +55,15 @@ class RequestRunScreen extends StatelessWidget {
 //    );
 
     final runIds = remoteDataSource.getRunsIds();
+
+    final ILocationRepository locationRepository = LocationRepository(
+      geolocator: Geolocator(),
+    );
+
+    final addresses = locationRepository.getCurrentPlace();
+
+    final places =
+        locationRepository.getPlaceFromQuery(query: '14620 115th Ave');
 
     return Scaffold(
       appBar: AppBar(

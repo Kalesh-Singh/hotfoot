@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/location/presentation/ui/address_widget.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
@@ -32,7 +33,12 @@ class HomeTab extends StatelessWidget {
                 )),
           ],
         ),
-        body: PlacesList(),
+        body: Column(
+          children: <Widget>[
+            AddressWidget(),
+            Expanded(child: PlacesList()),
+          ],
+        ),
         bottomNavigationBar: BottomNavBar(),
       ),
     );
