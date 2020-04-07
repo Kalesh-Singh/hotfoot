@@ -12,6 +12,7 @@ import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/location/data/repositories/location_repository_impl.dart';
 import 'package:hotfoot/features/location/domain/repositories/location_repository.dart';
 import 'package:hotfoot/features/location/domain/use_cases/get_current_place.dart';
+import 'package:hotfoot/features/location/domain/use_cases/get_place_from_query.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/login/data/repositories/login_repository_impl.dart';
 import 'package:hotfoot/features/login/domain/repositories/login_repository.dart';
@@ -81,6 +82,7 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => LocationBloc(
         getCurrentPlace: sl(),
+        getPlaceFromQuery: sl(),
       ));
 
   // Use cases
@@ -115,6 +117,9 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetCurrentPlace(
+        locationRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetPlaceFromQuery(
         locationRepository: sl(),
       ));
 

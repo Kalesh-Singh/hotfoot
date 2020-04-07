@@ -28,3 +28,21 @@ class CurrentPlaceLoadFailure extends LocationState {
   @override
   List<Object> get props => [message];
 }
+
+class QueriedPlaceLoadSuccess extends LocationState {
+  final PlaceEntity placeEntity;
+
+  const QueriedPlaceLoadSuccess({@required this.placeEntity});
+
+  @override
+  List<Object> get props => [placeEntity];
+}
+
+class QueriedPlaceLoadFailure extends LocationState {
+  final String message;
+
+  const QueriedPlaceLoadFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

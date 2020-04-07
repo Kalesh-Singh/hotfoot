@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 
 class LocationForm extends StatefulWidget {
@@ -80,7 +81,6 @@ class _LocationFormState extends State<LocationForm> {
   }
 
   void _onEditingComplete() {
-    // TODO: Get address from query
-//    _locationBloc.add();
+    _locationBloc.add(PlaceQueried(query: _addressController.text));
   }
 }
