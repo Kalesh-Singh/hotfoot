@@ -36,7 +36,7 @@ class RequestRunScreen extends StatelessWidget {
     );
     final IRunsRemoteDataSource remoteDataSource = RunsRemoteDataSource(
       firestore: sl(),
-      getUser: GetUserId(userRepository: userRepository),
+      getUserId: GetUserId(userRepository: userRepository),
     );
 
 //    remoteDataSource.insertOrUpdateRun(

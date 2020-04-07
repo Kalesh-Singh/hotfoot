@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
-import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:meta/meta.dart';
 
 import 'current_run_event.dart';
 import 'current_run_state.dart';
 
 class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
-  final IRunsRepository runRepository;
+  final InitRun initRun;
 
-  CurrentRunBloc({@required this.runRepository});
+  CurrentRunBloc({@required this.initRun}) : assert(initRun != null);
 
   @override
   CurrentRunState get initialState =>
@@ -61,7 +62,7 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
   }
 
   Stream<CurrentRunState> _mapCustomerChangedToState() async* {
-    final initRunEither = await runRepository.initRun();
+    final initRunEither = await initRun(NoParams());
     RunModel run = RunModel.empty();
     initRunEither.fold(
       (failure) {},

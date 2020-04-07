@@ -23,13 +23,13 @@ abstract class IRunsRemoteDataSource {
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
   final Firestore firestore;
   final CollectionReference _runsCollection;
-  final GetUserId getUser;
+  final GetUserId getUserId;
 
   RunsRemoteDataSource({
     @required this.firestore,
-    @required this.getUser,
+    @required this.getUserId,
   })  : assert(firestore != null),
-        assert(getUser != null),
+        assert(getUserId != null),
         this._runsCollection = firestore.collection('runs');
 
   @override
@@ -49,7 +49,7 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   @override
   Future<List<String>> getRunsIds() async {
-    final userEither = await (getUser(NoParams()));
+    final userEither = await (getUserId(NoParams()));
     List<String> runsIds = List<String>();
     await userEither.fold(
       (failure) {
@@ -99,7 +99,7 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         .setData(runModel.toJson());
 
     // Add run id to user list if it is not present.
-    final userEither = await (getUser(NoParams()));
+    final userEither = await (getUserId(NoParams()));
     userEither.fold(
       (failure) {
         print('failed to getUser');

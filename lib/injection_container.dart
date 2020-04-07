@@ -43,12 +43,19 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
+import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
+import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
+import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.dart';
+import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -86,7 +93,7 @@ Future<void> init() async {
         getPlaceFromQuery: sl(),
       ));
   sl.registerFactory(() => CurrentRunBloc(
-        runRepository: sl(),
+        initRun: sl(),
       ));
 
   // Use cases
@@ -126,6 +133,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPlaceFromQuery(
         locationRepository: sl(),
       ));
+  sl.registerLazySingleton(() => InitRun(
+        runsRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserId(
+        userRepository: sl(),
+      ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -155,6 +168,12 @@ Future<void> init() async {
   sl.registerLazySingleton<ILocationRepository>(() => LocationRepository(
         geolocator: sl(),
       ));
+  sl.registerLazySingleton<IRunsRepository>(() => RunsRepository(
+        runsLocalDataSource: sl(),
+        runsRemoteDataSource: sl(),
+        getUserId: sl(),
+        networkInfo: sl(),
+      ));
 
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
@@ -175,6 +194,13 @@ Future<void> init() async {
         firestore: sl(),
         firebaseAuth: sl(),
       ));
+  sl.registerLazySingleton<IRunsLocalDataSource>(() => RunsLocalDataSource(
+        runDao: sl(),
+      ));
+  sl.registerLazySingleton<IRunsRemoteDataSource>(() => RunsRemoteDataSource(
+        firestore: sl(),
+        getUserId: sl(),
+      ));
 
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
@@ -185,6 +211,9 @@ Future<void> init() async {
       ));
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
+        database: sl(),
+      ));
+  sl.registerLazySingleton<IRunDao>(() => RunDao(
         database: sl(),
       ));
 

@@ -12,10 +12,10 @@ abstract class IRunsLocalDataSource {
   Future<RunModel> insertOrUpdateRun({@required RunModel runModel});
 }
 
-class PlacesLocalDataSource implements IRunsLocalDataSource {
+class RunsLocalDataSource implements IRunsLocalDataSource {
   final IRunDao runDao;
 
-  const PlacesLocalDataSource({
+  const RunsLocalDataSource({
     @required this.runDao,
   }) : assert(runDao != null);
 
