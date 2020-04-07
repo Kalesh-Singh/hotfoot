@@ -10,21 +10,18 @@ import 'package:meta/meta.dart';
 class LocationRepository implements ILocationRepository {
   final Geolocator geolocator;
 
-  const LocationRepository({
+  PlaceEntity lastPlace;
+
+  LocationRepository({
     @required this.geolocator,
   }) : assert(geolocator != null);
 
-  Future<LocationEntity> _getCurrentLocation() async {
-    final Position position = await geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    return LocationEntity(
-      lat: position.latitude,
-      lng: position.longitude,
-    );
-  }
-
   @override
   Future<Either<Failure, PlaceEntity>> getCurrentPlace() async {
+    if (lastPlace != null) {
+      return Right(lastPlace);
+    }
+
     final currentLocation = await _getCurrentLocation();
     final coordinates = new Coordinates(
       currentLocation.lat,
@@ -35,6 +32,7 @@ class LocationRepository implements ILocationRepository {
     final firstAddress = addresses.first;
     print("${firstAddress.featureName} : ${firstAddress.addressLine}");
     final place = _getPlaceEntityFromAddress(address: firstAddress);
+    lastPlace = place;
     return Right(place);
   }
 
@@ -45,6 +43,7 @@ class LocationRepository implements ILocationRepository {
     print(
         "${firstAddress.featureName} : ${firstAddress.coordinates} : ${firstAddress.addressLine}");
     final place = _getPlaceEntityFromAddress(address: firstAddress);
+    lastPlace = place;
     return Right(place);
   }
 
@@ -59,6 +58,15 @@ class LocationRepository implements ILocationRepository {
       ),
       orders: null,
       photoUrl: null,
+    );
+  }
+
+  Future<LocationEntity> _getCurrentLocation() async {
+    final Position position = await geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    return LocationEntity(
+      lat: position.latitude,
+      lng: position.longitude,
     );
   }
 }
