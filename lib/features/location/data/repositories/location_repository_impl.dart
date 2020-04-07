@@ -34,24 +34,31 @@ class LocationRepository implements ILocationRepository {
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     final firstAddress = addresses.first;
     print("${firstAddress.featureName} : ${firstAddress.addressLine}");
-    return Right(
-      PlaceEntity(
-        id: null,
-        name: firstAddress.addressLine,
-        address: firstAddress.addressLine,
-        locationEntity: LocationEntity(
-          lat: firstAddress.coordinates.latitude,
-          lng: firstAddress.coordinates.longitude,
-        ),
-        orders: null,
-        photoUrl: null,
-      ),
-    );
+    final place = _getPlaceEntityFromAddress(address: firstAddress);
+    return Right(place);
   }
 
   @override
-  Future<Either<Failure, PlaceEntity>> getPlaceFromAddress({String address}) {
-    // TODO: implement getPlaceFromAddress
-    return null;
+  Future<Either<Failure, PlaceEntity>> getPlaceFromQuery({String query}) async {
+    var addresses = await Geocoder.local.findAddressesFromQuery(query);
+    var firstAddress = addresses.first;
+    print(
+        "${firstAddress.featureName} : ${firstAddress.coordinates} : ${firstAddress.addressLine}");
+    final place = _getPlaceEntityFromAddress(address: firstAddress);
+    return Right(place);
+  }
+
+  PlaceEntity _getPlaceEntityFromAddress({@required Address address}) {
+    return PlaceEntity(
+      id: null,
+      name: address.addressLine,
+      address: address.addressLine,
+      locationEntity: LocationEntity(
+        lat: address.coordinates.latitude,
+        lng: address.coordinates.longitude,
+      ),
+      orders: null,
+      photoUrl: null,
+    );
   }
 }

@@ -6,6 +6,6 @@ import 'package:meta/meta.dart';
 abstract class ILocationRepository {
   Future<Either<Failure, PlaceEntity>> getCurrentPlace();
 
-  Future<Either<Failure, PlaceEntity>> getPlaceFromAddress(
-      {@required String address});
+  Future<Either<Failure, PlaceEntity>> getPlaceFromQuery(
+      {@required String query});
 }

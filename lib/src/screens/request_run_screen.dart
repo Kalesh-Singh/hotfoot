@@ -62,6 +62,9 @@ class RequestRunScreen extends StatelessWidget {
 
     final addresses = locationRepository.getCurrentPlace();
 
+    final places =
+        locationRepository.getPlaceFromQuery(query: '14620 115th Ave');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Run Request'),
