@@ -11,6 +11,7 @@ class LocationForm extends StatefulWidget {
 class _LocationFormState extends State<LocationForm> {
   final TextEditingController _addressController =
       TextEditingController(text: 'Loading ...');
+  final FocusNode _addressFocus = FocusNode();
 
   LocationBloc _locationBloc;
 
@@ -24,14 +25,21 @@ class _LocationFormState extends State<LocationForm> {
   Widget build(BuildContext context) {
     return BlocListener<LocationBloc, LocationState>(
       listener: (context, state) {
-        if (state is CurrentPlaceLoadFailure) {
+        if (state is CurrentPlaceLoadFailure ||
+            state is QueriedPlaceLoadFailure) {
+          String errMsg;
+          if (state is CurrentPlaceLoadFailure) {
+            errMsg = state.message;
+          } else if (state is QueriedPlaceLoadFailure) {
+            errMsg = state.message;
+          }
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text(state.message), Icon(Icons.error)],
+                  children: [Text(errMsg), Icon(Icons.error)],
                 ),
                 backgroundColor: Colors.red,
               ),
@@ -42,13 +50,22 @@ class _LocationFormState extends State<LocationForm> {
         builder: (context, state) {
           if (state is CurrentPlaceLoadSuccess) {
             _addressController.text = state.placeEntity.address;
+          } else if (state is QueriedPlaceLoadSuccess) {
+            _addressController.text = state.placeEntity.address;
           }
+
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(
               child: TextFormField(
                 onEditingComplete: () {
                   _onEditingComplete();
+                },
+                onFieldSubmitted: (_) {
+                  _addressFocus.unfocus();
+                  // Hide keyboard
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  // TODO: Hide keyboard;
                 },
                 controller: _addressController,
                 decoration: InputDecoration(
