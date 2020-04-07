@@ -8,7 +8,8 @@ class LocationForm extends StatefulWidget {
 }
 
 class _LocationFormState extends State<LocationForm> {
-  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _addressController =
+      TextEditingController(text: 'Loading ...');
 
   LocationBloc _locationBloc;
 
@@ -38,22 +39,32 @@ class _LocationFormState extends State<LocationForm> {
       },
       child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
+          if (state is CurrentPlaceLoadSuccess) {
+            _addressController.text = state.placeEntity.address;
+          }
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(
               child: TextFormField(
                 onEditingComplete: () {
-                  _onFormSubmitted();
+                  _onEditingComplete();
                 },
                 controller: _addressController,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.email),
-                  labelText: 'Email',
+                  icon: Icon(Icons.location_on),
+                  labelText: 'Delivery Location',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 autovalidate: true,
                 autocorrect: false,
-                validator: (_) {},
               ),
             ),
           );
@@ -68,7 +79,7 @@ class _LocationFormState extends State<LocationForm> {
     super.dispose();
   }
 
-  void _onFormSubmitted() {
+  void _onEditingComplete() {
     // TODO: Get address from query
 //    _locationBloc.add();
   }
