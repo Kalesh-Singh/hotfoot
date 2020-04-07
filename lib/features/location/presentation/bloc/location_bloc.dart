@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/core/error/failures.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/location/domain/use_cases/get_current_place.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
@@ -9,7 +10,7 @@ import 'package:meta/meta.dart';
 
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
   static const String _CURRENT_PLACE_ERR_MSG =
-      'Failed to retrieve place details';
+      'Failed to retrieve current address';
   final GetCurrentPlace getCurrentPlace;
 
   LocationBloc({
@@ -22,17 +23,17 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   @override
   Stream<LocationState> mapEventToState(LocationEvent event) async* {
     if (event is CurrentPlaceRequested) {
-      final failureOrPlaceDetails = await getCurrentPlace();
+      final failureOrPlaceDetails = await getCurrentPlace(NoParams());
       yield* _eitherPlaceDetailsLoadedOrFailureState(failureOrPlaceDetails);
     }
   }
 
   Stream<LocationState> _eitherPlaceDetailsLoadedOrFailureState(
-      Either<Failure, PlaceEntity> failureOrPlaceDetails,
-      ) async* {
+    Either<Failure, PlaceEntity> failureOrPlaceDetails,
+  ) async* {
     yield failureOrPlaceDetails.fold(
-          (failure) => CurrentPlaceLoadFailure(message: _CURRENT_PLACE_ERR_MSG),
-          (placeEntity) => CurrentPlaceLoadSuccess(placeEntity: placeEntity),
+      (failure) => CurrentPlaceLoadFailure(message: _CURRENT_PLACE_ERR_MSG),
+      (placeEntity) => CurrentPlaceLoadSuccess(placeEntity: placeEntity),
     );
   }
 }
