@@ -9,7 +9,7 @@ class RunModel extends RunEntity {
     @required String id,
     @required String order,
     @required Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace,
-    @required String destinationPlaceId,
+    @required PlaceEntity destinationPlace,
     @required String customerId,
     @required String runnerId,
     @required DateTime timePlaced,
@@ -20,7 +20,7 @@ class RunModel extends RunEntity {
           id: id,
           order: order,
           pickupPlaceIdOrCustomPlace: pickupPlaceIdOrCustomPlace,
-          destinationPlaceId: destinationPlaceId,
+          destinationPlace: destinationPlace,
           customerId: customerId,
           runnerId: runnerId,
           timePlaced: timePlaced,
@@ -34,7 +34,7 @@ class RunModel extends RunEntity {
           id: (json['id'] as String),
           order: (json['order'] as String),
           pickupPlaceIdOrCustomPlace: _getPickupPlaceFromJson(json),
-          destinationPlaceId: (json['destinationPlaceId'] as String),
+          destinationPlace: PlaceModel.fromJson(json['destinationPlace']),
           customerId: (json['customerId'] as String),
           runnerId: (json['runnerId'] as String),
           timePlaced: DateTime.tryParse(json['timePlaced'] as String),
@@ -62,7 +62,7 @@ class RunModel extends RunEntity {
 
     map['id'] = this.id;
     map['order'] = this.order;
-    map['destinationPlaceId'] = destinationPlaceId;
+    map['destinationPlace'] = (destinationPlace as PlaceModel).toJson();
     map['customerId'] = customerId;
     map['runnerId'] = runnerId;
     map['timePlaced'] = timePlaced.toIso8601String();
@@ -86,7 +86,7 @@ class RunModel extends RunEntity {
     String id,
     String order,
     Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace,
-    String destinationPlaceId,
+    PlaceEntity destinationPlace,
     String customerId,
     String runnerId,
     DateTime timePlaced,
@@ -100,7 +100,7 @@ class RunModel extends RunEntity {
       order: order ?? this.order,
       pickupPlaceIdOrCustomPlace:
           pickupPlaceIdOrCustomPlace ?? this.pickupPlaceIdOrCustomPlace,
-      destinationPlaceId: destinationPlaceId ?? this.destinationPlaceId,
+      destinationPlace: destinationPlace ?? this.destinationPlace,
       customerId: customerId ?? this.customerId,
       runnerId: runnerId ?? this.runnerId,
       timePlaced: timePlaced ?? this.timePlaced,
@@ -108,6 +108,21 @@ class RunModel extends RunEntity {
       cost: cost ?? this.cost,
       status: status ?? this.status,
 //      runnerLocation: runnerLocation ?? this.runnerLocation,
+    );
+  }
+
+  factory RunModel.empty() {
+    return RunModel(
+      id: null,
+      order: null,
+      pickupPlaceIdOrCustomPlace: null,
+      destinationPlace: null,
+      customerId: null,
+      runnerId: null,
+      timePlaced: null,
+      timeDelivered: null,
+      cost: null,
+      status: null,
     );
   }
 }

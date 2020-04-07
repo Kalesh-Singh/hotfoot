@@ -6,6 +6,9 @@ import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRepository {
+  /// Initializes a Run object.
+  Future<Either<Failure, RunEntity>> initRun();
+
   /// Returns all runs that the user placed.
   Future<Either<Failure, List<String>>> getRunsIds();
 

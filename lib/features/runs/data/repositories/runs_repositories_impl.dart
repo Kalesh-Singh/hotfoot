@@ -2,24 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/network/network_info.dart';
+import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 
 class RunsRepository implements IRunsRepository {
   final IRunsLocalDataSource runsLocalDataSource;
   final IRunsRemoteDataSource runsRemoteDataSource;
   final INetworkInfo networkInfo;
+  final GetUserId getUserId;
 
   RunsRepository({
     @required this.runsLocalDataSource,
     @required this.runsRemoteDataSource,
     @required this.networkInfo,
+    @required this.getUserId,
   })  : assert(runsLocalDataSource != null),
         assert(runsRemoteDataSource != null),
-        assert(networkInfo != null);
+        assert(networkInfo != null),
+        assert(getUserId != null);
 
   @override
   Future<Either<Failure, RunModel>> getRunById({@required String id}) async {
@@ -110,5 +116,21 @@ class RunsRepository implements IRunsRepository {
     } else {
       return Left(NetworkFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, RunEntity>> initRun() async {
+    RunModel run = RunModel.empty();
+    final uidEither = await getUserId(NoParams());
+    uidEither.fold(
+      (failure) {},
+      (uid) {
+        run = run.copyWith(
+          customerId: uid,
+          status: 'Pending',
+        );
+      },
+    );
+    return null;
   }
 }

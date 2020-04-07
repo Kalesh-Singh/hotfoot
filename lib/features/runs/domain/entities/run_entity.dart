@@ -38,7 +38,7 @@ class RunEntity extends Equatable {
   final String id;
   final String order;
   final Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace;
-  final String destinationPlaceId;
+  final PlaceEntity destinationPlace;
   final String customerId;
   final String runnerId;
   final DateTime timePlaced;
@@ -52,7 +52,7 @@ class RunEntity extends Equatable {
     @required this.id,
     @required this.order,
     @required this.pickupPlaceIdOrCustomPlace,
-    @required this.destinationPlaceId,
+    @required this.destinationPlace,
     @required this.customerId,
     @required this.runnerId,
     @required this.timePlaced,
@@ -60,19 +60,20 @@ class RunEntity extends Equatable {
     @required this.cost,
     @required this.status,
 //    @required this.runnerLocation,
-  })  : assert(order != null),
-        assert(pickupPlaceIdOrCustomPlace != null),
-        assert(destinationPlaceId != null),
-        assert(customerId != null),
-        assert(timePlaced != null),
-        assert(status != null);
+  });
+//  : assert(order != null),
+//        assert(pickupPlaceIdOrCustomPlace != null),
+//        assert(destinationPlace != null),
+//        assert(customerId != null),
+//        assert(timePlaced != null),
+//        assert(status != null);
 
   @override
   List<Object> get props => [
         id,
         order,
         pickupPlaceIdOrCustomPlace,
-        destinationPlaceId,
+        destinationPlace,
         customerId,
         runnerId,
         timePlaced,
