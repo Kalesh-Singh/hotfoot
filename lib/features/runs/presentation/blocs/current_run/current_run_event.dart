@@ -9,6 +9,8 @@ abstract class CurrentRunEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class CustomerChanged extends CurrentRunEvent {}
+
 class OrderChanged extends CurrentRunEvent {
   final String order;
 
@@ -45,3 +47,6 @@ class DestinationChanged extends CurrentRunEvent {
   String toString() =>
       'DestinationChanged { destinationPlace :$destinationPlace }';
 }
+
+
+
