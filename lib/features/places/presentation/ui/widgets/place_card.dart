@@ -5,6 +5,8 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;
@@ -15,6 +17,8 @@ class PlaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        BlocProvider.of<CurrentRunBloc>(context)
+            .add(PickupPlaceIdChanged(pickupPlaceId: placeEntity.id));
         BlocProvider.of<NavigationScreenBloc>(context)
             .add(EnteredPurchaseFlow(placeEntity: placeEntity));
       },

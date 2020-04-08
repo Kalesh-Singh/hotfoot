@@ -8,6 +8,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
+import 'package:hotfoot/features/runs/presentation/ui/screens/order_details_screen.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/src/screens/settings_screen.dart';
 import 'package:hotfoot/src/screens/request_run_screen.dart';
@@ -35,7 +36,8 @@ class App extends StatelessWidget {
                 if (state is Home) {
                   return HomeScreen();
                 } else if (state is RequestRun) {
-                  return RequestRunScreen();
+                  return OrderDetailsScreen();
+//                  return RequestRunScreen();
                 } else if (state is Settings) {
                   return SettingsScreen();
                 } else if (state is Login) {
