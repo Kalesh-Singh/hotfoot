@@ -9,7 +9,7 @@ abstract class LocationState extends Equatable {
   List<Object> get props => [];
 }
 
-class CurrentPlaceUninitialized extends LocationState {}
+class LocationUninitialized extends LocationState {}
 
 class CurrentPlaceLoadSuccess extends LocationState {
   final PlaceEntity placeEntity;

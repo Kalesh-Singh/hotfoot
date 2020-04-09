@@ -23,7 +23,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   });
 
   @override
-  LocationState get initialState => CurrentPlaceUninitialized();
+  LocationState get initialState => LocationUninitialized();
 
   @override
   Stream<LocationState> mapEventToState(LocationEvent event) async* {
