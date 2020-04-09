@@ -50,7 +50,6 @@ import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.d
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -95,9 +94,6 @@ Future<void> init() async {
   sl.registerFactory(() => LocationBloc(
         getCurrentPlace: sl(),
         getPlaceFromQuery: sl(),
-      ));
-  sl.registerFactory(() => CurrentRunBloc(
-        initRun: sl(),
       ));
 
   // Use cases

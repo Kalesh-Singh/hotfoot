@@ -7,12 +7,9 @@ import 'package:hotfoot/features/navigation_home/presentation/ui/screen/home_scr
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/features/order_placed/presentation/ui/screen/run_placed_screen.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/src/screens/settings_screen.dart';
-import 'package:hotfoot/src/screens/request_run_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/login/presentation/ui/screen/splash_screen.dart';
 
@@ -30,7 +27,6 @@ class App extends StatelessWidget {
             if (state is Uninitialized) {
               return SplashScreen();
             } else if (state is Authenticated) {
-              BlocProvider.of<CurrentRunBloc>(context).add(CustomerChanged());
               print('Authenticated');
               return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
                   builder: (context, state) {
