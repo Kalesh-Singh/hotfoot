@@ -15,7 +15,9 @@ class RunDetails extends NavigationScreenState {
   const RunDetails({@required RunModel runModel}) : super(runModel: runModel);
 }
 
-class RunPlaced extends NavigationScreenState {}
+class RunPlaced extends NavigationScreenState {
+  const RunPlaced({@required RunModel runModel}) : super(runModel: runModel);
+}
 
 class Login extends NavigationScreenState {}
 

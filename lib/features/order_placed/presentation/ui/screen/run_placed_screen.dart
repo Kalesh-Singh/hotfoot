@@ -2,21 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/order_placed/presentation/ui/widgets/open_close_chat_button.dart';
 import 'package:hotfoot/features/order_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/order_placed/presentation/ui/widgets/accept_delivery_button.dart';
-import 'package:hotfoot/features/runs/data/models/run_model.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 
 class RunPlacedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final currRunBloc = BlocProvider.of<CurrentRunBloc>(context);
-    final currRun = currRunBloc.state.runModel;
-    if (currRun != null) {
-      final json1 = json.encode(currRun.toJson());
-      print(json1);
-    }
+    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
+    final currRun = navScreenBloc.state.runModel;
+    final json1 = json.encode(currRun.toJson());
+    print('FROM NAV BLOC');
+    print(json1);
+
     return Scaffold(
       appBar: AppBar(title: Text('Run Status')),
       body: SingleChildScrollView(

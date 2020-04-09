@@ -16,10 +16,13 @@ class EnteredPurchaseFlow extends NavigationScreenEvent {
       : super(runModel: runModel);
 }
 
+class EnteredRunPlaced extends NavigationScreenEvent {
+  const EnteredRunPlaced({@required RunModel runModel})
+      : super(runModel: runModel);
+}
+
 class EnteredLogin extends NavigationScreenEvent {}
 
 class EnteredSettings extends NavigationScreenEvent {}
 
 class EnteredHome extends NavigationScreenEvent {}
-
-class EnteredRunPlaced extends NavigationScreenEvent {}

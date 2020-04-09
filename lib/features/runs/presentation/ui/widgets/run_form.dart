@@ -22,13 +22,11 @@ class _RunFormState extends State<RunForm> {
   final TextEditingController _orderController = TextEditingController();
   final FocusNode _orderFocus = FocusNode();
 
-  CurrentRunBloc _currentRunBloc;
   NavigationScreenBloc _navigationScreenBloc;
 
   @override
   void initState() {
     super.initState();
-    _currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
     _navigationScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
   }
 
@@ -39,11 +37,20 @@ class _RunFormState extends State<RunForm> {
   void _onFormSubmitted() {
     if (_isPlaceRunEnabled()) {
 //      _currentRunBloc.add(OrderChanged(order: _orderController.text));
-      _currentRunBloc.add(OrderAndTimePlacedChanged(
-        order: _orderController.text,
-        timePlaced: DateTime.now(),
-      ));
+//      _currentRunBloc.add(OrderAndTimePlacedChanged(
+//        order: _orderController.text,
+//        timePlaced: DateTime.now(),
+//      ));
 //      _navigationScreenBloc.add(EnteredRunPlaced());
+      final currRun = _navigationScreenBloc.state.runModel;
+      _navigationScreenBloc.add(
+        EnteredRunPlaced(
+          runModel: currRun.copyWith(
+            timePlaced: DateTime.now(),
+            order: _orderController.text,
+          ),
+        ),
+      );
     }
   }
 
@@ -90,7 +97,6 @@ class _RunFormState extends State<RunForm> {
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: PlaceRunBotton(
                     onPressed: _onFormSubmitted,
-//                onPressed: _onFormSubmitted,
                   ),
                 ),
                 SizedBox(

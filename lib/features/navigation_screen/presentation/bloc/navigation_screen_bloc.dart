@@ -1,18 +1,21 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:meta/meta.dart';
 
 class NavigationScreenBloc
     extends Bloc<NavigationScreenEvent, NavigationScreenState> {
   final InitRun initRun;
+  final UpdateOrInsertRun updateOrInsertRun;
 
-  NavigationScreenBloc({@required this.initRun});
+  NavigationScreenBloc({
+    @required this.initRun,
+    @required this.updateOrInsertRun,
+  });
 
   @override
   NavigationScreenState get initialState => Home(runModel: RunModel.empty());
@@ -34,7 +37,7 @@ class NavigationScreenBloc
     } else if (event is EnteredSettings) {
       yield Settings();
     } else if (event is EnteredRunPlaced) {
-      yield RunPlaced();
+      yield* _mapEnteredRunPlacedToState(event.runModel);
     } else {
       print(event.runtimeType);
     }
@@ -43,16 +46,35 @@ class NavigationScreenBloc
   Stream<NavigationScreenState> _mapEnteredPurchaseFlowToState(
       RunModel currentRun) async* {
     final initRunEither = await initRun(NoParams());
-    initRunEither.fold(
-      (failure) {},
-      (run) {
+    yield* initRunEither.fold(
+      (failure) async* {
+        yield Home(runModel: RunModel.empty());
+      },
+      (run) async* {
         print('Init run');
-        currentRun = currentRun.copyWith(
-          customerId: run.customerId,
-          status: run.status,
+        yield RunDetails(
+          runModel: currentRun.copyWith(
+            customerId: run.customerId,
+            status: run.status,
+          ),
         );
       },
     );
-    yield RunDetails(runModel: currentRun);
+  }
+
+  Stream<NavigationScreenState> _mapEnteredRunPlacedToState(
+      RunModel currentRun) async* {
+    final updateOrInsertRunEither = await updateOrInsertRun(currentRun);
+    yield* updateOrInsertRunEither.fold(
+      (failure) async* {
+        yield RunDetails(runModel: currentRun);
+      },
+      (run) async* {
+        print('Insert or update run');
+        yield RunPlaced(
+          runModel: currentRun.copyWith(id: run.id),
+        );
+      },
+    );
   }
 }
