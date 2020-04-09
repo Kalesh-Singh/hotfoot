@@ -1,4 +1,4 @@
-import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -36,7 +36,7 @@ class PickupPlaceIdChanged extends CurrentRunEvent {
 }
 
 class DestinationChanged extends CurrentRunEvent {
-  final PlaceEntity destinationPlace;
+  final PlaceModel destinationPlace;
 
   const DestinationChanged({@required this.destinationPlace});
 
@@ -48,5 +48,18 @@ class DestinationChanged extends CurrentRunEvent {
       'DestinationChanged { destinationPlace :$destinationPlace }';
 }
 
+class PickupPlaceIdAndDestinationPlaceChanged extends CurrentRunEvent {
+  final String pickupPlaceId;
+  final PlaceModel destinationPlace;
 
+  const PickupPlaceIdAndDestinationPlaceChanged({
+    @required this.pickupPlaceId,
+    @required this.destinationPlace,
+  });
 
+  @override
+  List<Object> get props => [pickupPlaceId, destinationPlace];
+
+  @override
+  String toString() => 'PickupPlaceIdChanged { pickupPlaceId :$pickupPlaceId }';
+}

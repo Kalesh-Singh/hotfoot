@@ -4,6 +4,7 @@ import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
@@ -25,11 +26,13 @@ class PlaceCard extends StatelessWidget {
       onTap: () {
         final locationState = locationBloc.state;
         if (!(locationState is LocationUninitialized)) {
-          PlaceEntity destinationPlace;
+          PlaceModel destinationPlace;
           if (locationState is CurrentPlaceLoadSuccess) {
             destinationPlace = locationState.placeModel;
           } else if (locationState is QueriedPlaceLoadSuccess) {
             destinationPlace = locationState.placeModel;
+          } else {
+            print('LOCATION STATE FAILURE');
           }
           currentRunBloc
               .add(PickupPlaceIdChanged(pickupPlaceId: placeEntity.id));

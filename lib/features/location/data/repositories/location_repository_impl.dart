@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hotfoot/core/error/failures.dart';
-import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
+import 'package:hotfoot/features/location/data/models/location_model.dart';
 import 'package:hotfoot/features/location/domain/repositories/location_repository.dart';
 import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
@@ -52,7 +52,7 @@ class LocationRepository implements ILocationRepository {
       id: null,
       name: address.addressLine,
       address: address.addressLine,
-      locationEntity: LocationEntity(
+      locationModel: LocationModel(
         lat: address.coordinates.latitude,
         lng: address.coordinates.longitude,
       ),
@@ -61,10 +61,10 @@ class LocationRepository implements ILocationRepository {
     );
   }
 
-  Future<LocationEntity> _getCurrentLocation() async {
+  Future<LocationModel> _getCurrentLocation() async {
     final Position position = await geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    return LocationEntity(
+    return LocationModel(
       lat: position.latitude,
       lng: position.longitude,
     );
