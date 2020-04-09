@@ -6,7 +6,7 @@ import 'package:hotfoot/features/location/domain/use_cases/get_current_place.dar
 import 'package:hotfoot/features/location/domain/use_cases/get_place_from_query.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
-import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
@@ -37,20 +37,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   }
 
   Stream<LocationState> _eitherCurrentPlaceOrFailureState(
-    Either<Failure, PlaceEntity> failureOrCurrentPlace,
+    Either<Failure, PlaceModel> failureOrCurrentPlace,
   ) async* {
     yield failureOrCurrentPlace.fold(
       (failure) => CurrentPlaceLoadFailure(message: _CURRENT_PLACE_ERR_MSG),
-      (placeEntity) => CurrentPlaceLoadSuccess(placeEntity: placeEntity),
+      (placeModel) => CurrentPlaceLoadSuccess(placeModel: placeModel),
     );
   }
 
   Stream<LocationState> _eitherQueriedPlaceOrFailureState(
-    Either<Failure, PlaceEntity> failureOrQueriedPlace,
+    Either<Failure, PlaceModel> failureOrQueriedPlace,
   ) async* {
     yield failureOrQueriedPlace.fold(
       (failure) => QueriedPlaceLoadFailure(message: _QUERIED_PLACE_ERR_MSG),
-      (placeEntity) => QueriedPlaceLoadSuccess(placeEntity: placeEntity),
+      (placeModel) => QueriedPlaceLoadSuccess(placeModel: placeModel),
     );
   }
 }

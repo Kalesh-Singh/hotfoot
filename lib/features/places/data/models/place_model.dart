@@ -37,7 +37,7 @@ class PlaceModel extends PlaceEntity {
     map['id'] = id;
     map['name'] = name;
     map['address'] = address;
-    map['location'] = (locationEntity as LocationModel).toJson();
+    map['location'] = (locationEntity as LocationModel)?.toJson();
     map['photoUrl'] = photoUrl;
     map['orders'] = orders;
     return map;

@@ -27,13 +27,14 @@ class PlaceCard extends StatelessWidget {
         if (!(locationState is LocationUninitialized)) {
           PlaceEntity destinationPlace;
           if (locationState is CurrentPlaceLoadSuccess) {
-            destinationPlace = locationState.placeEntity;
+            destinationPlace = locationState.placeModel;
           } else if (locationState is QueriedPlaceLoadSuccess) {
-            destinationPlace = locationState.placeEntity;
+            destinationPlace = locationState.placeModel;
           }
           currentRunBloc
               .add(PickupPlaceIdChanged(pickupPlaceId: placeEntity.id));
-          currentRunBloc.add(DestinationChanged(destinationPlace: placeEntity));
+          currentRunBloc
+              .add(DestinationChanged(destinationPlace: destinationPlace));
           navScreenbloc.add(EnteredPurchaseFlow(placeEntity: destinationPlace));
         }
       },
