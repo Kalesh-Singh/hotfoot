@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
@@ -20,7 +21,7 @@ class PlaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
     final locationBloc = BlocProvider.of<LocationBloc>(context);
-    final navScreenbloc = BlocProvider.of<NavigationScreenBloc>(context);
+    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
 
     return GestureDetector(
       onTap: () {
@@ -38,7 +39,12 @@ class PlaceCard extends StatelessWidget {
             pickupPlaceId: placeEntity.id,
             destinationPlace: destinationPlace,
           ));
-          navScreenbloc.add(EnteredPurchaseFlow(placeEntity: destinationPlace));
+          final runModel = navScreenBloc.state.runModel;
+          navScreenBloc.add(EnteredPurchaseFlow(
+              runModel: runModel.copyWith(
+            pickupPlaceIdOrCustomPlace: Left(placeEntity.id),
+            destinationPlace: destinationPlace,
+          )));
         }
       },
       child: Container(
