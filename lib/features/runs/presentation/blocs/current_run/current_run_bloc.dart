@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
@@ -30,6 +31,11 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
       yield* _mapPickupPlaceIdChangedToState(event.pickupPlaceId);
     } else if (event is DestinationChanged) {
       yield* _mapDestinationChangedToState(event.destinationPlace);
+    } else if (event is PickupPlaceIdAndDestinationPlaceChanged) {
+      yield* _mapPickupIdAndDestinationChangedToState(
+          event.pickupPlaceId, event.destinationPlace);
+    } else if (event is OrderAndTimePlacedChanged) {
+      _mapOrderAndTimePlacedChangedToState(event.order, event.timePlaced);
     }
   }
 
@@ -73,6 +79,25 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
       (run) {
         currRun = run;
       },
+    );
+    yield CurrentRunState(runModel: currRun);
+  }
+
+  Stream<CurrentRunState> _mapPickupIdAndDestinationChangedToState(
+      String pickupPlaceId, PlaceModel destinationPlace) async* {
+    RunModel currRun = state.runModel.copyWith(
+      pickupPlaceIdOrCustomPlace: Left(pickupPlaceId),
+      destinationPlace: destinationPlace,
+    );
+    yield CurrentRunState(runModel: currRun);
+  }
+
+  Stream<CurrentRunState> _mapOrderAndTimePlacedChangedToState(
+      String order, DateTime timePlaced) async* {
+    print('ORDER AND TIME PLACED CHANGED');
+    RunModel currRun = state.runModel.copyWith(
+      order: order,
+      timePlaced: timePlaced,
     );
     yield CurrentRunState(runModel: currRun);
   }

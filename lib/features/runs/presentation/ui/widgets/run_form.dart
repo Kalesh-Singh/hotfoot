@@ -5,6 +5,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_state.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_name.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_run_button.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
@@ -37,59 +38,69 @@ class _RunFormState extends State<RunForm> {
 
   void _onFormSubmitted() {
     if (_isPlaceRunEnabled()) {
-      _currentRunBloc.add(OrderChanged(order: _orderController.text));
-      _navigationScreenBloc.add(EnteredRunPlaced());
+//      _currentRunBloc.add(OrderChanged(order: _orderController.text));
+      _currentRunBloc.add(OrderAndTimePlacedChanged(
+        order: _orderController.text,
+        timePlaced: DateTime.now(),
+      ));
+//      _navigationScreenBloc.add(EnteredRunPlaced());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final line = MediaQuery.of(context).size.height ~/ (4 * 16);
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Form(
-        child: ListView(
-          children: <Widget>[
-            RunPhoto(placeEntity: this.widget.placeEntity),
-            Center(child: PlaceName(name: this.widget.placeEntity.name)),
-            TextFormField(
-              maxLines: 5,
-              minLines: 5,
-              textInputAction: TextInputAction.done,
-              focusNode: _orderFocus,
-              onFieldSubmitted: (_) {
-                _orderFocus.unfocus();
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Request cannot be empty';
-                }
-                return null;
-              },
-              controller: _orderController,
-              decoration: InputDecoration(
-                labelText: 'What would you like to request?',
-                border: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(25.0),
-                  borderSide: new BorderSide(),
+    return BlocBuilder<CurrentRunBloc, CurrentRunState>(
+      builder: (context, state) {
+        if (state.runModel.order != null) {
+          _navigationScreenBloc.add(EnteredRunPlaced());
+        }
+        return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Form(
+            child: ListView(
+              children: <Widget>[
+                RunPhoto(placeEntity: this.widget.placeEntity),
+                Center(child: PlaceName(name: this.widget.placeEntity.name)),
+                TextFormField(
+                  maxLines: 5,
+                  minLines: 5,
+                  textInputAction: TextInputAction.done,
+                  focusNode: _orderFocus,
+                  onFieldSubmitted: (_) {
+                    _orderFocus.unfocus();
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Request cannot be empty';
+                    }
+                    return null;
+                  },
+                  controller: _orderController,
+                  decoration: InputDecoration(
+                    labelText: 'What would you like to request?',
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                  autovalidate: true,
+                  autocorrect: false,
                 ),
-              ),
-              autovalidate: true,
-              autocorrect: false,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: PlaceRunBotton(
-                onPressed: _onFormSubmitted,
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: PlaceRunBotton(
+                    onPressed: _onFormSubmitted,
 //                onPressed: _onFormSubmitted,
-              ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).viewInsets.bottom,
+                ),
+              ],
             ),
-            SizedBox(
-              height: MediaQuery.of(context).viewInsets.bottom,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

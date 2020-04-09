@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
@@ -15,6 +17,7 @@ class RunDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
+    print(json.encode(currentRunBloc.state.runModel.toJson()));
 
     return MultiBlocProvider(
       providers: [
@@ -51,7 +54,7 @@ class RunDetailsScreen extends StatelessWidget {
                   if (state is PlaceDetailsUninitialized) {
                     final pickUpEither = currentRunBloc
                         .state.runModel.pickupPlaceIdOrCustomPlace;
-                    pickUpEither.fold(
+                    pickUpEither?.fold(
                       (pickupPlaceId) {
                         BlocProvider.of<PlaceDetailsBloc>(context)
                             .add(PlaceDetailsRequested(placeId: pickupPlaceId));

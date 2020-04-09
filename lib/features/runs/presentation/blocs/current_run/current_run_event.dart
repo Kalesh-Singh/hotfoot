@@ -63,3 +63,16 @@ class PickupPlaceIdAndDestinationPlaceChanged extends CurrentRunEvent {
   @override
   String toString() => 'PickupPlaceIdChanged { pickupPlaceId :$pickupPlaceId }';
 }
+
+class OrderAndTimePlacedChanged extends CurrentRunEvent {
+  final String order;
+  final DateTime timePlaced;
+
+  const OrderAndTimePlacedChanged({
+    @required this.order,
+    @required this.timePlaced,
+  });
+
+  @override
+  List<Object> get props => [order, timePlaced];
+}

@@ -34,10 +34,10 @@ class PlaceCard extends StatelessWidget {
           } else {
             print('LOCATION STATE FAILURE');
           }
-          currentRunBloc
-              .add(PickupPlaceIdChanged(pickupPlaceId: placeEntity.id));
-          currentRunBloc
-              .add(DestinationChanged(destinationPlace: destinationPlace));
+          currentRunBloc.add(PickupPlaceIdAndDestinationPlaceChanged(
+            pickupPlaceId: placeEntity.id,
+            destinationPlace: destinationPlace,
+          ));
           navScreenbloc.add(EnteredPurchaseFlow(placeEntity: destinationPlace));
         }
       },
