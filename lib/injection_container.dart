@@ -78,7 +78,9 @@ Future<void> init() async {
         signOut: sl(),
       ));
   sl.registerFactory(() => NavigationHomeBloc());
-  sl.registerFactory(() => NavigationScreenBloc());
+  sl.registerFactory(() => NavigationScreenBloc(
+        initRun: sl(),
+      ));
   sl.registerFactory(() => PlacesIdsBloc(
         getPlacesIds: sl(),
       ));

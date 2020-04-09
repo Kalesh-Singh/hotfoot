@@ -34,15 +34,21 @@ class App extends StatelessWidget {
               print('Authenticated');
               return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
                   builder: (context, state) {
+                print('NAV BLOC STATE TYPE: ${state.runtimeType}');
                 if (state is Home) {
+                  print('HOME');
                   return HomeScreen();
                 } else if (state is RunDetails) {
+                  print('RUN DETAILS');
                   return RunDetailsScreen();
                 } else if (state is RunPlaced) {
+                  print('RUN PLACED');
                   return RunPlacedScreen();
                 } else if (state is Settings) {
+                  print('SETTINGS');
                   return SettingsScreen();
                 } else if (state is Login) {
+                  print('LOGIN');
                   return LoginScreen();
                 }
                 return Container();

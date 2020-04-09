@@ -9,8 +9,6 @@ import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;
@@ -19,12 +17,12 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
 
     return GestureDetector(
       onTap: () {
+        print('PLACE TAPPED');
         final locationState = locationBloc.state;
         if (!(locationState is LocationUninitialized)) {
           PlaceModel destinationPlace;
@@ -35,16 +33,17 @@ class PlaceCard extends StatelessWidget {
           } else {
             print('LOCATION STATE FAILURE');
           }
-          currentRunBloc.add(PickupPlaceIdAndDestinationPlaceChanged(
-            pickupPlaceId: placeEntity.id,
-            destinationPlace: destinationPlace,
-          ));
           final runModel = navScreenBloc.state.runModel;
-          navScreenBloc.add(EnteredPurchaseFlow(
+          navScreenBloc.add(
+            EnteredPurchaseFlow(
               runModel: runModel.copyWith(
-            pickupPlaceIdOrCustomPlace: Left(placeEntity.id),
-            destinationPlace: destinationPlace,
-          )));
+                pickupPlaceIdOrCustomPlace: Left(placeEntity.id),
+                destinationPlace: destinationPlace,
+              ),
+            ),
+          );
+        } else {
+          print('LOCATION STATE NOT UNINITIALIZED');
         }
       },
       child: Container(

@@ -9,15 +9,15 @@ import 'package:hotfoot/features/places/presentation/blocs/place_details/place_d
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_event.dart';
-import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_form.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class RunDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
-    print(json.encode(currentRunBloc.state.runModel.toJson()));
+    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
+    print('FROM NAV BLOC');
+    print(json.encode(navScreenBloc.state.runModel.toJson()));
 
     return MultiBlocProvider(
       providers: [
@@ -52,8 +52,8 @@ class RunDetailsScreen extends StatelessWidget {
               child: BlocBuilder<PlaceDetailsBloc, PlaceDetailsState>(
                 builder: (BuildContext context, PlaceDetailsState state) {
                   if (state is PlaceDetailsUninitialized) {
-                    final pickUpEither = currentRunBloc
-                        .state.runModel.pickupPlaceIdOrCustomPlace;
+                    final pickUpEither =
+                        navScreenBloc.state.runModel.pickupPlaceIdOrCustomPlace;
                     pickUpEither?.fold(
                       (pickupPlaceId) {
                         BlocProvider.of<PlaceDetailsBloc>(context)

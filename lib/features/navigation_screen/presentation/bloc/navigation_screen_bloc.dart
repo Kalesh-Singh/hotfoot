@@ -35,6 +35,8 @@ class NavigationScreenBloc
       yield Settings();
     } else if (event is EnteredRunPlaced) {
       yield RunPlaced();
+    } else {
+      print(event.runtimeType);
     }
   }
 
@@ -44,7 +46,11 @@ class NavigationScreenBloc
     initRunEither.fold(
       (failure) {},
       (run) {
-        currentRun = run;
+        print('Init run');
+        currentRun = currentRun.copyWith(
+          customerId: run.customerId,
+          status: run.status,
+        );
       },
     );
     yield RunDetails(runModel: currentRun);
