@@ -23,3 +23,5 @@ class EnteredLogin extends NavigationScreenEvent {}
 class EnteredSettings extends NavigationScreenEvent {}
 
 class EnteredHome extends NavigationScreenEvent {}
+
+class EnteredRunPlaced extends NavigationScreenEvent {}

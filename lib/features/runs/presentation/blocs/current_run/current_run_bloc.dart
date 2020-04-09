@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
@@ -33,17 +34,18 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
   }
 
   Stream<CurrentRunState> _mapOrderChangedToState(String order) async* {
-    final currRun = state.runModel;
+    print('ORDER CHANGED');
+    final currRun = state.runModel.copyWith(order: order);
+    print(json.encode((currRun as RunModel).toJson()));
     yield CurrentRunState(
-      runModel: currRun.copyWith(
-        order: order,
-      ),
+      runModel: currRun,
     );
   }
 
   Stream<CurrentRunState> _mapPickupPlaceIdChangedToState(
       String pickupPlaceId) async* {
     final currRun = state.runModel;
+    print('PICKUPID CHANGED');
     yield CurrentRunState(
       runModel: currRun.copyWith(
         pickupPlaceIdOrCustomPlace: Left(pickupPlaceId),
@@ -54,6 +56,7 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
   Stream<CurrentRunState> _mapDestinationChangedToState(
       PlaceEntity destinationPlace) async* {
     final currRun = state.runModel;
+    print('DESTINATION CHANGED');
     yield CurrentRunState(
       runModel: currRun.copyWith(
         destinationPlace: destinationPlace,
@@ -62,14 +65,15 @@ class CurrentRunBloc extends Bloc<CurrentRunEvent, CurrentRunState> {
   }
 
   Stream<CurrentRunState> _mapCustomerChangedToState() async* {
+    print('CUSTOMER CHANGED');
     final initRunEither = await initRun(NoParams());
-    RunModel run = RunModel.empty();
+    RunModel currRun = state.runModel;
     initRunEither.fold(
       (failure) {},
       (run) {
-        run = run;
+        currRun = run;
       },
     );
-    yield CurrentRunState(runModel: run);
+    yield CurrentRunState(runModel: currRun);
   }
 }

@@ -62,20 +62,20 @@ class RunModel extends RunEntity {
 
     map['id'] = this.id;
     map['order'] = this.order;
-    map['destinationPlace'] = (destinationPlace as PlaceModel).toJson();
+    map['destinationPlace'] = (destinationPlace as PlaceModel)?.toJson();
     map['customerId'] = customerId;
     map['runnerId'] = runnerId;
-    map['timePlaced'] = timePlaced.toIso8601String();
+    map['timePlaced'] = timePlaced?.toIso8601String();
     map['timeDelivered'] = timeDelivered?.toIso8601String();
     map['cost'] = cost;
     map['status'] = status;
 
-    pickupPlaceIdOrCustomPlace.fold(
+    pickupPlaceIdOrCustomPlace?.fold(
       (pickupPlaceId) {
         map['pickupPlaceId'] = pickupPlaceId;
       },
       (customPlace) {
-        map['customPickupPlace'] = (customPlace as PlaceModel).toJson();
+        map['customPickupPlace'] = (customPlace as PlaceModel)?.toJson();
       },
     );
 

@@ -5,7 +5,9 @@ abstract class NavigationScreenState extends Equatable {
   List<Object> get props => [];
 }
 
-class RequestRun extends NavigationScreenState {}
+class RunDetails extends NavigationScreenState {}
+
+class RunPlaced extends NavigationScreenState {}
 
 class Login extends NavigationScreenState {}
 

@@ -6,6 +6,7 @@ import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_ho
 import 'package:hotfoot/features/navigation_home/presentation/ui/screen/home_screen.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
+import 'package:hotfoot/features/order_placed/presentation/ui/screen/run_placed_screen.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
@@ -35,9 +36,10 @@ class App extends StatelessWidget {
                   builder: (context, state) {
                 if (state is Home) {
                   return HomeScreen();
-                } else if (state is RequestRun) {
+                } else if (state is RunDetails) {
                   return RunDetailsScreen();
-//                  return RequestRunScreen();
+                } else if (state is RunPlaced) {
+                  return RunPlacedScreen();
                 } else if (state is Settings) {
                   return SettingsScreen();
                 } else if (state is Login) {

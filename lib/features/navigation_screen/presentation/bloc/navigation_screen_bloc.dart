@@ -20,9 +20,11 @@ class NavigationScreenBloc
       // as a PlaceEntity.
       // The pin location screen should also pass place info as a
       // PlaceEntity even though all the fields may not be necessary.
-      yield RequestRun();
+      yield RunDetails();
     } else if (event is EnteredSettings) {
       yield Settings();
+    } else if (event is EnteredRunPlaced) {
+      yield RunPlaced();
     }
   }
 }

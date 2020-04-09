@@ -123,7 +123,9 @@ class RunsRepository implements IRunsRepository {
     RunModel run = RunModel.empty();
     final uidEither = await getUserId(NoParams());
     uidEither.fold(
-      (failure) {},
+      (failure) {
+        print('FAILED TO GET CUSTOMER ID');
+      },
       (uid) {
         run = run.copyWith(
           customerId: uid,
@@ -131,6 +133,6 @@ class RunsRepository implements IRunsRepository {
         );
       },
     );
-    return null;
+    return Right(run);
   }
 }

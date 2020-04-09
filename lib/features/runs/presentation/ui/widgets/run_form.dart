@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/current_run/current_run_event.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_name.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_run_button.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
@@ -19,19 +22,24 @@ class _RunFormState extends State<RunForm> {
   final FocusNode _orderFocus = FocusNode();
 
   CurrentRunBloc _currentRunBloc;
+  NavigationScreenBloc _navigationScreenBloc;
 
   @override
   void initState() {
     super.initState();
     _currentRunBloc = BlocProvider.of<CurrentRunBloc>(context);
+    _navigationScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
   }
 
-  bool isPlaceRunEnabled() {
+  bool _isPlaceRunEnabled() {
     return _orderController.text.isNotEmpty;
   }
 
   void _onFormSubmitted() {
-    // TODO: Update run and navigate to new screen.
+    if (_isPlaceRunEnabled()) {
+      _currentRunBloc.add(OrderChanged(order: _orderController.text));
+      _navigationScreenBloc.add(EnteredRunPlaced());
+    }
   }
 
   @override
@@ -52,9 +60,15 @@ class _RunFormState extends State<RunForm> {
               onFieldSubmitted: (_) {
                 _orderFocus.unfocus();
               },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Request cannot be empty';
+                }
+                return null;
+              },
               controller: _orderController,
               decoration: InputDecoration(
-                labelText: 'What would you like to request',
+                labelText: 'What would you like to request?',
                 border: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(25.0),
                   borderSide: new BorderSide(),
@@ -66,7 +80,8 @@ class _RunFormState extends State<RunForm> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: PlaceRunBotton(
-                onPressed: isPlaceRunEnabled() ? _onFormSubmitted : null,
+                onPressed: _onFormSubmitted,
+//                onPressed: _onFormSubmitted,
               ),
             ),
             SizedBox(
