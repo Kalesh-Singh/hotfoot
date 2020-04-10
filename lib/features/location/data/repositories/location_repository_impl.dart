@@ -2,22 +2,22 @@ import 'package:dartz/dartz.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hotfoot/core/error/failures.dart';
-import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
+import 'package:hotfoot/features/location/data/models/location_model.dart';
 import 'package:hotfoot/features/location/domain/repositories/location_repository.dart';
-import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
 class LocationRepository implements ILocationRepository {
   final Geolocator geolocator;
 
-  PlaceEntity lastPlace;
+  PlaceModel lastPlace;
 
   LocationRepository({
     @required this.geolocator,
   }) : assert(geolocator != null);
 
   @override
-  Future<Either<Failure, PlaceEntity>> getCurrentPlace() async {
+  Future<Either<Failure, PlaceModel>> getCurrentPlace() async {
     if (lastPlace != null) {
       return Right(lastPlace);
     }
@@ -31,28 +31,28 @@ class LocationRepository implements ILocationRepository {
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     final firstAddress = addresses.first;
     print("${firstAddress.featureName} : ${firstAddress.addressLine}");
-    final place = _getPlaceEntityFromAddress(address: firstAddress);
+    final place = _getPlaceModelFromAddress(address: firstAddress);
     lastPlace = place;
     return Right(place);
   }
 
   @override
-  Future<Either<Failure, PlaceEntity>> getPlaceFromQuery({String query}) async {
+  Future<Either<Failure, PlaceModel>> getPlaceFromQuery({String query}) async {
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var firstAddress = addresses.first;
     print(
         "${firstAddress.featureName} : ${firstAddress.coordinates} : ${firstAddress.addressLine}");
-    final place = _getPlaceEntityFromAddress(address: firstAddress);
+    final place = _getPlaceModelFromAddress(address: firstAddress);
     lastPlace = place;
     return Right(place);
   }
 
-  PlaceEntity _getPlaceEntityFromAddress({@required Address address}) {
-    return PlaceEntity(
+  PlaceModel _getPlaceModelFromAddress({@required Address address}) {
+    return PlaceModel(
       id: null,
       name: address.addressLine,
       address: address.addressLine,
-      locationEntity: LocationEntity(
+      locationModel: LocationModel(
         lat: address.coordinates.latitude,
         lng: address.coordinates.longitude,
       ),
@@ -61,10 +61,10 @@ class LocationRepository implements ILocationRepository {
     );
   }
 
-  Future<LocationEntity> _getCurrentLocation() async {
+  Future<LocationModel> _getCurrentLocation() async {
     final Position position = await geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    return LocationEntity(
+    return LocationModel(
       lat: position.latitude,
       lng: position.longitude,
     );

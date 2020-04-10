@@ -1,21 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class NavigationScreenEvent extends Equatable {
-  const NavigationScreenEvent();
+  final RunModel runModel;
+
+  const NavigationScreenEvent({@required this.runModel});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [this.runModel];
 }
 
 class EnteredPurchaseFlow extends NavigationScreenEvent {
-  final PlaceEntity placeEntity;
+  const EnteredPurchaseFlow({@required RunModel runModel})
+      : super(runModel: runModel);
+}
 
-  const EnteredPurchaseFlow({@required this.placeEntity});
-
-  @override
-  List<Object> get props => [placeEntity];
+class EnteredRunPlaced extends NavigationScreenEvent {
+  const EnteredRunPlaced({@required RunModel runModel})
+      : super(runModel: runModel);
 }
 
 class EnteredLogin extends NavigationScreenEvent {}

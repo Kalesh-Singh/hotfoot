@@ -1,7 +1,11 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
@@ -13,10 +17,34 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
+
     return GestureDetector(
       onTap: () {
-        BlocProvider.of<NavigationScreenBloc>(context)
-            .add(EnteredPurchaseFlow(placeEntity: placeEntity));
+        print('PLACE TAPPED');
+        final locationState = locationBloc.state;
+        if (!(locationState is LocationUninitialized)) {
+          PlaceModel destinationPlace;
+          if (locationState is CurrentPlaceLoadSuccess) {
+            destinationPlace = locationState.placeModel;
+          } else if (locationState is QueriedPlaceLoadSuccess) {
+            destinationPlace = locationState.placeModel;
+          } else {
+            print('LOCATION STATE FAILURE');
+          }
+          final runModel = navScreenBloc.state.runModel;
+          navScreenBloc.add(
+            EnteredPurchaseFlow(
+              runModel: runModel.copyWith(
+                pickupPlaceIdOrCustomPlace: Left(placeEntity.id),
+                destinationPlace: destinationPlace,
+              ),
+            ),
+          );
+        } else {
+          print('LOCATION STATE NOT UNINITIALIZED');
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),

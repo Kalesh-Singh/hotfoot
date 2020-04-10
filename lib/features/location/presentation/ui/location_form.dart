@@ -49,9 +49,9 @@ class _LocationFormState extends State<LocationForm> {
       child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
           if (state is CurrentPlaceLoadSuccess) {
-            _addressController.text = state.placeEntity.address;
+            _addressController.text = state.placeModel.address;
           } else if (state is QueriedPlaceLoadSuccess) {
-            _addressController.text = state.placeEntity.address;
+            _addressController.text = state.placeModel.address;
           }
 
           return Padding(

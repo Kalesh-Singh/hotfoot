@@ -6,9 +6,10 @@ import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_ho
 import 'package:hotfoot/features/navigation_home/presentation/ui/screen/home_screen.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
+import 'package:hotfoot/features/order_placed/presentation/ui/screen/run_placed_screen.dart';
+import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/src/screens/settings_screen.dart';
-import 'package:hotfoot/src/screens/request_run_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/login/presentation/ui/screen/splash_screen.dart';
 
@@ -29,13 +30,21 @@ class App extends StatelessWidget {
               print('Authenticated');
               return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
                   builder: (context, state) {
+                print('NAV BLOC STATE TYPE: ${state.runtimeType}');
                 if (state is Home) {
+                  print('HOME');
                   return HomeScreen();
-                } else if (state is RequestRun) {
-                  return RequestRunScreen();
+                } else if (state is RunDetails) {
+                  print('RUN DETAILS');
+                  return RunDetailsScreen();
+                } else if (state is RunPlaced) {
+                  print('RUN PLACED');
+                  return RunPlacedScreen();
                 } else if (state is Settings) {
+                  print('SETTINGS');
                   return SettingsScreen();
                 } else if (state is Login) {
+                  print('LOGIN');
                   return LoginScreen();
                 }
                 return Container();

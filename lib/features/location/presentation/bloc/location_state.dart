@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class LocationState extends Equatable {
@@ -9,15 +9,15 @@ abstract class LocationState extends Equatable {
   List<Object> get props => [];
 }
 
-class CurrentPlaceUninitialized extends LocationState {}
+class LocationUninitialized extends LocationState {}
 
 class CurrentPlaceLoadSuccess extends LocationState {
-  final PlaceEntity placeEntity;
+  final PlaceModel placeModel;
 
-  const CurrentPlaceLoadSuccess({@required this.placeEntity});
+  const CurrentPlaceLoadSuccess({@required this.placeModel});
 
   @override
-  List<Object> get props => [placeEntity];
+  List<Object> get props => [placeModel];
 }
 
 class CurrentPlaceLoadFailure extends LocationState {
@@ -30,12 +30,12 @@ class CurrentPlaceLoadFailure extends LocationState {
 }
 
 class QueriedPlaceLoadSuccess extends LocationState {
-  final PlaceEntity placeEntity;
+  final PlaceModel placeModel;
 
-  const QueriedPlaceLoadSuccess({@required this.placeEntity});
+  const QueriedPlaceLoadSuccess({@required this.placeModel});
 
   @override
-  List<Object> get props => [placeEntity];
+  List<Object> get props => [placeModel];
 }
 
 class QueriedPlaceLoadFailure extends LocationState {

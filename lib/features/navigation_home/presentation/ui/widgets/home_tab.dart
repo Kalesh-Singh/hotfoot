@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/ui/address_widget.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
@@ -11,8 +13,15 @@ import 'package:hotfoot/injection_container.dart';
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PlacesIdsBloc>(
-      create: (context) => sl<PlacesIdsBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PlacesIdsBloc>(
+          create: (context) => sl<PlacesIdsBloc>(),
+        ),
+        BlocProvider<LocationBloc>(
+          create: (context) => sl<LocationBloc>()..add(CurrentPlaceRequested()),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: Center(
