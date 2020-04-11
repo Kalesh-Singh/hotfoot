@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/network/network_info.dart';
 import 'package:hotfoot/features/search/data/data_sources/search_results_data_source.dart';
-import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
 import 'package:hotfoot/features/search/domain/repositories/search_results_repository.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
 class SearchResultsRepository implements ISearchResultsRepository {
@@ -17,8 +17,8 @@ class SearchResultsRepository implements ISearchResultsRepository {
         assert(networkInfo != null);
 
   @override
-  Future<Either<Failure, List<SearchResultEntity>>>
-      getResultsWithMatchingAddress({@required String address}) async {
+  Future<Either<Failure, List<PlaceEntity>>> getResultsWithMatchingAddress(
+      {@required String address}) async {
     if (!(await networkInfo.isConnected)) {
       return Left(DatabaseFailure());
     }

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/features/search/data/models/search_result_model.dart';
-import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class ISearchResultsDataSource {
-  Future<List<SearchResultEntity>> getResultsWithMatchingAddress(
+  Future<List<PlaceEntity>> getResultsWithMatchingAddress(
       {@required String address});
 }
 
@@ -23,10 +23,10 @@ class SearchResultsDataSource implements ISearchResultsDataSource {
         this._placesCollection = firestore.collection('places');
 
   @override
-  Future<List<SearchResultEntity>> getResultsWithMatchingAddress(
+  Future<List<PlaceEntity>> getResultsWithMatchingAddress(
       {String address}) async {
     print('Getting results with matching address from firestore');
-    List<SearchResultEntity> results = List<SearchResultEntity>();
+    List<PlaceEntity> results = List<PlaceEntity>();
     final QuerySnapshot placesSnapshot = await _placesCollection
         .where('address', isGreaterThanOrEqualTo: address)
         .where('address', isLessThanOrEqualTo: address + _PUA)

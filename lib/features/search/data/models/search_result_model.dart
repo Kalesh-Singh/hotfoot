@@ -1,7 +1,7 @@
-import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
-class SearchResultModel extends SearchResultEntity {
+class SearchResultModel extends PlaceEntity {
   const SearchResultModel({
     @required String id,
     @required String name,

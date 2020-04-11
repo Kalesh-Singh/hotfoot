@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class ResultsWithMatchingAddressState extends Equatable {
@@ -16,7 +16,7 @@ class ResultsWithMatchingAddressSearching
 
 class ResultsWithMatchingAddressSearched
     extends ResultsWithMatchingAddressState {
-  final List<SearchResultEntity> resultsWithMatchingAddress;
+  final List<PlaceEntity> resultsWithMatchingAddress;
 
   const ResultsWithMatchingAddressSearched(
       {@required this.resultsWithMatchingAddress});

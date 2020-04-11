@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_state.dart';
 
@@ -12,7 +12,7 @@ class SearchResultsList extends StatelessWidget {
           ResultsWithMatchingAddressState>(
         builder: (BuildContext context, state) {
           if (state is ResultsWithMatchingAddressEmpty) {
-            return _buildSearchResultsList(List<SearchResultEntity>());
+            return _buildSearchResultsList(List<PlaceEntity>());
           } else if (state is ResultsWithMatchingAddressSearching) {
             return CircularProgressIndicator();
           } else if (state is ResultsWithMatchingAddressSearched) {
@@ -29,7 +29,7 @@ class SearchResultsList extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchResultsList(List<SearchResultEntity> searchResults) {
+  Widget _buildSearchResultsList(List<PlaceEntity> searchResults) {
     return ListView.builder(
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
@@ -42,7 +42,7 @@ class SearchResultsList extends StatelessWidget {
 }
 
 class SearchResultsListEntry extends StatelessWidget {
-  final SearchResultEntity searchResult;
+  final PlaceEntity searchResult;
 
   const SearchResultsListEntry({Key key, this.searchResult}) : super(key: key);
 
