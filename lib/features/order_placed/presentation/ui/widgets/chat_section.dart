@@ -1,7 +1,12 @@
 
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hotfoot/features/order_placed/presentation/ui/widgets/chat_message_list_item.dart';
+import 'package:hotfoot/injection_container.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 // https://www.youtube.com/watch?v=WwhyaqNtNQY
 
@@ -27,17 +32,22 @@ class ChatSection extends StatelessWidget {
   }
 }
 
-// ! kattenlaf, we want to avoid using stateful widgets so this will be
-// ! refactored using bloc
 class Chat extends StatefulWidget {
   @override
-  State createState() =>  ChatWindow();
+  State createState() =>  ChatWindow(firebaseAuth: sl());
 }
 
 class ChatWindow extends State<Chat> with TickerProviderStateMixin {
-  final List<Msg> _messages = <Msg>[];
+  final FirebaseAuth firebaseAuth;
   final TextEditingController _textController = TextEditingController();
+  // TODO Here we can create a unique FirebaseDatabase instance object using
+  // TODO runners email concatanated with customer email such as email1-email2
+  final reference = FirebaseDatabase.instance.reference().child('messages');
   bool _isWriting = false;
+
+  ChatWindow({
+    @required this.firebaseAuth,
+  }) : assert(firebaseAuth != null);
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +60,19 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
       body:  Column(
         children: <Widget>[
          Flexible(
-            child:  ListView.builder(
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-              reverse: true,
-              padding:  EdgeInsets.all(6.0),
-            )),
-        //  Divider(height: 1.0),
+           child: FirebaseAnimatedList(
+             query: reference,
+             padding: const EdgeInsets.all(8.0),
+             reverse: true,
+             sort: (a, b) => b.key.compareTo(a.key),
+             itemBuilder: (_, DataSnapshot messageSnapshot, Animation<double> animation, __) {
+               return ChatMessageListItem(
+                 messageSnapshot: messageSnapshot,
+                 animation: animation,
+                  );
+                },
+              ),
+            ),
          Container(
           child: _buildComposer(),
           decoration:  BoxDecoration(color: Theme.of(context).cardColor),
@@ -112,69 +128,22 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
     );
   }
 
-  void _submitMsg(String txt) {
+  void _submitMsg(String txt) async {
     _textController.clear();
     setState(() {
       _isWriting = false;
     });
-    Msg msg =  Msg(
-      txt: txt,
-      animationController:  AnimationController(
-          vsync: this,
-        duration:  Duration(milliseconds: 800)
-      ),
-    );
-    setState(() {
-      _messages.insert(0, msg);
+    // TODO should probably do some check here so that we determine user is logged in
+    // TODO but I believe the app would log out here anyway can double check later
+    final FirebaseUser __firebaseUser = await firebaseAuth.currentUser();
+    _sendMessage(messageText: txt, firebaseUser: __firebaseUser);
+  }
+
+  void _sendMessage({String messageText, FirebaseUser firebaseUser}) {
+    reference.push().set({
+      'text': messageText,
+      'email': firebaseUser.email,
+      'senderName': firebaseUser.email,
     });
-    msg.animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    for (Msg msg in _messages) {
-      msg.animationController.dispose();
-    }
-    super.dispose();
-  }
-
-}
-
-class Msg extends StatelessWidget {
-  Msg({this.txt, this.animationController});
-  final String txt;
-  final AnimationController animationController;
-
-  @override
-  Widget build(BuildContext ctx) {
-    return  SizeTransition(
-      sizeFactor:  CurvedAnimation(
-          parent: animationController, curve: Curves.easeOut),
-      axisAlignment: 0.0,
-      child:  Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        child:  Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-             Container(
-              margin: const EdgeInsets.only(right: 18.0),
-              child:  CircleAvatar(child:  Text(defaultUserName[0])),
-            ),
-             Expanded(
-              child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                   Text(defaultUserName, style: Theme.of(ctx).textTheme.subhead),
-                   Container(
-                    margin: const EdgeInsets.only(top: 6.0),
-                    child:  Text(txt),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
