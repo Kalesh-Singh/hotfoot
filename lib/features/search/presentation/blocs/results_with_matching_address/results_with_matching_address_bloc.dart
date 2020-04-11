@@ -4,7 +4,7 @@ import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/search/domain/use_cases/get_results_with_matching_address.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_event.dart';
-import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_state.dart';
+import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
 import 'package:meta/meta.dart';
 
 class ResultsWithMatchingAddressBloc extends Bloc<

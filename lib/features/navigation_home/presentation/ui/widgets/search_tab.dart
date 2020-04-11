@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/ui/widgets/search_results_list.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';

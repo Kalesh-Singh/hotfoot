@@ -63,7 +63,7 @@ import 'features/search/data/data_sources/search_results_data_source.dart';
 import 'features/search/data/repositories/search_results_repository_impl.dart';
 import 'features/search/domain/repositories/search_results_repository.dart';
 import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
-import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_bloc.dart';
+import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 
 final sl = GetIt.instance;
 

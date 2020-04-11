@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
-import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_bloc.dart';
-import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_state.dart';
+import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
 
 class SearchResultsList extends StatelessWidget {
   @override
