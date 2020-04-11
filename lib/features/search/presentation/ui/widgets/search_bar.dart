@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/matching_addresses/matching_addresses_bloc.dart';
@@ -12,6 +13,11 @@ class _SearchBarState extends State<SearchBar> {
   final TextEditingController _searchBarController = TextEditingController();
 
   MatchingAddressesBloc _matchingAddressesBloc;
+
+  // Debounce timer is used with onChange so that unnecessary firestore API
+  // calls are not made.
+  Timer _debounce;
+  static const int _DEBOUNCE_DURATION_MS = 500;
 
   @override
   void initState() {
@@ -34,8 +40,8 @@ class _SearchBarState extends State<SearchBar> {
             padding: EdgeInsets.all(20.0),
             child: Form(
               child: TextFormField(
-                onFieldSubmitted: (_) {
-                  _onFieldSubmitted();
+                onChanged: (_) {
+                  _onChanged();
                 },
                 decoration: InputDecoration(
                   hintText: "Enter the location address",
@@ -59,8 +65,11 @@ class _SearchBarState extends State<SearchBar> {
     super.dispose();
   }
 
-  void _onFieldSubmitted() {
-    _matchingAddressesBloc
-        .add(AddressEntered(placeAddress: _searchBarController.text));
+  void _onChanged() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(milliseconds: _DEBOUNCE_DURATION_MS), () {
+      _matchingAddressesBloc
+          .add(AddressEntered(placeAddress: _searchBarController.text));
+    });
   }
 }

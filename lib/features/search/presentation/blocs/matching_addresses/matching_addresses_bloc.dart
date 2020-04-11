@@ -21,10 +21,15 @@ class MatchingAddressesBloc
   Stream<MatchingAddressesState> mapEventToState(
       MatchingAddressesEvent event) async* {
     if (event is AddressEntered) {
-      final failureOrMatchingAddresses =
-          await getMatchingAddresses(event.placeAddress);
-      yield* _eitherMatchingAddressesSearchedOrFailureState(
-          failureOrMatchingAddresses);
+      String placeAddress = event.placeAddress;
+      if (placeAddress.length == 0) {
+        yield MatchingAddressesEmpty();
+      } else {
+        final failureOrMatchingAddresses =
+            await getMatchingAddresses(placeAddress);
+        yield* _eitherMatchingAddressesSearchedOrFailureState(
+            failureOrMatchingAddresses);
+      }
     }
   }
 
