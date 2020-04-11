@@ -7,5 +7,5 @@ abstract class UserTypeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ToggleUserType extends UserTypeEvent {}
+class UserTypeToggled extends UserTypeEvent {}
 
