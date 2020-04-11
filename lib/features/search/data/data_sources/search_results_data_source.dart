@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hotfoot/features/search/data/models/search_result_model.dart';
+import 'package:hotfoot/features/search/domain/entities/search_result_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class ISearchResultsDataSource {
-  Future<List<String>> getMatchingAddresses({@required String address});
+  Future<List<SearchResultEntity>> getResultsWithMatchingAddress(
+      {@required String address});
 }
 
 class SearchResultsDataSource implements ISearchResultsDataSource {
@@ -20,18 +23,19 @@ class SearchResultsDataSource implements ISearchResultsDataSource {
         this._placesCollection = firestore.collection('places');
 
   @override
-  Future<List<String>> getMatchingAddresses({String address}) async {
-    print('Getting matching addresses from firestore');
-    List<String> placeAddresses = List<String>();
+  Future<List<SearchResultEntity>> getResultsWithMatchingAddress(
+      {String address}) async {
+    print('Getting results with matching address from firestore');
+    List<SearchResultEntity> results = List<SearchResultEntity>();
     final QuerySnapshot placesSnapshot = await _placesCollection
         .where('address', isGreaterThanOrEqualTo: address)
         .where('address', isLessThanOrEqualTo: address + _PUA)
         .getDocuments();
     placesSnapshot.documents.forEach((document) {
-      placeAddresses.add(document.data['address']);
+      results.add(SearchResultModel.fromJson(document.data));
     });
     print('Got search results from firestore');
-    print('Number of results ${placeAddresses.length}');
-    return placeAddresses;
+    print('Number of results ${results.length}');
+    return results;
   }
 }

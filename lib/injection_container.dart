@@ -50,8 +50,6 @@ import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.d
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
-import 'package:hotfoot/features/search/domain/use_cases/get_matching_addresses.dart';
-import 'package:hotfoot/features/search/presentation/blocs/matching_addresses/matching_addresses_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -64,6 +62,8 @@ import 'package:path_provider/path_provider.dart';
 import 'features/search/data/data_sources/search_results_data_source.dart';
 import 'features/search/data/repositories/search_results_repository_impl.dart';
 import 'features/search/domain/repositories/search_results_repository.dart';
+import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
+import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_addresses_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -101,8 +101,8 @@ Future<void> init() async {
         getCurrentPlace: sl(),
         getPlaceFromQuery: sl(),
       ));
-  sl.registerFactory(() => MatchingAddressesBloc(
-        getMatchingAddresses: sl(),
+  sl.registerFactory(() => ResultsWithMatchingAddressBloc(
+        getResultsWithMatchingAddress: sl(),
       ));
 
   // Use cases
@@ -151,7 +151,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateOrInsertRun(
         runsRepository: sl(),
       ));
-  sl.registerLazySingleton(() => GetMatchingAddresses(
+  sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
         searchResultsRepository: sl(),
       ));
 
