@@ -82,7 +82,7 @@ class RunModel extends RunEntity {
     return map;
   }
 
-  RunEntity copyWith({
+  RunModel copyWith({
     String id,
     String order,
     Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace,

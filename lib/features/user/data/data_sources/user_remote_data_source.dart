@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class IUserRemoteDataSource {
@@ -36,6 +37,8 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       email: firebaseUser.email,
       id: firebaseUser.uid,
       name: firebaseUser.email,
+      // Initialize the user to be a customer
+      type: UserType.CUSTOMER,
     );
     return userModel;
   }

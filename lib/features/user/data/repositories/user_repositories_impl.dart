@@ -44,9 +44,20 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> getUserInfo() {
-    // TODO: implement getUserInfo
-    return null;
+  Future<Either<Failure, UserEntity>> getUserInfo() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final UserModel userModel = await userRemoteDataSource.getUserInfo();
+        await userLocalDataSource.insertOrUpdateUser(userModel: userModel);
+        return Right(userModel);
+      } catch (e) {
+        print(e);
+        return Left(FirestoreFailure());
+      }
+    } else {
+      final UserModel userModel = await userLocalDataSource.getUserInfo();
+      return Right(userModel);
+    }
   }
 
   @override
@@ -65,6 +76,46 @@ class UserRepository implements IUserRepository {
       },
       (success) {
         return Right(success);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserType>> getUserType() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) {
+        return Right(userModel.type);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserType>> toggleUserType() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        final currUserType = userModel.type;
+        final newUserType = (currUserType == UserType.CUSTOMER)
+            ? UserType.RUNNER
+            : UserType.CUSTOMER;
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(type: newUserType);
+        final updateEither = await insertOrUpdateUser(userModel: newUserModel);
+        return updateEither.fold(
+          (failure) {
+            return Left(failure);
+          },
+          (userModel) {
+            return Right(userModel.type);
+          },
+        );
       },
     );
   }
