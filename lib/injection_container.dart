@@ -59,6 +59,12 @@ import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'features/search/data/data_sources/search_results_data_source.dart';
+import 'features/search/data/repositories/search_results_repository_impl.dart';
+import 'features/search/domain/repositories/search_results_repository.dart';
+import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
+import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -94,6 +100,9 @@ Future<void> init() async {
   sl.registerFactory(() => LocationBloc(
         getCurrentPlace: sl(),
         getPlaceFromQuery: sl(),
+      ));
+  sl.registerFactory(() => ResultsWithMatchingAddressBloc(
+        getResultsWithMatchingAddress: sl(),
       ));
 
   // Use cases
@@ -142,6 +151,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateOrInsertRun(
         runsRepository: sl(),
       ));
+  sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
+        searchResultsRepository: sl(),
+      ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -177,6 +189,11 @@ Future<void> init() async {
         getUserId: sl(),
         networkInfo: sl(),
       ));
+  sl.registerLazySingleton<ISearchResultsRepository>(
+      () => SearchResultsRepository(
+            searchResultsDataSource: sl(),
+            networkInfo: sl(),
+          ));
 
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
@@ -204,6 +221,10 @@ Future<void> init() async {
         firestore: sl(),
         getUserId: sl(),
       ));
+  sl.registerLazySingleton<ISearchResultsDataSource>(
+      () => SearchResultsDataSource(
+            firestore: sl(),
+          ));
 
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
