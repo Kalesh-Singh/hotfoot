@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-import 'package:hotfoot/features/order_placed/presentation/ui/widgets/open_close_chat_button.dart';
-import 'package:hotfoot/features/order_placed/presentation/ui/widgets/cancel_delivery_button.dart';
-import 'package:hotfoot/features/order_placed/presentation/ui/widgets/accept_delivery_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
 
 class RunPlacedScreen extends StatelessWidget {
   @override
