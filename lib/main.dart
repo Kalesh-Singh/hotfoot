@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/app.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/injection_container.dart' as di;
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
@@ -18,6 +19,9 @@ void main() async {
         BlocProvider<NavigationScreenBloc>(
           create: (context) => di.sl<NavigationScreenBloc>(),
         ),
+        BlocProvider<UserTypeBloc>(
+          create: (context) => di.sl<UserTypeBloc>(),
+        )
       ],
       child: App(),
     ),
