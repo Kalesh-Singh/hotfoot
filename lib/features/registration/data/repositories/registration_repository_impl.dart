@@ -4,10 +4,8 @@ import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
-import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:meta/meta.dart';
-import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 
 class RegistrationRepository implements IRegistrationRepository {
   final FirebaseAuth firebaseAuth;
