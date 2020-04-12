@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
@@ -47,9 +49,11 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   Future<UserModel> getUserInfo() async {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
+    print('USER ID: $userId');
     final userData =
         await (firestore.collection('users').document(userId).get());
     final userJson = userData.data;
+    print('Pulled user info: ${json.encode(userJson)}');
     return UserModel.fromJson(userJson);
   }
 

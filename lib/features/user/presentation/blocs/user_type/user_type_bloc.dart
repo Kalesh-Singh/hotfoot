@@ -22,7 +22,7 @@ class UserTypeBloc extends Bloc<UserTypeEvent, UserTypeState> {
 
   @override
   Stream<UserTypeState> mapEventToState(UserTypeEvent event) async* {
-    if (event is ToggleUserType) {
+    if (event is UserTypeToggled) {
       final failureOrUserType = await toggleUserType(NoParams());
       yield* _eitherUserTypeToggledOrFailureState(failureOrUserType);
     }

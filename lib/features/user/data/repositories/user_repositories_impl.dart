@@ -51,7 +51,7 @@ class UserRepository implements IUserRepository {
         await userLocalDataSource.insertOrUpdateUser(userModel: userModel);
         return Right(userModel);
       } catch (e) {
-        print(e);
+        print('FIRESTORE FAILURE: $e');
         return Left(FirestoreFailure());
       }
     } else {
@@ -98,6 +98,7 @@ class UserRepository implements IUserRepository {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
       (failure) {
+        print('FAILED TO GET USER INFO');
         return Left(failure);
       },
       (userModel) async {
@@ -110,6 +111,7 @@ class UserRepository implements IUserRepository {
         final updateEither = await insertOrUpdateUser(userModel: newUserModel);
         return updateEither.fold(
           (failure) {
+            print('FAILED TO UPDATE USER MODEL');
             return Left(failure);
           },
           (userModel) {

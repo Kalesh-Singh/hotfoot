@@ -10,6 +10,8 @@ class UserTypeSwitch extends StatelessWidget {
     return BlocBuilder<UserTypeBloc, UserTypeState>(
       builder: (BuildContext context, state) {
         final bool switchValue = state is RunnerUserType;
+        print('SWITCH VALUE = $switchValue');
+        print('STATE is ${state.runtimeType}');
         return Switch(
           onChanged: (_) {
             _toggleUserType(context);
@@ -25,6 +27,7 @@ class UserTypeSwitch extends StatelessWidget {
   }
 
   void _toggleUserType(BuildContext context) {
+    print('TOGGLED USER');
     final _userTypeBloc = BlocProvider.of<UserTypeBloc>(context);
     _userTypeBloc.add(UserTypeToggled());
   }

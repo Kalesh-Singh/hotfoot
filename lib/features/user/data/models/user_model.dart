@@ -34,7 +34,7 @@ class UserModel extends UserEntity {
 
   static UserType _getUserTypeFromString(String type) {
     return UserType.values
-        .firstWhere((e) => e.toString() == 'UserModel.' + type);
+        .firstWhere((e) => e.toString() == type);
   }
 
   UserModel copyWith({
