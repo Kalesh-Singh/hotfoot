@@ -105,6 +105,7 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => UserTypeBloc(
         toggleUserType: sl(),
+      ));
   sl.registerFactory(() => ResultsWithMatchingAddressBloc(
         getResultsWithMatchingAddress: sl(),
       ));
@@ -157,6 +158,7 @@ Future<void> init() async {
       ));
   sl.registerLazySingleton(() => ToggleUserType(
         userRepository: sl(),
+      ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
         searchResultsRepository: sl(),
       ));
