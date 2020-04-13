@@ -5,6 +5,7 @@ import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_au
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -45,6 +46,8 @@ class SettingsScreen extends StatelessWidget {
                 '$user',
                 style: TextStyle(fontSize: 20),
               )),
+              SizedBox(height: 24),
+              UserTypeWidget(),
               SizedBox(height: 24.0),
               Center(
                 child: signOutButton(context),

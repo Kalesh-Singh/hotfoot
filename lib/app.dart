@@ -9,7 +9,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/run_placed/presentation/ui/screen/run_placed_screen.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
 import 'package:hotfoot/injection_container.dart';
-import 'package:hotfoot/src/screens/settings_screen.dart';
+import 'package:hotfoot/features/user/presentation/ui/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/login/presentation/ui/screen/splash_screen.dart';
 

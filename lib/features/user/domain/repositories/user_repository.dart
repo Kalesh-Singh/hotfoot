@@ -9,6 +9,10 @@ abstract class IUserRepository {
 
   Future<Either<Failure, String>> getUserId();
 
+  Future<Either<Failure, UserType>> getUserType();
+
+  Future<Either<Failure, UserType>> toggleUserType();
+
   Future<Either<Failure, UserEntity>> getUserInfo();
 
   Future<Either<Failure, UserEntity>> insertOrUpdateUser(
