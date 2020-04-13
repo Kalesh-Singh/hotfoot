@@ -9,3 +9,5 @@ abstract class UserTypeEvent extends Equatable {
 
 class UserTypeToggled extends UserTypeEvent {}
 
+class UserTypeRequested extends UserTypeEvent {}
+

@@ -5,12 +5,24 @@ import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_ho
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/home_tab.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/orders_tab.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/search_tab.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 
 // Run Placed Screen at
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userTypeBloc = BlocProvider.of<UserTypeBloc>(context);
+    print('USER TYPE ON HOME: ${userTypeBloc.state.runtimeType}');
+    if (userTypeBloc.state is UserTypeLoading) {
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Container(
       child: BlocBuilder<NavigationHomeBloc, NavigationHomeState>(
           builder: (context, state) {

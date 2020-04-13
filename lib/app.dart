@@ -8,6 +8,8 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/screen/run_placed_screen.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_event.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/user/presentation/ui/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +30,7 @@ class App extends StatelessWidget {
               return SplashScreen();
             } else if (state is Authenticated) {
               print('Authenticated');
+              BlocProvider.of<UserTypeBloc>(context).add(UserTypeRequested());
               return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
                   builder: (context, state) {
                 print('NAV BLOC STATE TYPE: ${state.runtimeType}');
