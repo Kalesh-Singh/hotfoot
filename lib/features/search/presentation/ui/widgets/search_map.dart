@@ -47,7 +47,7 @@ class _SearchMap extends State<SearchMap> {
               "SearchMapLoaded with latlng ${state.locationEntity.lat}, ${state.locationEntity.lng}");
           _moveToLocation(state.locationEntity.lat, state.locationEntity.lng);
         } else if (state is SearchMapFailure) {
-          // TODO: finish.
+          print(state.message);
         }
       },
       child: GoogleMap(

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
-import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
-import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_event.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_event.dart';
@@ -61,7 +61,7 @@ class SearchResultsListEntry extends StatelessWidget {
         print("Selected search result with id (${searchResult.id})");
         BlocProvider.of<SearchMapBloc>(context)
             .add(SearchItemSelectedForMap(placeId: searchResult.id));
-        BlocProvider.of<SearchBottomDrawerBloc>(context)
+        BlocProvider.of<DrawerContentsBloc>(context)
             .add(SearchItemSelectedForDrawer(placeId: searchResult.id));
         BlocProvider.of<ResultsWithMatchingAddressBloc>(context)
             .add(ListEntryClicked());
