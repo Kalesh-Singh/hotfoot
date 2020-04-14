@@ -20,3 +20,14 @@ class UserTypeToggleFailure extends UserTypeState {
   @override
   List<Object> get props => [message];
 }
+
+class UserTypeLoadFailure extends UserTypeState {
+  final String message;
+
+  const UserTypeLoadFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class UserTypeLoading extends UserTypeState {}

@@ -56,6 +56,7 @@ import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.d
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
@@ -105,6 +106,7 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => UserTypeBloc(
         toggleUserType: sl(),
+        getUserType: sl(),
       ));
   sl.registerFactory(() => ResultsWithMatchingAddressBloc(
         getResultsWithMatchingAddress: sl(),
@@ -157,6 +159,9 @@ Future<void> init() async {
         runsRepository: sl(),
       ));
   sl.registerLazySingleton(() => ToggleUserType(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserType(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
