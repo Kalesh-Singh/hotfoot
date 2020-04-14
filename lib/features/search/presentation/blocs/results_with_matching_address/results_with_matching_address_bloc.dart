@@ -33,7 +33,7 @@ class ResultsWithMatchingAddressBloc extends Bloc<
             failureOrResultsWithMatchingAddress);
       }
     } else if (event is ListEntryClicked) {
-      yield ResultsWithMatchingAddressEmpty();
+      yield ResultsWithMatchingAddressSelected(placeId: event.placeId);
     }
   }
 

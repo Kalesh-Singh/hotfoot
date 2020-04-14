@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
@@ -12,8 +11,6 @@ import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_state.dart';
 import 'package:hotfoot/features/search/presentation/ui/utils/bottom_drawer_gesture_detector.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-
-import '../../../../navigation_screen/presentation/bloc/navigation_screen_event.dart';
 
 class SearchBottomDrawer extends StatelessWidget {
   @override
