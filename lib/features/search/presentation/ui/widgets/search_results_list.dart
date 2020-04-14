@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_event.dart';
+
+import '../../blocs/results_with_matching_address/results_with_matching_address_event.dart';
 
 class SearchResultsList extends StatelessWidget {
   @override
@@ -54,6 +58,10 @@ class SearchResultsListEntry extends StatelessWidget {
       ),
       onTap: () {
         print("Selected search result with id (${searchResult.id})");
+        BlocProvider.of<SearchMapBloc>(context)
+            .add(SearchItemSelected(placeId: searchResult.id));
+        BlocProvider.of<ResultsWithMatchingAddressBloc>(context)
+            .add(ListEntryClicked());
       },
     );
   }

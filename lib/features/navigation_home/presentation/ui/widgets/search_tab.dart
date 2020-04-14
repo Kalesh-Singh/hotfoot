@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
+import 'package:hotfoot/features/search/presentation/ui/widgets/search_map.dart';
 import 'package:hotfoot/features/search/presentation/ui/widgets/search_results_list.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
@@ -14,15 +16,24 @@ class SearchTab extends StatelessWidget {
           BlocProvider<ResultsWithMatchingAddressBloc>(
             create: (context) => sl<ResultsWithMatchingAddressBloc>(),
           ),
+          BlocProvider<SearchMapBloc>(
+            create: (context) => sl<SearchMapBloc>(),
+          ),
         ],
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text('Search'),
           ),
-          body: Column(
+          body: Stack(
             children: <Widget>[
-              SearchBar(),
-              Expanded(child: SearchResultsList()),
+              SearchMap(),
+              Column(
+                children: <Widget>[
+                  SearchBar(),
+                  Expanded(child: SearchResultsList()),
+                ],
+              )
             ],
           ),
           bottomNavigationBar: BottomNavBar(),

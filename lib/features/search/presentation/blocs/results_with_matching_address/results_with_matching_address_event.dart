@@ -13,3 +13,5 @@ class AddressEntered extends ResultsWithMatchingAddressEvent {
 
   const AddressEntered({@required this.placeAddress});
 }
+
+class ListEntryClicked extends ResultsWithMatchingAddressEvent {}

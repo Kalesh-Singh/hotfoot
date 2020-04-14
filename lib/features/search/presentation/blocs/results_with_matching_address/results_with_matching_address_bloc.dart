@@ -32,13 +32,14 @@ class ResultsWithMatchingAddressBloc extends Bloc<
         yield* _eitherResultsWithMatchingAddressSearchedOrFailureState(
             failureOrResultsWithMatchingAddress);
       }
+    } else if (event is ListEntryClicked) {
+      yield ResultsWithMatchingAddressEmpty();
     }
   }
 
   Stream<ResultsWithMatchingAddressState>
       _eitherResultsWithMatchingAddressSearchedOrFailureState(
-    Either<Failure, List<PlaceEntity>>
-        failureOrResultsWithMatchingAddress,
+    Either<Failure, List<PlaceEntity>> failureOrResultsWithMatchingAddress,
   ) async* {
     yield failureOrResultsWithMatchingAddress.fold(
       (failure) => ResultsWithMatchingAddressFailure(message: _ERROR_MSG),

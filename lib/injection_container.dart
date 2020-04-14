@@ -64,6 +64,7 @@ import 'features/search/data/repositories/search_results_repository_impl.dart';
 import 'features/search/domain/repositories/search_results_repository.dart';
 import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
 import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'features/search/presentation/blocs/search_map/search_map_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -103,6 +104,9 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => ResultsWithMatchingAddressBloc(
         getResultsWithMatchingAddress: sl(),
+      ));
+  sl.registerFactory(() => SearchMapBloc(
+        getPlaceById: sl(),
       ));
 
   // Use cases
