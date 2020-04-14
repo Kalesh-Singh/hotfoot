@@ -9,21 +9,21 @@ abstract class SearchMapState extends Equatable {
   List<Object> get props => [];
 }
 
-class SearchMapStateUninitialized extends SearchMapState {}
+class SearchMapUninitialized extends SearchMapState {}
 
-class SearchMapStateLoaded extends SearchMapState {
+class SearchMapLoaded extends SearchMapState {
   final LocationEntity locationEntity;
 
-  const SearchMapStateLoaded({@required this.locationEntity});
+  const SearchMapLoaded({@required this.locationEntity});
 
   @override
   List<Object> get props => [locationEntity];
 }
 
-class SearchMapStateFailure extends SearchMapState {
+class SearchMapFailure extends SearchMapState {
   final String message;
 
-  const SearchMapStateFailure({@required this.message});
+  const SearchMapFailure({@required this.message});
 
   @override
   List<Object> get props => [message];

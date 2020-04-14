@@ -42,11 +42,11 @@ class _SearchMap extends State<SearchMap> {
 
     return BlocListener<SearchMapBloc, SearchMapState>(
       listener: (context, state) {
-        if (state is SearchMapStateLoaded) {
+        if (state is SearchMapLoaded) {
           print(
-              "SearchMapStateLoaded with latlng ${state.locationEntity.lat}, ${state.locationEntity.lng}");
+              "SearchMapLoaded with latlng ${state.locationEntity.lat}, ${state.locationEntity.lng}");
           _moveToLocation(state.locationEntity.lat, state.locationEntity.lng);
-        } else if (state is SearchMapStateFailure) {
+        } else if (state is SearchMapFailure) {
           // TODO: finish.
         }
       },

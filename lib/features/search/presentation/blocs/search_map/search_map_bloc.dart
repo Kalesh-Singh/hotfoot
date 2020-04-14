@@ -14,15 +14,15 @@ class SearchMapBloc extends Bloc<SearchMapEvent, SearchMapState> {
   SearchMapBloc({@required this.getPlaceById});
 
   @override
-  SearchMapState get initialState => SearchMapStateUninitialized();
+  SearchMapState get initialState => SearchMapUninitialized();
 
   @override
   Stream<SearchMapState> mapEventToState(SearchMapEvent event) async* {
-    if (event is SearchItemSelected) {
+    if (event is SearchItemSelectedForMap) {
       final failureOrPlaceEntity = await getPlaceById(event.placeId);
       yield* _eitherFailureOrPlaceEntity(failureOrPlaceEntity);
     } else {
-      yield SearchMapStateUninitialized();
+      yield SearchMapUninitialized();
     }
   }
 
@@ -30,9 +30,9 @@ class SearchMapBloc extends Bloc<SearchMapEvent, SearchMapState> {
     Either<Failure, PlaceEntity> eitherFailureOrPlaceEntity,
   ) async* {
     yield eitherFailureOrPlaceEntity.fold(
-      (failure) => SearchMapStateFailure(message: _ERROR_MSG),
+      (failure) => SearchMapFailure(message: _ERROR_MSG),
       (placeEntity) =>
-          SearchMapStateLoaded(locationEntity: placeEntity.locationEntity),
+          SearchMapLoaded(locationEntity: placeEntity.locationEntity),
     );
   }
 }

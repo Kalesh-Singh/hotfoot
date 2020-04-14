@@ -57,14 +57,14 @@ import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
+import 'package:hotfoot/features/search/data/data_sources/search_results_data_source.dart';
+import 'package:hotfoot/features/search/data/repositories/search_results_repository_impl.dart';
+import 'package:hotfoot/features/search/domain/repositories/search_results_repository.dart';
+import 'package:hotfoot/features/search/domain/use_cases/get_results_with_matching_address.dart';
+import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'features/search/data/data_sources/search_results_data_source.dart';
-import 'features/search/data/repositories/search_results_repository_impl.dart';
-import 'features/search/domain/repositories/search_results_repository.dart';
-import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
-import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
-import 'features/search/presentation/blocs/search_map/search_map_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -107,6 +107,10 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => SearchMapBloc(
         getPlaceById: sl(),
+      ));
+  sl.registerFactory(() => SearchBottomDrawerBloc(
+        getPlaceById: sl(),
+        getPlacePhoto: sl(),
       ));
 
   // Use cases

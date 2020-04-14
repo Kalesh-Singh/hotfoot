@@ -8,8 +8,8 @@ abstract class SearchMapEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SearchItemSelected extends SearchMapEvent {
+class SearchItemSelectedForMap extends SearchMapEvent {
   final String placeId;
 
-  const SearchItemSelected({@required this.placeId});
+  const SearchItemSelectedForMap({@required this.placeId});
 }
