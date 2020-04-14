@@ -15,7 +15,17 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
       right: 15,
       left: 15,
       child: Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 1.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ],
+        ),
         child: Row(
           children: <Widget>[
             IconButton(
@@ -39,11 +49,13 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
                             context),
                         child: SearchHandlerScreen());
                   }));
-                  print("Place Id ($selectedPlaceId) returned from handler");
-                  BlocProvider.of<SearchMapBloc>(context)
-                      .add(SearchItemSelectedForMap(placeId: selectedPlaceId));
-                  BlocProvider.of<DrawerContentsBloc>(context).add(
-                      SearchItemSelectedForDrawer(placeId: selectedPlaceId));
+                  if (selectedPlaceId != null) {
+                    print("Place Id ($selectedPlaceId) returned from handler");
+                    BlocProvider.of<SearchMapBloc>(context).add(
+                        SearchItemSelectedForMap(placeId: selectedPlaceId));
+                    BlocProvider.of<DrawerContentsBloc>(context).add(
+                        SearchItemSelectedForDrawer(placeId: selectedPlaceId));
+                  }
                 },
               ),
             ),

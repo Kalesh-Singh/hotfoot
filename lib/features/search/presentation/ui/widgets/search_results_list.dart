@@ -52,7 +52,17 @@ class SearchResultsListEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: ListTile(
-        leading: Text('${searchResult.address}'),
+        leading: Container(
+            width: MediaQuery.of(context).size.width / 1.2,
+            margin: const EdgeInsets.only(left: 15.0, right: 1.0),
+            decoration: BoxDecoration(
+                border: Border(
+              bottom: BorderSide(width: 0.5, color: Colors.grey),
+            )),
+            child: Text(
+              '${searchResult.address}',
+              style: TextStyle(fontSize: 15),
+            )),
       ),
       onTap: () {
         print("Selected search result with id (${searchResult.id})");

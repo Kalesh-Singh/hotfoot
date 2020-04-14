@@ -30,39 +30,47 @@ class SearchHandlerScreen extends StatelessWidget {
       },
       child: Scaffold(
         body: Container(
-          color: Colors.white,
           child: Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 40, 15, 0),
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      splashColor: Colors.grey,
-                      icon: Icon(Icons.search),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        cursorColor: Colors.black,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 15),
-                            hintText: "Enter the location address..."),
-                        onChanged: (String value) {
-                          if (_debounce?.isActive ?? false) _debounce.cancel();
-                          _debounce = Timer(
-                              const Duration(
-                                  milliseconds: _DEBOUNCE_DURATION_MS), () {
-                            _resultsWithMatchingAddressBloc
-                                .add(AddressEntered(placeAddress: value));
-                          });
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(color: Colors.grey)),
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        splashColor: Colors.grey,
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.pop(context, null);
                         },
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: TextField(
+                          cursorColor: Colors.black,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.go,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 15),
+                              hintText: "Enter the location address..."),
+                          onChanged: (String value) {
+                            if (_debounce?.isActive ?? false)
+                              _debounce.cancel();
+                            _debounce = Timer(
+                                const Duration(
+                                    milliseconds: _DEBOUNCE_DURATION_MS), () {
+                              _resultsWithMatchingAddressBloc
+                                  .add(AddressEntered(placeAddress: value));
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
