@@ -33,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.library_books),
-        title: Text('Orders'),
+        title: Text('Runs'),
       ),
     ];
   }
@@ -50,7 +50,7 @@ class BottomNavBar extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.library_books),
-        title: Text('Orders'),
+        title: Text('Runs'),
       ),
     ];
   }

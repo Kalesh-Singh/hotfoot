@@ -16,8 +16,8 @@ class NavigationHomeBloc
       yield HomeIconTab();
     } else if (event is SearchIconPressed) {
       yield SearchIconTab();
-    } else if (event is OrdersIconPressed) {
-      yield OrdersIconTab();
+    } else if (event is RunsIconPressed) {
+      yield RunsIconTab();
     }
   }
 
@@ -26,7 +26,7 @@ class NavigationHomeBloc
       switch (state.runtimeType) {
         case HomeIconTab:
           return 0;
-        case OrdersIconTab:
+        case RunsIconTab:
           return 1;
         default:
           return 0;
@@ -37,7 +37,7 @@ class NavigationHomeBloc
           return 0;
         case SearchIconTab:
           return 1;
-        case OrdersIconTab:
+        case RunsIconTab:
           return 2;
         default:
           return 0;
@@ -55,7 +55,7 @@ class NavigationHomeBloc
           add(HomeIconPressed());
           break;
         case 1:
-          add(OrdersIconPressed());
+          add(RunsIconPressed());
           break;
         default:
           add(HomeIconPressed());
@@ -69,7 +69,7 @@ class NavigationHomeBloc
           add(SearchIconPressed());
           break;
         case 2:
-          add(OrdersIconPressed());
+          add(RunsIconPressed());
           break;
         default:
           add(HomeIconPressed());

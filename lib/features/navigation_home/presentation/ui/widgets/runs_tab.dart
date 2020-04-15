@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
 
-class OrdersTab extends StatelessWidget {
+class RunsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
