@@ -126,37 +126,41 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     return _runsCollection.document(runId).collection('run').snapshots();
   }
 
-  @override
-  Future<List<String>> getRunsIdsWhereUserIsCustomer() async {
+  Future<List<String>> _getRunsIdsWhereUserIs(
+      {@required String userTypeId}) async {
     final userEither = await (getUserId(NoParams()));
-    List<String> _customerRunsIds = List<String>();
+    List<String> _runsIds = List<String>();
     await userEither.fold(
       (failure) {
         print('failed to getUser');
       },
       (userId) async {
         final Query _runsCollectionGroup = firestore.collectionGroup('run');
-        final QuerySnapshot _customerRunsSnapshot = await _runsCollectionGroup
-            .where('customerId', isEqualTo: userId)
+        final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+            .where(userTypeId, isEqualTo: userId)
             .getDocuments();
-        _customerRunsSnapshot.documents.forEach(
+        _runsSnapshot.documents.forEach(
           (document) {
-            _customerRunsIds.add(document.documentID);
+            _runsIds.add(document.documentID);
           },
         );
       },
     );
 
-    print('Customer runs id');
-    for (final id in _customerRunsIds) {
+    print('$userTypeId runs id');
+    for (final id in _runsIds) {
       print(id);
     }
-    return _customerRunsIds;
+    return _runsIds;
   }
 
   @override
-  Future<List<String>> getRunsIdsWhereUserIsRunner() {
-    // TODO: implement getRunsIdsWhereUserIsRunner
-    return null;
+  Future<List<String>> getRunsIdsWhereUserIsCustomer() async {
+    return await _getRunsIdsWhereUserIs(userTypeId: 'customerId');
+  }
+
+  @override
+  Future<List<String>> getRunsIdsWhereUserIsRunner() async {
+    return await _getRunsIdsWhereUserIs(userTypeId: 'runnerId');
   }
 }
