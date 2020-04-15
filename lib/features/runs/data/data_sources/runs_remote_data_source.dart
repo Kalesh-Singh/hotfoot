@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_message_list_item.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
@@ -18,6 +19,10 @@ abstract class IRunsRemoteDataSource {
 
   /// Returns a stream that can be listened to for run updates.
   Future<Stream<QuerySnapshot>> getRunStream(String runId);
+
+  Future<List<String>> getRunsIdsWhereUserIsCustomer();
+
+  Future<List<String>> getRunsIdsWhereUserIsRunner();
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -119,5 +124,39 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   Future<Stream<QuerySnapshot>> getRunStream(String runId) async {
     return _runsCollection.document(runId).collection('run').snapshots();
+  }
+
+  @override
+  Future<List<String>> getRunsIdsWhereUserIsCustomer() async {
+    final userEither = await (getUserId(NoParams()));
+    List<String> _customerRunsIds = List<String>();
+    await userEither.fold(
+      (failure) {
+        print('failed to getUser');
+      },
+      (userId) async {
+        final Query _runsCollectionGroup = firestore.collectionGroup('run');
+        final QuerySnapshot _customerRunsSnapshot = await _runsCollectionGroup
+            .where('customerId', isEqualTo: userId)
+            .getDocuments();
+        _customerRunsSnapshot.documents.forEach(
+          (document) {
+            _customerRunsIds.add(document.documentID);
+          },
+        );
+      },
+    );
+
+    print('Customer runs id');
+    for (final id in _customerRunsIds) {
+      print(id);
+    }
+    return _customerRunsIds;
+  }
+
+  @override
+  Future<List<String>> getRunsIdsWhereUserIsRunner() {
+    // TODO: implement getRunsIdsWhereUserIsRunner
+    return null;
   }
 }

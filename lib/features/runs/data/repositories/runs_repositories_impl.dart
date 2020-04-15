@@ -135,4 +135,16 @@ class RunsRepository implements IRunsRepository {
     );
     return Right(run);
   }
+
+  @override
+  Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsCustomer() {
+    // TODO: implement getRunsIdsWhereUserIsCustomer
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsRunner() {
+    // TODO: implement getRunsIdsWhereUserIsRunner
+    return null;
+  }
 }
