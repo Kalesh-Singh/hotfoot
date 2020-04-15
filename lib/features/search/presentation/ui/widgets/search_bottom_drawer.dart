@@ -10,7 +10,6 @@ import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_state.dart';
 import 'package:hotfoot/features/search/presentation/ui/utils/bottom_drawer_gesture_detector.dart';
-import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 
 class SearchBottomDrawer extends StatelessWidget {
   @override
@@ -43,18 +42,19 @@ class _SearchBottomDrawer extends StatelessWidget {
           BlocBuilder<SearchBottomDrawerBloc, SearchBottomDrawerState>(
             builder: (context, state) {
               if (state is SearchBottomDrawerOpened) {
+                print("Opened!");
                 return AnimatedPositioned(
                     curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 200),
                     left: 0,
-                    bottom: -95,
+                    bottom: 0,
                     child: DrawerContents());
               }
               return AnimatedPositioned(
                   curve: Curves.easeInOut,
                   duration: Duration(milliseconds: 200),
                   left: 0,
-                  bottom: -232,
+                  bottom: -145,
                   child: DrawerContents());
             },
           ),
@@ -67,7 +67,6 @@ class _SearchBottomDrawer extends StatelessWidget {
 class DrawerContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return ClipRRect(
@@ -75,7 +74,7 @@ class DrawerContents extends StatelessWidget {
       child: Container(
         color: Colors.redAccent,
         width: width,
-        height: height / 3 + 60,
+        height: 200,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2.0),
           child: Column(
@@ -133,100 +132,93 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final photoBytes = placePhoto.readAsBytesSync();
 
     return Row(
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(top: 10.0, right: 10.0),
-          height: 140,
-          width: 350,
-          child: Card(
-            elevation: 5,
-            child: Row(
-              children: <Widget>[
-                Container(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.memory(
-                    photoBytes,
-                    width: 140,
-                    height: 140,
-                    fit: BoxFit.fill,
-                  ),
-                )),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                top: 12.0,
-                                left: 12.0,
-                              ),
-                              child: Text(
-                                placeEntity.name,
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+        Expanded(
+          child: Container(
+            height: 140,
+            padding: EdgeInsets.only(top: 10.0),
+            child: Card(
+              elevation: 5,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.memory(
+                      photoBytes,
+                      width: 140,
+                      height: 140,
+                      fit: BoxFit.fill,
+                    ),
+                  )),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              top: 12.0,
+                              left: 12.0,
+                            ),
+                            child: Text(
+                              placeEntity.name,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 12.0,
-                          left: 12.0,
                         ),
-                        child: Text(
-                          placeEntity.address,
-                          style: TextStyle(
-                            fontSize: 14.0,
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              top: 12.0,
+                              left: 12.0,
+                            ),
+                            child: Text(
+                              placeEntity.address,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Confirm",
-            ),
-            Center(
-              child: IconButton(
-                icon: Icon(Icons.check_circle),
-                iconSize: 35,
-                color: Colors.greenAccent,
-                onPressed: () {
-                  // TODO: Enter purchase flow.
-//                  final runModel = navScreenBloc.state.runModel;
-//                  navScreenBloc.add(
-//                    EnteredPurchaseFlow(
-//                      runModel: runModel.copyWith(
-//                        pickupPlaceIdOrCustomPlace: Left(placeEntity.id),
-//                        destinationPlace: placeEntity.,
-//                      ),
-//                    ),
-//                  );
-                },
+        Container(
+          height: 140,
+          width: 60,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "Confirm",
               ),
-            ),
-          ],
+              Center(
+                child: IconButton(
+                  icon: Icon(Icons.check_circle),
+                  iconSize: 35,
+                  color: Colors.greenAccent,
+                  onPressed: () {
+                    // TODO: Enter purchase flow.
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
