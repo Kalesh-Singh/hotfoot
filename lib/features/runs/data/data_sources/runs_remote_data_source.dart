@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
-import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_message_list_item.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
-import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
-import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 

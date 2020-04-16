@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
-import 'package:hotfoot/features/runs/domain/use_cases/get_customer_runs__ids.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_customer_runs_ids.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_state.dart';
 import 'package:meta/meta.dart';
@@ -21,6 +21,7 @@ class CustomerRunsIdsBloc
   Stream<CustomerRunsIdsState> mapEventToState(
       CustomerRunsIdsEvent event) async* {
     if (event is CustomerRunsRequested) {
+      print('CUSTOMER RUNS REQUESTED');
       final failureOrCustomerRunsIds = await getCustomerRunsIds(NoParams());
       yield* _eitherLoadedOrFailureState(failureOrCustomerRunsIds);
     }
