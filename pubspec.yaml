@@ -65,7 +65,7 @@ dependencies:
   dash_chat: ^1.0.16
 
   # TODO: Maybe delete unused ones
-  google_maps_flutter: ^0.5.21
+  google_maps_flutter: ^0.5.25
   flutter_google_places: ^0.2.3
   google_maps_webservice: ^0.0.16
 
