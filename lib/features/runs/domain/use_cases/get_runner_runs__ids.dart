@@ -4,10 +4,10 @@ import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:meta/meta.dart';
 
-class GetRunsIdsWhereUserIsRunner implements UseCase<List<String>, NoParams> {
+class GetRunnerRunsIds implements UseCase<List<String>, NoParams> {
   final IRunsRepository runsRepository;
 
-  const GetRunsIdsWhereUserIsRunner({@required this.runsRepository});
+  const GetRunnerRunsIds({@required this.runsRepository});
 
   @override
   Future<Either<Failure, List<String>>> call(NoParams params) async {
