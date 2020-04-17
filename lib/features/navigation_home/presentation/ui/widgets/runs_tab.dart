@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
+import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/runs_list.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_state.dart';
@@ -48,7 +49,7 @@ class RunsTab extends StatelessWidget {
               if (state.customerRunsIds.length == 0) {
                 return Text('No runs requested yet.');
               } else {
-                return Text('List of runs for customer');
+                return RunsList(runsIds: state.customerRunsIds);
               }
             } else if (state is CustomerRunsIdsLoadFailure) {
               return Text(state.message);
