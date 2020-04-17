@@ -52,6 +52,7 @@ import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
@@ -121,6 +122,7 @@ Future<void> init() async {
         getPlacePhoto: sl(),
       ));
   sl.registerFactory(() => SearchBottomDrawerBloc());
+  sl.registerFactory(() => SearchHandlerScreenBloc());
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(

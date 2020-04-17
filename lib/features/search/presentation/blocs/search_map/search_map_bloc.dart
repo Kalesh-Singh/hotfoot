@@ -19,6 +19,7 @@ class SearchMapBloc extends Bloc<SearchMapEvent, SearchMapState> {
   @override
   Stream<SearchMapState> mapEventToState(SearchMapEvent event) async* {
     if (event is SearchItemSelectedForMap) {
+      print("SearchItemSelectedForMap is ${event.placeId}");
       final failureOrPlaceEntity = await getPlaceById(event.placeId);
       yield* _eitherFailureOrPlaceEntity(failureOrPlaceEntity);
     } else {
