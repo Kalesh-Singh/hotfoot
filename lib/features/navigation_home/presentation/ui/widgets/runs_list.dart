@@ -11,9 +11,6 @@ class RunsList extends StatelessWidget {
     return ListView.builder(
       itemCount: runsIds.length,
       itemBuilder: (context, index) {
-//        return ListTile(
-//          title: Text(runsIds[index]),
-//        );
         return RunListTile(runId: runsIds[index]);
       },
     );
