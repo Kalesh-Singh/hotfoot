@@ -5,6 +5,9 @@ import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/runs_li
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_state.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_event.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_state.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
@@ -15,7 +18,11 @@ class RunsTab extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CustomerRunsIdsBloc>(
-            create: (context) => sl<CustomerRunsIdsBloc>()),
+          create: (context) => sl<CustomerRunsIdsBloc>(),
+        ),
+        BlocProvider<RunnerRunsIdsBloc>(
+          create: (context) => sl<RunnerRunsIdsBloc>(),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -35,7 +42,28 @@ class RunsTab extends StatelessWidget {
   Widget _runnerRuns() {
     return Container(
       child: Center(
-        child: Text('No runs completed yet'),
+        child: BlocBuilder<RunnerRunsIdsBloc, RunnerRunsIdsState>(
+          builder: (BuildContext context, RunnerRunsIdsState state) {
+            if (state is RunnerRunsIdsLoadSuccess) {
+              if (state.runnerRunsIds.length == 0) {
+                return Text('No runs completed yet.');
+              } else {
+                return RunsList(
+                  runsIds: state.runnerRunsIds,
+                  isRunner: true,
+                );
+              }
+            } else if (state is RunnerRunsIdsLoadFailure) {
+              return Text(state.message);
+            } else if (state is RunnerRunsIdsUninitialized) {
+              BlocProvider.of<RunnerRunsIdsBloc>(context)
+                  .add(RunnerRunsRequested());
+              return CircularProgressIndicator();
+            } else {
+              return Container();
+            }
+          },
+        ),
       ),
     );
   }

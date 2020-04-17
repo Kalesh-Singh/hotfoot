@@ -50,10 +50,12 @@ import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.d
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_customer_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_by_id.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_runner_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
@@ -128,6 +130,9 @@ Future<void> init() async {
   sl.registerFactory(() => CustomerRunsIdsBloc(
         getCustomerRunsIds: sl(),
       ));
+  sl.registerFactory(() => RunnerRunsIdsBloc(
+    getRunnerRunsIds: sl(),
+  ));
   sl.registerFactory(() => RunDetailsBloc(
         getRunById: sl(),
       ));
@@ -188,6 +193,9 @@ Future<void> init() async {
         searchResultsRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetCustomerRunsIds(
+    runsRepository: sl(),
+  ));
+  sl.registerLazySingleton(() => GetRunnerRunsIds(
         runsRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetRunById(
