@@ -58,6 +58,7 @@ import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details
 import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
@@ -136,6 +137,7 @@ Future<void> init() async {
   sl.registerFactory(() => RunDetailsBloc(
         getRunById: sl(),
       ));
+  sl.registerFactory(() => SearchHandlerScreenBloc());
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(

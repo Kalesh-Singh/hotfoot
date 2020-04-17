@@ -112,7 +112,7 @@ packages:
       name: dash_chat
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.18"
+    version: "1.0.19"
   data_connection_checker:
     dependency: "direct main"
     description:
@@ -229,7 +229,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   flutter_google_places:
     dependency: "direct main"
     description:

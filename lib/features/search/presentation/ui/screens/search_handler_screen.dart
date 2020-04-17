@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_event.dart';
 import 'package:hotfoot/features/search/presentation/ui/widgets/search_results_list.dart';
 
 class SearchHandlerScreen extends StatelessWidget {
@@ -15,17 +17,12 @@ class SearchHandlerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // According to https://github.com/felangel/bloc/issues/587, this is a false
-    // positive.
-    // ignore: close_sinks
-    ResultsWithMatchingAddressBloc _resultsWithMatchingAddressBloc =
-        BlocProvider.of<ResultsWithMatchingAddressBloc>(context);
-
     return BlocListener<ResultsWithMatchingAddressBloc,
         ResultsWithMatchingAddressState>(
       listener: (context, state) {
         if (state is ResultsWithMatchingAddressSelected) {
-          Navigator.pop(context, state.placeId);
+          BlocProvider.of<SearchHandlerScreenBloc>(context)
+              .add(SearchResultSelectedFromList(placeId: state.placeId));
         }
       },
       child: Scaffold(
@@ -44,7 +41,8 @@ class SearchHandlerScreen extends StatelessWidget {
                         splashColor: Colors.grey,
                         icon: Icon(Icons.arrow_back),
                         onPressed: () {
-                          Navigator.pop(context, null);
+                          BlocProvider.of<SearchHandlerScreenBloc>(context)
+                              .add(BackButtonPressed());
                         },
                       ),
                       Expanded(
@@ -63,7 +61,8 @@ class SearchHandlerScreen extends StatelessWidget {
                             _debounce = Timer(
                                 const Duration(
                                     milliseconds: _DEBOUNCE_DURATION_MS), () {
-                              _resultsWithMatchingAddressBloc
+                              BlocProvider.of<ResultsWithMatchingAddressBloc>(
+                                      context)
                                   .add(AddressEntered(placeAddress: value));
                             });
                           },
@@ -75,10 +74,7 @@ class SearchHandlerScreen extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: BlocProvider.value(
-                    value: _resultsWithMatchingAddressBloc,
-                    child: SearchResultsList(),
-                  ),
+                  child: SearchResultsList(),
                 ),
               ),
             ],
