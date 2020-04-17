@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:intl/intl.dart';
 
 class RunCard extends StatelessWidget {
   final RunEntity runEntity;
@@ -20,12 +21,17 @@ class RunCard extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Center(
-                child: Text(runEntity.order),
+                child: Text(
+                  runEntity.order,
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
             Expanded(
               child: Center(
-                child: Text(runEntity.timePlaced.toString()),
+                child: Text(
+                  DateFormat.yMMMMEEEEd().format(runEntity.timePlaced),
+                ),
               ),
             ),
           ],

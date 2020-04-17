@@ -28,15 +28,7 @@ class RunListTile extends StatelessWidget {
                 ),
               );
             } else if (state is RunDetailsLoadSuccess) {
-//                return PlaceCard(placeEntity: state.placeEntity);
-            // TODO: Run Card
               return RunCard(runEntity: state.runEntity);
-//              return Container(
-//                height: 50,
-//                child: Center(
-//                  child: Text(state.runEntity.order),
-//                ),
-//              );
             } else {
               return Container();
             }
