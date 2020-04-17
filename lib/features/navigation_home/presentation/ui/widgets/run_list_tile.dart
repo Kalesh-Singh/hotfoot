@@ -8,8 +8,13 @@ import 'package:hotfoot/injection_container.dart';
 
 class RunListTile extends StatelessWidget {
   final String runId;
+  final bool isRunner;
 
-  const RunListTile({Key key, this.runId}) : super(key: key);
+  const RunListTile({
+    Key key,
+    @required this.runId,
+    @required this.isRunner,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,10 @@ class RunListTile extends StatelessWidget {
                 ),
               );
             } else if (state is RunDetailsLoadSuccess) {
-              return RunCard(runEntity: state.runEntity);
+              return RunCard(
+                runEntity: state.runEntity,
+                isRunner: isRunner,
+              );
             } else {
               return Container();
             }

@@ -4,8 +4,13 @@ import 'package:intl/intl.dart';
 
 class RunCard extends StatelessWidget {
   final RunEntity runEntity;
+  final bool isRunner;
 
-  const RunCard({Key key, this.runEntity}) : super(key: key);
+  const RunCard({
+    Key key,
+    @required this.runEntity,
+    @required this.isRunner,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

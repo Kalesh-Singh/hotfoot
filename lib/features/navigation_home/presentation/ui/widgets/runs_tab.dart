@@ -49,7 +49,10 @@ class RunsTab extends StatelessWidget {
               if (state.customerRunsIds.length == 0) {
                 return Text('No runs requested yet.');
               } else {
-                return RunsList(runsIds: state.customerRunsIds);
+                return RunsList(
+                  runsIds: state.customerRunsIds,
+                  isRunner: false,
+                );
               }
             } else if (state is CustomerRunsIdsLoadFailure) {
               return Text(state.message);
