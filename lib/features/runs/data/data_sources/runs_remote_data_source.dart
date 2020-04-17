@@ -125,22 +125,30 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   Future<List<String>> _getRunsIdsWhereUserIs(
       {@required String userTypeId}) async {
-    final userEither = await (getUserId(NoParams()));
+    final userEither = await getUserId(NoParams());
+    print('Got user either');
     List<String> _runsIds = List<String>();
     await userEither.fold(
       (failure) {
         print('failed to getUser');
       },
       (userId) async {
+        print('Got user id');
         final Query _runsCollectionGroup = firestore.collectionGroup('run');
-        final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
-            .where(userTypeId, isEqualTo: userId)
-            .getDocuments();
-        _runsSnapshot.documents.forEach(
-          (document) {
-            _runsIds.add(document.documentID);
-          },
-        );
+        print('Created Collection group');
+        try {
+          final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+              .where(userTypeId, isEqualTo: userId)
+              .getDocuments();
+          print('Got collection group');
+          _runsSnapshot.documents.forEach(
+                (document) {
+              _runsIds.add(document.documentID);
+            },
+          );
+        } on Exception catch (e) {
+          throw e;
+        }
       },
     );
 

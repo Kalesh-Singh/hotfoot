@@ -138,13 +138,25 @@ class RunsRepository implements IRunsRepository {
 
   @override
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsCustomer() async {
-    final customerRunsIds = await runsRemoteDataSource.getRunsIdsWhereUserIsCustomer();
-    return Right(customerRunsIds);
+    try {
+      final customerRunsIds =
+          await runsRemoteDataSource.getRunsIdsWhereUserIsCustomer();
+      return Right(customerRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
   }
 
   @override
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsRunner() async {
-    final runnerRunsIds = await runsRemoteDataSource.getRunsIdsWhereUserIsRunner();
-    return Right(runnerRunsIds);
+    try {
+      final runnerRunsIds =
+          await runsRemoteDataSource.getRunsIdsWhereUserIsRunner();
+      return Right(runnerRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
   }
 }
