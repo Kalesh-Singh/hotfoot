@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
@@ -42,11 +44,9 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     final DocumentSnapshot runSnapshot =
         await _subCollection.document(id).get();
 
-//    final runModel = RunModel.fromJson(runSnapshot.data);
-//
-//    print(runModel);
-return RunModel.empty();
-//    return runModel;
+    final runModel = RunModel.fromJson(runSnapshot.data);
+    print(json.encode(runModel.toJson()));
+    return runModel;
   }
 
   @override
