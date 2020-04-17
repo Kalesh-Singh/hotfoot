@@ -37,8 +37,9 @@ class RunsRepository implements IRunsRepository {
       try {
         print('getting run from remote data source');
         RunModel runModel = await runsRemoteDataSource.getRunById(id: id);
-        await runsLocalDataSource.insertOrUpdateRun(runModel: runModel);
         print('got run from remote data source');
+        await runsLocalDataSource.insertOrUpdateRun(runModel: runModel);
+        print('cached runs details locally');
         return Right(runModel);
       } catch (e) {
         print('Exception $e');

@@ -42,11 +42,11 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     final DocumentSnapshot runSnapshot =
         await _subCollection.document(id).get();
 
-    final runModel = RunModel.fromJson(runSnapshot.data);
-
-    print(runModel);
-
-    return runModel;
+//    final runModel = RunModel.fromJson(runSnapshot.data);
+//
+//    print(runModel);
+return RunModel.empty();
+//    return runModel;
   }
 
   @override
