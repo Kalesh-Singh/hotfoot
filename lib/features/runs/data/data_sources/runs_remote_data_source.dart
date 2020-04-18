@@ -1,9 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
-import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_message_list_item.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
-import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
-import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 
@@ -46,9 +45,7 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         await _subCollection.document(id).get();
 
     final runModel = RunModel.fromJson(runSnapshot.data);
-
-    print(runModel);
-
+    print(json.encode(runModel.toJson()));
     return runModel;
   }
 
@@ -128,22 +125,30 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   Future<List<String>> _getRunsIdsWhereUserIs(
       {@required String userTypeId}) async {
-    final userEither = await (getUserId(NoParams()));
+    final userEither = await getUserId(NoParams());
+    print('Got user either');
     List<String> _runsIds = List<String>();
     await userEither.fold(
       (failure) {
         print('failed to getUser');
       },
       (userId) async {
+        print('Got user id');
         final Query _runsCollectionGroup = firestore.collectionGroup('run');
-        final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
-            .where(userTypeId, isEqualTo: userId)
-            .getDocuments();
-        _runsSnapshot.documents.forEach(
-          (document) {
-            _runsIds.add(document.documentID);
-          },
-        );
+        print('Created Collection group');
+        try {
+          final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+              .where(userTypeId, isEqualTo: userId)
+              .getDocuments();
+          print('Got collection group');
+          _runsSnapshot.documents.forEach(
+                (document) {
+              _runsIds.add(document.documentID);
+            },
+          );
+        } on Exception catch (e) {
+          throw e;
+        }
       },
     );
 
