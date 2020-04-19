@@ -13,9 +13,9 @@ import 'package:hotfoot/injection_container.dart';
 class RunPlacedScreen extends StatelessWidget {
 
   Stream<QuerySnapshot> returnCurrentRunStream (GetRunStream useCase, String id) async* {
-    final result = await useCase.call(id);
-    if (result.isRight()) {
-      yield* result.getOrElse(null);
+    final runStreamEither = await useCase(id);
+    if (runStreamEither.isRight()) {
+      yield* runStreamEither.getOrElse(null);
     }
   }
 
@@ -23,11 +23,12 @@ class RunPlacedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final currRun = navScreenBloc.state.runModel;
-    final GetRunStream useCase = GetRunStream(runsRepository: sl(),);
+    final GetRunStream getRunStream = sl();
+    // final GetRunStream getRunStream = GetRunStream(runsRepository: sl(),);
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
-    final runStream = returnCurrentRunStream(useCase, currRun.id);
+    final runStream = returnCurrentRunStream(getRunStream, currRun.id);
     return Container(
       child: StreamBuilder(
         stream: runStream,

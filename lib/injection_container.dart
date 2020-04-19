@@ -64,6 +64,7 @@ import 'features/search/data/repositories/search_results_repository_impl.dart';
 import 'features/search/domain/repositories/search_results_repository.dart';
 import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
 import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_run_stream.dart';
 
 final sl = GetIt.instance;
 
@@ -154,6 +155,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
         searchResultsRepository: sl(),
       ));
+  sl.registerLazySingleton(() => GetRunStream(
+    runsRepository: sl(),
+  ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
