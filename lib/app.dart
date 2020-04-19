@@ -7,6 +7,7 @@ import 'package:hotfoot/features/navigation_home/presentation/ui/screen/home_scr
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/screen/run_placed_screen.dart';
+import 'package:hotfoot/features/runs/presentation/ui/screens/accept_run_screen.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_event.dart';
@@ -49,6 +50,9 @@ class App extends StatelessWidget {
                 } else if (state is Login) {
                   print('LOGIN');
                   return LoginScreen();
+                } else if (state is AcceptRun) {
+                  print('ACCEPT RUN');
+                  return AcceptRunScreen();
                 }
                 return Container();
               });

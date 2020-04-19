@@ -22,10 +22,16 @@ class RunCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isRunner
-          ? null
-          : () =>
-              (isPending) ? _acceptRun(context) : _showOrderAgainModal(context),
+      onTap: () {
+        print('Run card tapped');
+        print('isRunner: $isRunner');
+        print('isPending: $isPending');
+        if (isPending) {
+          _acceptRun(context);
+        } else if (!isRunner) {
+          _showOrderAgainModal(context);
+        }
+      },
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         height: 140,
@@ -139,6 +145,7 @@ class RunCard extends StatelessWidget {
   }
 
   void _acceptRun(BuildContext context) {
-    // TODO(zaykha): Show the runner the details of the run and allow to accept or decline.
+    BlocProvider.of<NavigationScreenBloc>(context)
+        .add(EnteredAcceptRun(runModel: runEntity));
   }
 }

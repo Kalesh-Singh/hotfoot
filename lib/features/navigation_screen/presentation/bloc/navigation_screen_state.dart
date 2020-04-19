@@ -25,4 +25,8 @@ class Home extends NavigationScreenState {
   const Home({@required RunModel runModel}) : super(runModel: runModel);
 }
 
+class AcceptRun extends NavigationScreenState {
+  const AcceptRun({@required RunModel runModel}) : super(runModel: runModel);
+}
+
 class Settings extends NavigationScreenState {}

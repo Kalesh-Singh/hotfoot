@@ -38,7 +38,7 @@ class RunListTile extends StatelessWidget {
               return RunCard(
                 runEntity: state.runEntity,
                 isRunner: isRunner,
-                isPending: false,
+                isPending: isPending,
               );
             } else {
               return Container();
