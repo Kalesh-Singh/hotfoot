@@ -4,6 +4,7 @@ import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/ui/address_widget.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
+import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/runs_list.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
@@ -84,7 +85,28 @@ class HomeTab extends StatelessWidget {
       ),
       body: Container(
         child: Center(
-          child: Text('Pendiing Requests'),
+          child: BlocBuilder<CustomerRunsIdsBloc, CustomerRunsIdsState>(
+            builder: (BuildContext context, CustomerRunsIdsState state) {
+              if (state is CustomerRunsIdsLoadSuccess) {
+                if (state.customerRunsIds.length == 0) {
+                  return Text('No pepnding runs.');
+                } else {
+                  return RunsList(
+                    runsIds: state.customerRunsIds,
+                    isRunner: true,
+                  );
+                }
+              } else if (state is CustomerRunsIdsLoadFailure) {
+                return Text(state.message);
+              } else if (state is CustomerRunsIdsUninitialized) {
+                BlocProvider.of<CustomerRunsIdsBloc>(context)
+                    .add(CustomerRunsRequested());
+                return CircularProgressIndicator();
+              } else {
+                return Container();
+              }
+            },
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBar(),

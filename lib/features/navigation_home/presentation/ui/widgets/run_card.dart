@@ -4,6 +4,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:intl/intl.dart';
 
 class RunCard extends StatelessWidget {
@@ -121,7 +122,7 @@ class RunCard extends StatelessWidget {
       destinationPlace: runEntity.destinationPlace,
       pickupPlaceIdOrCustomPlace: runEntity.pickupPlaceIdOrCustomPlace,
       order: runEntity.order,
-      status: "Pending",
+      status: RunStatus.PENDING,
     );
     BlocProvider.of<NavigationScreenBloc>(context)
         .add(EnteredPurchaseFlow(runModel: newRunModel));
