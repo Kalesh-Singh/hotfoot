@@ -139,10 +139,12 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         try {
           final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
               .where(userTypeId, isEqualTo: userId)
+              .orderBy('timePlaced', descending: true)
+              .orderBy('timeDelivered', descending: true)
               .getDocuments();
           print('Got collection group');
           _runsSnapshot.documents.forEach(
-                (document) {
+            (document) {
               _runsIds.add(document.documentID);
             },
           );
