@@ -9,6 +9,9 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/places/presentation/ui/widgets/place_list.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_event.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_state.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
@@ -85,22 +88,22 @@ class HomeTab extends StatelessWidget {
       ),
       body: Container(
         child: Center(
-          child: BlocBuilder<CustomerRunsIdsBloc, CustomerRunsIdsState>(
-            builder: (BuildContext context, CustomerRunsIdsState state) {
-              if (state is CustomerRunsIdsLoadSuccess) {
-                if (state.customerRunsIds.length == 0) {
-                  return Text('No pepnding runs.');
+          child: BlocBuilder<PendingRunsIdsBloc, PendingRunsIdsState>(
+            builder: (BuildContext context, PendingRunsIdsState state) {
+              if (state is PendingRunsIdsLoadSuccess) {
+                if (state.pendingRunsIds.length == 0) {
+                  return Text('No pending runs.');
                 } else {
                   return RunsList(
-                    runsIds: state.customerRunsIds,
+                    runsIds: state.pendingRunsIds,
                     isRunner: true,
                   );
                 }
-              } else if (state is CustomerRunsIdsLoadFailure) {
+              } else if (state is PendingRunsIdsLoadFailure) {
                 return Text(state.message);
-              } else if (state is CustomerRunsIdsUninitialized) {
-                BlocProvider.of<CustomerRunsIdsBloc>(context)
-                    .add(CustomerRunsRequested());
+              } else if (state is PendingRunsIdsUninitialized) {
+                BlocProvider.of<PendingRunsIdsBloc>(context)
+                    .add(PendingRunsRequested());
                 return CircularProgressIndicator();
               } else {
                 return Container();
