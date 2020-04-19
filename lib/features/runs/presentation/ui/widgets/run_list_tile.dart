@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/run_card.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/run_card.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_state.dart';

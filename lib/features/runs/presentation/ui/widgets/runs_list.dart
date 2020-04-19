@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/run_list_tile.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/run_list_tile.dart';
 
 class RunsList extends StatelessWidget {
   final List<String> runsIds;

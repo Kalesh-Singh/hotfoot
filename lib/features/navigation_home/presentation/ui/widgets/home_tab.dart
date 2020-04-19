@@ -4,7 +4,7 @@ import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/ui/address_widget.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
-import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/runs_list.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/runs_list.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
