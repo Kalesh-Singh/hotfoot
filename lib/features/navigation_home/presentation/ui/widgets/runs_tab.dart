@@ -51,6 +51,7 @@ class RunsTab extends StatelessWidget {
                 return RunsList(
                   runsIds: state.runnerRunsIds,
                   isRunner: true,
+                  isPending: false,
                 );
               }
             } else if (state is RunnerRunsIdsLoadFailure) {
@@ -80,6 +81,7 @@ class RunsTab extends StatelessWidget {
                 return RunsList(
                   runsIds: state.customerRunsIds,
                   isRunner: false,
+                  isPending: false,
                 );
               }
             } else if (state is CustomerRunsIdsLoadFailure) {

@@ -4,11 +4,13 @@ import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/run_lis
 class RunsList extends StatelessWidget {
   final List<String> runsIds;
   final bool isRunner;
+  final bool isPending;
 
   const RunsList({
     Key key,
     @required this.runsIds,
     @required this.isRunner,
+    @required this.isPending,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class RunsList extends StatelessWidget {
         return RunListTile(
           runId: runsIds[index],
           isRunner: isRunner,
+          isPending: isPending,
         );
       },
     );

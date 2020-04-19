@@ -10,17 +10,22 @@ import 'package:intl/intl.dart';
 class RunCard extends StatelessWidget {
   final RunEntity runEntity;
   final bool isRunner;
+  final bool isPending;
 
   const RunCard({
     Key key,
     @required this.runEntity,
     @required this.isRunner,
+    @required this.isPending,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isRunner ? null : () => _showOrderAgainModal(context),
+      onTap: isRunner
+          ? null
+          : () =>
+              (isPending) ? _acceptRun(context) : _showOrderAgainModal(context),
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         height: 140,
@@ -131,5 +136,9 @@ class RunCard extends StatelessWidget {
 
   void _cancelOrderAgain(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  void _acceptRun(BuildContext context) {
+    // TODO(zaykha): Show the runner the details of the run and allow to accept or decline.
   }
 }
