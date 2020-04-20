@@ -24,8 +24,6 @@ class OpenCloseChatButton extends StatelessWidget {
       ),
       icon: FaIcon(FontAwesomeIcons.comments, color: Colors.white),
       onPressed: () {
-        // ! Mysdreivus => Something like BlocProvider.of<ChatBloc>(context).add(ChatButtonPressed())
-        // ! When button is pressed we need to close or open chat popup or navigate with back button not sure yet
         print("Contact Runner Button Tapped");
         showModalBottomSheet(
           context: context, 

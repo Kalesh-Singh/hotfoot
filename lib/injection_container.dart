@@ -71,6 +71,12 @@ import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'features/search/data/data_sources/search_results_data_source.dart';
+import 'features/search/data/repositories/search_results_repository_impl.dart';
+import 'features/search/domain/repositories/search_results_repository.dart';
+import 'features/search/domain/use_cases/get_results_with_matching_address.dart';
+import 'features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_run_stream.dart';
 import 'package:hotfoot/features/search/data/data_sources/search_results_data_source.dart';
 import 'package:hotfoot/features/search/data/repositories/search_results_repository_impl.dart';
 import 'package:hotfoot/features/search/domain/repositories/search_results_repository.dart';
@@ -194,6 +200,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
         searchResultsRepository: sl(),
       ));
+  sl.registerLazySingleton(() => GetRunStream(
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetCustomerRunsIds(
     runsRepository: sl(),
   ));

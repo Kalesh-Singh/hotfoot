@@ -26,23 +26,17 @@ class ChatSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      child:  Chat(),
+      child:  ChatWindow(firebaseAuth: sl()),
     );
   }
 }
 
-class Chat extends StatefulWidget {
-  @override
-  State createState() =>  ChatWindow(firebaseAuth: sl());
-}
-
-class ChatWindow extends State<Chat> with TickerProviderStateMixin {
+class ChatWindow extends StatelessWidget {
   final FirebaseAuth firebaseAuth;
   final TextEditingController _textController = TextEditingController();
   // TODO Here we can create a unique FirebaseDatabase instance object using
   // TODO runners email concatanated with customer email such as email1-email2
   final reference = FirebaseDatabase.instance.reference().child('messages');
-  bool _isWriting = false;
 
   ChatWindow({
     @required this.firebaseAuth,
@@ -73,7 +67,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
               ),
             ),
          Container(
-          child: _buildComposer(),
+          child: _buildComposer(context),
           decoration:  BoxDecoration(color: Theme.of(context).cardColor),
         ),
       ]),
@@ -81,7 +75,7 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
   }
 
 
-  Widget _buildComposer() {
+  Widget _buildComposer(BuildContext context) {
     return  IconTheme(
         data:  IconThemeData(color: Theme.of(context).accentColor),
         child:  Container(
@@ -92,9 +86,6 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                   child:  TextField(
                     controller: _textController,
                     onChanged: (String txt) {
-                      setState(() {
-                        _isWriting = txt.length > 0;
-                      });
                     },
                     onSubmitted: _submitMsg,
                     decoration:
@@ -106,32 +97,21 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
                 child: Theme.of(context).platform == TargetPlatform.iOS
                   ?  CupertinoButton(
                     child:  Text("Submit"),
-                    onPressed: _isWriting ? () => _submitMsg(_textController.text)
-                        : null
+                    onPressed: () => _submitMsg(_textController.text),
                 )
                     :  IconButton(
                     icon:  Icon(Icons.message),
-                    onPressed: _isWriting
-                      ? () => _submitMsg(_textController.text)
-                        : null,
+                    onPressed: () => _submitMsg(_textController.text),
                 ),
               ),
             ],
           ),
-          decoration: Theme.of(context).platform == TargetPlatform.iOS
-          ?  BoxDecoration(
-            border:
-               Border(top:  BorderSide(color: Colors.brown))) :
-              null
-        ),
+        )
     );
   }
 
   void _submitMsg(String txt) async {
     _textController.clear();
-    setState(() {
-      _isWriting = false;
-    });
     // TODO should probably do some check here so that we determine user is logged in
     // TODO but I believe the app would log out here anyway can double check later
     final FirebaseUser __firebaseUser = await firebaseAuth.currentUser();
@@ -139,10 +119,13 @@ class ChatWindow extends State<Chat> with TickerProviderStateMixin {
   }
 
   void _sendMessage({String messageText, FirebaseUser firebaseUser}) {
-    reference.push().set({
-      'text': messageText,
+    String formattedMsg = messageText.trim();
+    if (formattedMsg.length != 0) {
+      reference.push().set({
+      'text': formattedMsg,
       'email': firebaseUser.email,
       'senderName': firebaseUser.email,
     });
+    }
   }
 }
