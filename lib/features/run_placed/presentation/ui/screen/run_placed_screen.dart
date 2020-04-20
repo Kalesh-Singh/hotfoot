@@ -24,7 +24,6 @@ class RunPlacedScreen extends StatelessWidget {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final currRun = navScreenBloc.state.runModel;
     final GetRunStream getRunStream = sl();
-    // final GetRunStream getRunStream = GetRunStream(runsRepository: sl(),);
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
@@ -58,7 +57,7 @@ class RunPlacedScreen extends StatelessWidget {
                       SizedBox(width: 40),
                       Text("Status", style: TextStyle(fontSize: 24.0)),
                       SizedBox(width: 110),
-                      OpenCloseChatButton(),
+                      OpenCloseChatButton(runModel: currRun,),
                     ],
                   ),
                   Row(
