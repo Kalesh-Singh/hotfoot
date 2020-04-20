@@ -5,10 +5,13 @@ import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class OpenCloseChatButton extends StatelessWidget {
   final RunModel runModel;
+  final String buttonText;
 
   OpenCloseChatButton({
     @required this.runModel,
-  }) : assert(runModel != null);
+    @required this.buttonText,
+  }) : assert(runModel != null),
+       assert(buttonText != null);
 
   Column _chatSection() {
     return 
@@ -51,7 +54,7 @@ class OpenCloseChatButton extends StatelessWidget {
           },
         );
       },
-      label: Text('Contact Runner', style: TextStyle(color: Colors.white)),
+      label: Text(buttonText, style: TextStyle(color: Colors.white)),
       color: Colors.blueAccent,
       ),
     );
