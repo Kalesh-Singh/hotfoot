@@ -9,14 +9,19 @@ import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
 
 class RunForm extends StatefulWidget {
   final PlaceEntity placeEntity;
+  final String initialOrder;
 
-  const RunForm({Key key, @required this.placeEntity}) : super(key: key);
+  const RunForm({
+    Key key,
+    @required this.placeEntity,
+    @required this.initialOrder,
+  }) : super(key: key);
 
   State<RunForm> createState() => _RunFormState();
 }
 
 class _RunFormState extends State<RunForm> {
-  final TextEditingController _orderController = TextEditingController();
+  TextEditingController _orderController;
   final FocusNode _orderFocus = FocusNode();
 
   NavigationScreenBloc _navigationScreenBloc;
@@ -24,6 +29,10 @@ class _RunFormState extends State<RunForm> {
   @override
   void initState() {
     super.initState();
+    String initialOrder = this.widget.initialOrder;
+    _orderController = (initialOrder == null)
+        ? TextEditingController()
+        : TextEditingController(text: initialOrder);
     _navigationScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
   }
 

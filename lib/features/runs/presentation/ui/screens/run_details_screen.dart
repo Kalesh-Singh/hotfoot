@@ -75,6 +75,7 @@ class RunDetailsScreen extends StatelessWidget {
                         .add(PlacePhotoRequested(placeEntity: placeEntity));
                     return RunForm(
                       placeEntity: placeEntity,
+                      initialOrder: navScreenBloc.state.runModel.order,
                     );
                   } else {
                     return Container();

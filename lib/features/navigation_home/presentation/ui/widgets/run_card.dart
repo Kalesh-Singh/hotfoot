@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -48,7 +52,7 @@ class RunCard extends StatelessWidget {
     );
   }
 
-  _showOrderAgainModal(BuildContext context) {
+  void _showOrderAgainModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -85,7 +89,7 @@ class RunCard extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => _cancelOrderAgain(context),
                               child: Text('Cancel'),
                             ),
                           ),
@@ -94,7 +98,7 @@ class RunCard extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RaisedButton(
-                              onPressed: () {},
+                              onPressed: () => _orderAgain(context),
                               child: Text('Order Again'),
                             ),
                           ),
@@ -107,5 +111,24 @@ class RunCard extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void _orderAgain(BuildContext context) {
+    final newRunModel = RunModel.empty().copyWith(
+      // NOTE: runId must be [null] in order for the run to be
+      // new and not update the old run.
+      customerId: runEntity.customerId,
+      destinationPlace: runEntity.destinationPlace,
+      pickupPlaceIdOrCustomPlace: runEntity.pickupPlaceIdOrCustomPlace,
+      order: runEntity.order,
+      status: "Pending",
+    );
+    BlocProvider.of<NavigationScreenBloc>(context)
+        .add(EnteredPurchaseFlow(runModel: newRunModel));
+    Navigator.pop(context);
+  }
+
+  void _cancelOrderAgain(BuildContext context) {
+    Navigator.pop(context);
   }
 }
