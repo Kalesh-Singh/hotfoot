@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 
@@ -22,6 +23,8 @@ abstract class IRunsRemoteDataSource {
   Future<List<String>> getRunsIdsWhereUserIsCustomer();
 
   Future<List<String>> getRunsIdsWhereUserIsRunner();
+
+  Future<List<String>> getPendingRunsIds();
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -169,5 +172,31 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
   @override
   Future<List<String>> getRunsIdsWhereUserIsRunner() async {
     return await _getRunsIdsWhereUserIs(userTypeId: 'runnerId');
+  }
+
+  @override
+  Future<List<String>> getPendingRunsIds() async {
+    // NOTE: A runner should not be able to have a pending order
+    // and be a runner at the same time.
+
+    List<String> _runsIds = List<String>();
+    final Query _runsCollectionGroup = firestore.collectionGroup('run');
+    print('Created Collection group');
+    final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+        .where('status', isEqualTo: RunStatus.PENDING)
+        .getDocuments();
+    print('Got collection group');
+    _runsSnapshot.documents.forEach(
+      (document) {
+        _runsIds.add(document.documentID);
+      },
+    );
+
+    print('Pending runs id');
+    for (final id in _runsIds) {
+      print(id);
+    }
+
+    return _runsIds;
   }
 }

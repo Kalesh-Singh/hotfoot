@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
-import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/runs_list.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/runs_list.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_state.dart';
@@ -51,6 +51,7 @@ class RunsTab extends StatelessWidget {
                 return RunsList(
                   runsIds: state.runnerRunsIds,
                   isRunner: true,
+                  isPending: false,
                 );
               }
             } else if (state is RunnerRunsIdsLoadFailure) {
@@ -80,6 +81,7 @@ class RunsTab extends StatelessWidget {
                 return RunsList(
                   runsIds: state.customerRunsIds,
                   isRunner: false,
+                  isPending: false,
                 );
               }
             } else if (state is CustomerRunsIdsLoadFailure) {

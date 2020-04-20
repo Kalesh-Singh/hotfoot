@@ -26,3 +26,8 @@ class EnteredLogin extends NavigationScreenEvent {}
 class EnteredSettings extends NavigationScreenEvent {}
 
 class EnteredHome extends NavigationScreenEvent {}
+
+class EnteredAcceptRun extends NavigationScreenEvent {
+  const EnteredAcceptRun({@required RunModel runModel})
+      : super(runModel: runModel);
+}

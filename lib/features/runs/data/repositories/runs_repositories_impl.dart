@@ -7,6 +7,7 @@ import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.d
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
@@ -130,7 +131,7 @@ class RunsRepository implements IRunsRepository {
       (uid) {
         run = run.copyWith(
           customerId: uid,
-          status: 'Pending',
+          status: RunStatus.PENDING,
         );
       },
     );
@@ -155,6 +156,18 @@ class RunsRepository implements IRunsRepository {
       final runnerRunsIds =
           await runsRemoteDataSource.getRunsIdsWhereUserIsRunner();
       return Right(runnerRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getPendingRunsIds() async {
+    try {
+      final pendingRunsIds =
+          await runsRemoteDataSource.getPendingRunsIds();
+      return Right(pendingRunsIds);
     } on Exception catch (e) {
       print(e);
       return Left(FirestoreFailure());

@@ -25,4 +25,6 @@ abstract class IRunsRepository {
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsCustomer();
 
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsRunner();
+
+  Future<Either<Failure, List<String>>> getPendingRunsIds();
 }

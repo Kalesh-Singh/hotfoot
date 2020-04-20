@@ -49,11 +49,13 @@ import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.
 import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_customer_runs_ids.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_pending_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_by_id.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_runner_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_runs_ids_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/drawer_contents/drawer_contents_bloc.dart';
@@ -138,8 +140,11 @@ Future<void> init() async {
         getCustomerRunsIds: sl(),
       ));
   sl.registerFactory(() => RunnerRunsIdsBloc(
-    getRunnerRunsIds: sl(),
-  ));
+        getRunnerRunsIds: sl(),
+      ));
+  sl.registerFactory(() => PendingRunsIdsBloc(
+        getPendingRunsIds: sl(),
+      ));
   sl.registerFactory(() => RunDetailsBloc(
         getRunById: sl(),
       ));
@@ -204,9 +209,12 @@ Future<void> init() async {
     runsRepository: sl(),
   ));
   sl.registerLazySingleton(() => GetCustomerRunsIds(
-    runsRepository: sl(),
-  ));
+        runsRepository: sl(),
+      ));
   sl.registerLazySingleton(() => GetRunnerRunsIds(
+        runsRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetPendingRunsIds(
         runsRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetRunById(

@@ -38,6 +38,8 @@ class NavigationScreenBloc
       yield Settings();
     } else if (event is EnteredRunPlaced) {
       yield* _mapEnteredRunPlacedToState(event.runModel);
+    } else if (event is EnteredAcceptRun) {
+      yield AcceptRun(runModel: event.runModel);
     } else {
       print(event.runtimeType);
     }
