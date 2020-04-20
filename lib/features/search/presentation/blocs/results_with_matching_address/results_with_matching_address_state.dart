@@ -34,3 +34,13 @@ class ResultsWithMatchingAddressFailure
   @override
   List<Object> get props => [message];
 }
+
+class ResultsWithMatchingAddressSelected
+    extends ResultsWithMatchingAddressState {
+  final String placeId;
+
+  const ResultsWithMatchingAddressSelected({@required this.placeId});
+
+  @override
+  List<Object> get props => [placeId];
+}

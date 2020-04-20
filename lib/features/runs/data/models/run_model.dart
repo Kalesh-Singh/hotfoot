@@ -38,7 +38,7 @@ class RunModel extends RunEntity {
           customerId: (json['customerId'] as String),
           runnerId: (json['runnerId'] as String),
           timePlaced: DateTime.tryParse(json['timePlaced'] as String),
-          timeDelivered: DateTime.tryParse((json['timeDelivered'] as String)),
+          timeDelivered: _getTimeDeliveredFromJson(json['timeDelivered']),
           cost: (json['cost'] as double),
           status: (json['status'] as String),
         )
@@ -55,6 +55,13 @@ class RunModel extends RunEntity {
       return Right(customPickupPlace);
     }
     return null;
+  }
+
+  static DateTime _getTimeDeliveredFromJson(String timeFormattedString) {
+    if (timeFormattedString == null) {
+      return null;
+    }
+    return DateTime.tryParse(timeFormattedString);
   }
 
   Map<String, dynamic> toJson() {
@@ -82,7 +89,7 @@ class RunModel extends RunEntity {
     return map;
   }
 
-  RunEntity copyWith({
+  RunModel copyWith({
     String id,
     String order,
     Either<String, PlaceEntity> pickupPlaceIdOrCustomPlace,

@@ -9,4 +9,4 @@ class HomeIconTab extends NavigationHomeState {}
 
 class SearchIconTab extends NavigationHomeState {}
 
-class OrdersIconTab extends NavigationHomeState {}
+class RunsIconTab extends NavigationHomeState {}

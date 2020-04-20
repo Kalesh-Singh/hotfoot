@@ -37,8 +37,9 @@ class RunsRepository implements IRunsRepository {
       try {
         print('getting run from remote data source');
         RunModel runModel = await runsRemoteDataSource.getRunById(id: id);
-        await runsLocalDataSource.insertOrUpdateRun(runModel: runModel);
         print('got run from remote data source');
+        await runsLocalDataSource.insertOrUpdateRun(runModel: runModel);
+        print('cached runs details locally');
         return Right(runModel);
       } catch (e) {
         print('Exception $e');
@@ -134,5 +135,29 @@ class RunsRepository implements IRunsRepository {
       },
     );
     return Right(run);
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsCustomer() async {
+    try {
+      final customerRunsIds =
+          await runsRemoteDataSource.getRunsIdsWhereUserIsCustomer();
+      return Right(customerRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsRunner() async {
+    try {
+      final runnerRunsIds =
+          await runsRemoteDataSource.getRunsIdsWhereUserIsRunner();
+      return Right(runnerRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
   }
 }

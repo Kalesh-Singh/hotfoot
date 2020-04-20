@@ -8,11 +8,19 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/places_ids/places_ids_bloc.dart';
 import 'package:hotfoot/features/places/presentation/ui/widgets/place_list.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bool isRunner =
+        BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
+    return isRunner ? _runnerHomeTab(context) : _customerHomeTab(context);
+  }
+
+  Widget _customerHomeTab(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlacesIdsBloc>(
@@ -50,6 +58,36 @@ class HomeTab extends StatelessWidget {
         ),
         bottomNavigationBar: BottomNavBar(),
       ),
+    );
+  }
+
+  Widget _runnerHomeTab(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text('Requested Runs'),
+        ),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  BlocProvider.of<NavigationScreenBloc>(context)
+                      .add(EnteredSettings());
+                },
+                child: Icon(
+                  Icons.settings,
+                  size: 26.0,
+                ),
+              )),
+        ],
+      ),
+      body: Container(
+        child: Center(
+          child: Text('Pendiing Requests'),
+        ),
+      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

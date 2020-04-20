@@ -9,4 +9,4 @@ class HomeIconPressed extends NavigationHomeEvent {}
 
 class SearchIconPressed extends NavigationHomeEvent {}
 
-class OrdersIconPressed extends NavigationHomeEvent {}
+class RunsIconPressed extends NavigationHomeEvent {}
