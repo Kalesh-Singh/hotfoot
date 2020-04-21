@@ -5,6 +5,7 @@ class RunStatus {
       'Runner picked up your order and is on the way';
   static const String ARRIVING = 'Runner is arriving soon';
   static const String DELIVERED = 'Delivered';
+  static const String CANCELLED = 'Cancelled';
 
 // TODO: Add or remove statuses as you see fit.
 }
