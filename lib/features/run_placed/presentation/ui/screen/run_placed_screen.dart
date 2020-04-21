@@ -54,7 +54,7 @@ class RunPlacedScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CancelDeliveryButton(),
+                CancelDeliveryButton(currRun: currRun, updateOrInsertRun: sl()),
                 AcceptDeliveryButton(),
               ],
             ),
@@ -96,7 +96,7 @@ class RunPlacedScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CancelDeliveryButton(),
+                CancelDeliveryButton(currRun: currRun, updateOrInsertRun: sl()),
               ],
             ),
           ],
