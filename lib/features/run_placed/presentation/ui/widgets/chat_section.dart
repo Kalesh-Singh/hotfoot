@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_message_list_item.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 // https://www.youtube.com/watch?v=WwhyaqNtNQY
 
@@ -20,13 +21,36 @@ final ThemeData androidTheme =  ThemeData(
   accentColor: Colors.green,
 );
 
-const String defaultUserName = "John Doe";
-
 class ChatSection extends StatelessWidget {
+  final RunModel runModel;
+
+  ChatSection({
+    @required this.runModel,
+  }) : assert(runModel != null);
+
+  String makeReferenceId() {
+    // Will return messages for now to not break app
+    if (runModel.customerId == null || runModel.runnerId == null) {
+      return 'messages';
+    }
+    else {
+      // Can also append date or whatever discerning factors to create unique chatrooms
+      String referenceId = runModel.customerId+runModel.runnerId;
+      print(referenceId);
+      return referenceId;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String referenceId = makeReferenceId();
+    final DatabaseReference reference = FirebaseDatabase.instance.reference().child(referenceId);
     return  Container(
-      child:  ChatWindow(firebaseAuth: sl()),
+      child:  ChatWindow(
+                        firebaseAuth: sl(), 
+                        referenceId: referenceId, 
+                        reference: reference
+                        ),
     );
   }
 }
@@ -34,13 +58,16 @@ class ChatSection extends StatelessWidget {
 class ChatWindow extends StatelessWidget {
   final FirebaseAuth firebaseAuth;
   final TextEditingController _textController = TextEditingController();
-  // TODO Here we can create a unique FirebaseDatabase instance object using
-  // TODO runners email concatanated with customer email such as email1-email2
-  final reference = FirebaseDatabase.instance.reference().child('messages');
+  final String referenceId;
+  final reference;
 
   ChatWindow({
     @required this.firebaseAuth,
-  }) : assert(firebaseAuth != null);
+    @required this.referenceId,
+    @required this.reference
+  }) : assert(firebaseAuth != null),
+       assert(referenceId != null),
+       assert(reference != null);
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +139,6 @@ class ChatWindow extends StatelessWidget {
 
   void _submitMsg(String txt) async {
     _textController.clear();
-    // TODO should probably do some check here so that we determine user is logged in
-    // TODO but I believe the app would log out here anyway can double check later
     final FirebaseUser __firebaseUser = await firebaseAuth.currentUser();
     _sendMessage(messageText: txt, firebaseUser: __firebaseUser);
   }
