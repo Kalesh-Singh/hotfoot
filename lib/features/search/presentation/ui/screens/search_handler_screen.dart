@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
@@ -69,6 +70,27 @@ class SearchHandlerScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10.0),
+                child: ButtonTheme(
+                  minWidth: 140.0,
+                  height: 40.0,
+                  child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    icon: FaIcon(FontAwesomeIcons.mapMarkerAlt,
+                        color: Colors.white),
+                    onPressed: () {
+                      BlocProvider.of<SearchHandlerScreenBloc>(context)
+                          .add(ManuallyLocateButtonPressed());
+                    },
+                    label: Text('Manually locate place',
+                        style: TextStyle(color: Colors.white, fontSize: 15)),
+                    color: Colors.redAccent,
                   ),
                 ),
               ),

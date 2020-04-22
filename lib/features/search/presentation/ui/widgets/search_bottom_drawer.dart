@@ -70,7 +70,10 @@ class DrawerContents extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10.0),
+        topRight: Radius.circular(10.0),
+      ),
       child: Container(
         color: Colors.redAccent,
         width: width,
