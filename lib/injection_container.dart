@@ -62,6 +62,7 @@ import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/
 import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/search_bottom_drawer_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
+import 'package:hotfoot/features/search/presentation/blocs/unknown_place_screen/unknown_place_screen_bloc.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -149,6 +150,7 @@ Future<void> init() async {
         getRunById: sl(),
       ));
   sl.registerFactory(() => SearchHandlerScreenBloc());
+  sl.registerFactory(() => UnknownPlaceScreenBloc());
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -206,8 +208,8 @@ Future<void> init() async {
         searchResultsRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetRunStream(
-    runsRepository: sl(),
-  ));
+        runsRepository: sl(),
+      ));
   sl.registerLazySingleton(() => GetCustomerRunsIds(
         runsRepository: sl(),
       ));
