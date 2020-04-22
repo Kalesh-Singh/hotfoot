@@ -16,6 +16,10 @@ class _UnknownPlaceScreen extends State<UnknownPlaceScreen> {
   final _placeNameController = TextEditingController();
   Completer<GoogleMapController> _controller = Completer();
 
+  // TODO: Get the current coordinates from home tab.
+  LatLng markerLatLng = LatLng(37.42199552647863, -122.08394385874273);
+  final MarkerId singletonMarkerId = MarkerId("Marker");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,12 +46,26 @@ class _UnknownPlaceScreen extends State<UnknownPlaceScreen> {
               child: GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(0, 0),
-                  zoom: 15,
+                  target: markerLatLng,
+                  zoom: 12,
                 ),
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
+                markers: Set<Marker>.of(
+                  <Marker>[
+                    Marker(
+                      draggable: true,
+                      markerId: singletonMarkerId,
+                      position: markerLatLng,
+                      icon: BitmapDescriptor.defaultMarker,
+                      onDragEnd: ((value) {
+                        markerLatLng = LatLng(value.latitude, value.longitude);
+                        print("Marker moved to $markerLatLng");
+                      }),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
