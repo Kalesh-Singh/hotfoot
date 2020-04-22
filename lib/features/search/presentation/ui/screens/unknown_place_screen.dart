@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
+import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
+import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/unknown_place_screen/unknown_place_screen_bloc.dart';
@@ -32,16 +35,30 @@ class _UnknownPlaceScreen extends State<UnknownPlaceScreen> {
       listener: (context, state) {
         if (state is PlaceModelLoaded) {
           print("Continuing order");
+          final locationBloc = BlocProvider.of<LocationBloc>(context);
           final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
-          final runModel = navScreenBloc.state.runModel;
-          navScreenBloc.add(
-            EnteredPurchaseFlow(
-              runModel: runModel.copyWith(
-                pickupPlaceIdOrCustomPlace: dartz.Right(state.placeModel),
-                destinationPlace: state.placeModel,
+          final locationState = locationBloc.state;
+          if (!(locationState is LocationUninitialized)) {
+            PlaceModel destinationPlace;
+            if (locationState is CurrentPlaceLoadSuccess) {
+              destinationPlace = locationState.placeModel;
+            } else if (locationState is QueriedPlaceLoadSuccess) {
+              destinationPlace = locationState.placeModel;
+            } else {
+              print('LOCATION STATE FAILURE');
+            }
+            final runModel = navScreenBloc.state.runModel;
+            navScreenBloc.add(
+              EnteredPurchaseFlow(
+                runModel: runModel.copyWith(
+                  pickupPlaceIdOrCustomPlace: dartz.Right(state.placeModel),
+                  destinationPlace: destinationPlace,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            print('LOCATION STATE NOT UNINITIALIZED');
+          }
         }
       },
       child: Scaffold(
