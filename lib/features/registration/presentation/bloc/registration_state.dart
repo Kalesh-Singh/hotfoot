@@ -9,6 +9,7 @@ class RegistrationState extends Equatable {
   final bool isSuccess;
   final bool isFailure;
   final bool isEmailVerified;
+  final String message;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -19,6 +20,7 @@ class RegistrationState extends Equatable {
     @required this.isSuccess,
     @required this.isFailure,
     @required this.isEmailVerified,
+    @required this.message,
   });
 
   factory RegistrationState.empty() {
@@ -29,6 +31,7 @@ class RegistrationState extends Equatable {
       isSuccess: false,
       isFailure: false,
       isEmailVerified: false,
+      message: '',
     );
   }
 
@@ -40,10 +43,11 @@ class RegistrationState extends Equatable {
       isSuccess: false,
       isFailure: false,
       isEmailVerified: false,
+      message: 'Loading',
     );
   }
 
-  factory RegistrationState.failure() {
+  factory RegistrationState.failure(String failureMessage) {
     return RegistrationState(
       isEmailValid: true,
       isPasswordValid: true,
@@ -51,6 +55,7 @@ class RegistrationState extends Equatable {
       isSuccess: false,
       isFailure: true,
       isEmailVerified: false,
+      message: failureMessage,
     );
   }
 
@@ -62,6 +67,7 @@ class RegistrationState extends Equatable {
       isSuccess: true,
       isFailure: false,
       isEmailVerified: true,
+      message: 'Registration Success',
     );
   }
 
@@ -73,6 +79,7 @@ class RegistrationState extends Equatable {
       isSuccess: true,
       isFailure: false,
       isEmailVerified: true,
+      message: 'Email is unverified',
     );
   }
 
@@ -98,6 +105,7 @@ class RegistrationState extends Equatable {
     bool isSuccess,
     bool isFailure,
     bool isEmailVerified,
+    String message,
   }) {
     return RegistrationState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -106,6 +114,7 @@ class RegistrationState extends Equatable {
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      message: message ?? this.message,
     );
   }
 
@@ -118,6 +127,7 @@ class RegistrationState extends Equatable {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       isEmailVerified: $isEmailVerified,
+      message: $message,
     }''';
   }
 
@@ -129,5 +139,6 @@ class RegistrationState extends Equatable {
         isSuccess,
         isFailure,
         isEmailVerified,
+        message,
       ];
 }

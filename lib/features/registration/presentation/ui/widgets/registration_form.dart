@@ -81,7 +81,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registration Failure'),
+                    Text(state.message),
                     Icon(Icons.error),
                   ],
                 ),

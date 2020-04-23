@@ -9,6 +9,7 @@ abstract class Failure extends Equatable {
 
 // General Failures
 class FirebaseAuthFailure extends Failure {}
+class FirebaseAuthEmailAlreadyInUseFailure extends Failure {}
 
 class GoogleSignInFailure extends Failure {}
 

@@ -7,11 +7,13 @@ class UserModel extends UserEntity {
     @required String name,
     @required String email,
     @required UserType type,
+    @required bool isEmailVerified,
   }) : super(
           id: id,
           name: name,
           email: email,
           type: type,
+          isEmailVerified: isEmailVerified,
         );
 
   factory UserModel.fromJson(Map json) => json != null
@@ -20,6 +22,7 @@ class UserModel extends UserEntity {
           name: (json['name'] as String),
           email: (json['email'] as String),
           type: _getUserTypeFromString(json['type'] as String),
+          isEmailVerified: (json['isEmailVerified'] as bool),
         )
       : null;
 
@@ -29,6 +32,7 @@ class UserModel extends UserEntity {
     map['name'] = name;
     map['email'] = email;
     map['type'] = type.toString();
+    map['isEmailVerified'] = isEmailVerified.toString();
     return map;
   }
 
@@ -43,12 +47,14 @@ class UserModel extends UserEntity {
     String email,
     UserType type,
     String status,
+    bool isEmailVerified,
   }) {
     return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       type: type ?? this.type,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 }

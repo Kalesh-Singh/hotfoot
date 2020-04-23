@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_event.dart';
@@ -75,7 +76,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
     yield* signUpEither.fold(
       (failure) async* {
-        yield RegistrationState.failure();
+        print(failure);
+        if (failure is FirebaseAuthEmailAlreadyInUseFailure) {
+          yield RegistrationState.failure("Email Already in Use");
+        }
+        else if (failure is FirebaseAuthFailure) {
+          yield RegistrationState.failure("Registration Failure");
+        }
       },
       (success) async* {
         yield RegistrationState.success();

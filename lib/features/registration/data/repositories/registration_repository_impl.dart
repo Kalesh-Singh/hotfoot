@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
@@ -23,6 +24,7 @@ class RegistrationRepository implements IRegistrationRepository {
     @required String password,
   }) async {
     try {
+      // TODO check if email in use
       final result = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -45,8 +47,14 @@ class RegistrationRepository implements IRegistrationRepository {
         },
       );
     } catch (e) {
-      print(e);
-      return Left(FirebaseAuthFailure());
+      if(e is PlatformException) {
+        if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          return Left(FirebaseAuthEmailAlreadyInUseFailure());
+        }
+      }
+      else{
+        return Left(FirebaseAuthFailure());
+      }
     }
   }
 }

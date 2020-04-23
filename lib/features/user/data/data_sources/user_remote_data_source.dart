@@ -41,6 +41,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       name: firebaseUser.email,
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
+      isEmailVerified: firebaseUser.isEmailVerified,
     );
     return userModel;
   }
