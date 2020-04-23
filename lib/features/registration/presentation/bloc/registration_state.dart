@@ -8,6 +8,7 @@ class RegistrationState extends Equatable {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final bool isEmailVerified;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -17,6 +18,7 @@ class RegistrationState extends Equatable {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.isEmailVerified,
   });
 
   factory RegistrationState.empty() {
@@ -26,6 +28,7 @@ class RegistrationState extends Equatable {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isEmailVerified: false,
     );
   }
 
@@ -36,6 +39,7 @@ class RegistrationState extends Equatable {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      isEmailVerified: false,
     );
   }
 
@@ -46,6 +50,7 @@ class RegistrationState extends Equatable {
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      isEmailVerified: false,
     );
   }
 
@@ -56,6 +61,18 @@ class RegistrationState extends Equatable {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      isEmailVerified: true,
+    );
+  }
+
+  factory RegistrationState.successUnverified() {
+    return RegistrationState(
+      isEmailValid: true,
+      isPasswordValid: true,
+      isSubmitting: false,
+      isSuccess: true,
+      isFailure: false,
+      isEmailVerified: true,
     );
   }
 
@@ -69,6 +86,7 @@ class RegistrationState extends Equatable {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isEmailVerified: false,
     );
   }
 
@@ -79,6 +97,7 @@ class RegistrationState extends Equatable {
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    bool isEmailVerified,
   }) {
     return RegistrationState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -86,6 +105,7 @@ class RegistrationState extends Equatable {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 
@@ -97,6 +117,7 @@ class RegistrationState extends Equatable {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isEmailVerified: $isEmailVerified,
     }''';
   }
 
@@ -107,5 +128,6 @@ class RegistrationState extends Equatable {
         isSubmitting,
         isSuccess,
         isFailure,
+        isEmailVerified,
       ];
 }

@@ -32,7 +32,6 @@ void main() {
     mockValidators = MockValidators();
 
     bloc = LoginBloc(
-      signInWithGoogle: mockSignInWithGoogle,
       signInWithCredentials: mockSignInWithCredentials,
       validators: mockValidators,
     );

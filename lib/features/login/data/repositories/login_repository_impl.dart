@@ -32,6 +32,7 @@ class LoginRepository implements ILoginRepository {
     }
   }
 
+  // Not needed
   @override
   Future<Either<Failure, FirebaseUser>> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();

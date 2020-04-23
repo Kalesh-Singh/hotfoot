@@ -4,7 +4,6 @@ import 'package:hotfoot/features/login/presentation/bloc/login_bloc.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_state.dart';
 import 'package:hotfoot/features/login/presentation/ui/widgets/create_account_button.dart';
-import 'package:hotfoot/features/login/presentation/ui/widgets/google_login_button.dart';
 import 'package:hotfoot/features/login/presentation/ui/widgets/login_button.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
@@ -135,9 +134,6 @@ class _LoginFormState extends State<LoginForm> {
                               ? _onFormSubmitted
                               : null,
                         ),
-                        // ! More than likely will not be using this unless we have a way to
-                        // ! override the functionality so it works only with bison.howard.edu
-                        GoogleLoginButton(),
                         CreateAccountButton(),
                       ],
                     ),

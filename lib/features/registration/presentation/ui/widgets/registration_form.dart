@@ -53,9 +53,25 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
             );
         }
-        if (state.isSuccess) {
+        if (state.isSuccess && state.isEmailVerified) {
           BlocProvider.of<NavigationAuthBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
+        }
+        if (state.isSuccess && state.isEmailVerified == false) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Please verify your email address'),
+                    Icon(Icons.error),
+                  ],
+                ),
+                backgroundColor: Colors.blue,
+              ),
+            );
         }
         if (state.isFailure) {
           Scaffold.of(context)

@@ -31,6 +31,10 @@ class RegistrationRepository implements IRegistrationRepository {
       if (_firebaseUser == null) {
         print("firebase user is null");
       }
+      // Send verification email here
+      else {
+        await _firebaseUser.sendEmailVerification();
+      }
       final either = await initUser(NoParams());
       return either.fold(
         (failure) {
