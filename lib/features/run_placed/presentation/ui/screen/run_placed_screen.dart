@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_stream.dart';
@@ -88,24 +89,7 @@ class _RunPlacedScreenState extends State<RunPlacedScreen> {
               color: Colors.lightGreenAccent,
             ),
             SizedBox(height: 20),
-            Row(
-              // Should use this here so formatting stays similar across
-              // all screen sizes
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(width: 40),
-                Text("Status", style: TextStyle(fontSize: 24.0)),
-                SizedBox(width: 110),
-                OpenCloseChatButton(
-                    runModel: currRun, buttonText: 'Contact Runner'),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CancelDeliveryButton(currRun: currRun, updateOrInsertRun: sl()),
-              ],
-            ),
+            ActiveRunInfoWidget(runModel: currRun),
           ],
         ),
       ),
@@ -121,13 +105,13 @@ class _RunPlacedScreenState extends State<RunPlacedScreen> {
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
-            return isRunner
-                ? _runnerRunPlacedScreen(context, currRun)
-                : _customerRunPlacedScreen(context, currRun);
+    return isRunner
+        ? _runnerRunPlacedScreen(context, currRun)
+        : _customerRunPlacedScreen(context, currRun);
   }
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     _listenForRunUpdates();
   }
@@ -159,15 +143,6 @@ class _RunPlacedScreenState extends State<RunPlacedScreen> {
     RunModel runModel;
     querySnapshot.documents.forEach((DocumentSnapshot documentSnapshot) {
       runModel = RunModel.fromJson(documentSnapshot.data);
-      documentSnapshot.data.forEach((String key, value) {
-        print('$key: $value');
-      });
     });
-    final oldStatus =
-        BlocProvider.of<NavigationScreenBloc>(context).state.runModel.status;
-    if (runModel.status != oldStatus) {
-
-    }
-
   }
 }
