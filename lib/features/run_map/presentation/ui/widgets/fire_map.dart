@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hotfoot/features/location/data/models/location_model.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:location/location.dart' as DeviceLocation;
 
 class FireMap extends StatefulWidget {
@@ -39,6 +41,7 @@ class _FireMapState extends State<FireMap> {
     setState(() {
       mapController = controller;
     });
+    _listenForLocationUpdates();
   }
 
   void _animateToLocation({@required LatLng latLng}) {
@@ -47,11 +50,23 @@ class _FireMapState extends State<FireMap> {
     );
   }
 
-  Future<void> _insertOrUpdateRunnerLocation({@required String runId}) async {
-    final coordinates = await deviceLocation.getLocation();
+  void _listenForLocationUpdates() {
+    final runId =
+        BlocProvider.of<NavigationScreenBloc>(context).state.runModel.id;
+    final locationStream = deviceLocation.onLocationChanged;
+    locationStream.listen((DeviceLocation.LocationData locationData) {
+      print('DEVICE LOCATION UPDATED');
+      _insertOrUpdateRunnerLocation(runId: runId, locationData: locationData);
+    });
+  }
+
+  Future<void> _insertOrUpdateRunnerLocation({
+    @required String runId,
+    @required DeviceLocation.LocationData locationData,
+  }) async {
     final location = LocationModel(
-      lat: coordinates.latitude,
-      lng: coordinates.longitude,
+      lat: locationData.latitude,
+      lng: locationData.longitude,
     );
     return firestore
         .collection('runs')

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/run_map/presentation/ui/widgets/fire_map.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
@@ -14,8 +15,8 @@ import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class RunPlacedScreen extends StatelessWidget {
-
-  Stream<QuerySnapshot> returnCurrentRunStream (GetRunStream useCase, String id) async* {
+  Stream<QuerySnapshot> returnCurrentRunStream(
+      GetRunStream useCase, String id) async* {
     final runStreamEither = await useCase(id);
     if (runStreamEither.isRight()) {
       yield* runStreamEither.getOrElse(null);
@@ -48,7 +49,8 @@ class RunPlacedScreen extends StatelessWidget {
                 SizedBox(width: 40),
                 Text("Status", style: TextStyle(fontSize: 24.0)),
                 SizedBox(width: 110),
-                OpenCloseChatButton(runModel: currRun, buttonText: 'Contact Customer'),
+                OpenCloseChatButton(
+                    runModel: currRun, buttonText: 'Contact Customer'),
               ],
             ),
             Row(
@@ -76,10 +78,11 @@ class RunPlacedScreen extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: Center(
-                  child: Text("Live map being updated here",
-                      style: TextStyle(fontSize: 24.0))),
-              color: Colors.lightGreenAccent,
+//              child: Center(
+//                  child: Text("Live map being updated here",
+//                      style: TextStyle(fontSize: 24.0))),
+//              color: Colors.lightGreenAccent,
+              child: FireMap(),
             ),
             SizedBox(height: 20),
             Row(
@@ -90,7 +93,8 @@ class RunPlacedScreen extends StatelessWidget {
                 SizedBox(width: 40),
                 Text("Status", style: TextStyle(fontSize: 24.0)),
                 SizedBox(width: 110),
-                OpenCloseChatButton(runModel: currRun, buttonText: 'Contact Runner'),
+                OpenCloseChatButton(
+                    runModel: currRun, buttonText: 'Contact Runner'),
               ],
             ),
             Row(
@@ -110,19 +114,21 @@ class RunPlacedScreen extends StatelessWidget {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final currRun = navScreenBloc.state.runModel;
     final GetRunStream getRunStream = sl();
-    final bool isRunner = BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
+    final bool isRunner =
+        BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
     final runStream = returnCurrentRunStream(getRunStream, currRun.id);
     return Container(
       child: StreamBuilder(
-        stream: runStream,
-        builder: (context, snapshot) {
-          print("Isrunner variable is $isRunner");
-          return isRunner ? _runnerRunPlacedScreen(context, currRun) : _customerRunPlacedScreen(context, currRun);
-        }
-      ),
+          stream: runStream,
+          builder: (context, snapshot) {
+            print("Isrunner variable is $isRunner");
+            return isRunner
+                ? _runnerRunPlacedScreen(context, currRun)
+                : _customerRunPlacedScreen(context, currRun);
+          }),
     );
   }
 }
