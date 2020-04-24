@@ -79,7 +79,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (failure is FirebaseAuthInvalidEmailFailure) {
           yield LoginState.failure("Email is not registered");
         } else if (failure is FirebaseAuthEmailUnverifiedFailure) {
-          LoginState.failure("Please click the verification link sent to your email");
+          yield LoginState.failure("Please click the verification link sent to your email");
+        } else if (failure is FirebaseAuthFailure) {
+          print("Regular failure");
+          yield LoginState.failure('');
         }
       },
       (success) async* {
