@@ -54,6 +54,7 @@ import 'package:hotfoot/features/runs/domain/use_cases/get_run_by_id.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_runner_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_bloc.dart';
@@ -151,6 +152,10 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => SearchHandlerScreenBloc());
   sl.registerFactory(() => UnknownPlaceScreenBloc());
+  sl.registerFactory(() => AcceptRunBloc(
+        getUserId: sl(),
+        updateOrInsertRun: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
