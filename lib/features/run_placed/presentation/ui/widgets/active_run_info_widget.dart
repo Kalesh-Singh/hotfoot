@@ -23,7 +23,6 @@ class ActiveRunInfoWidget extends StatefulWidget {
 class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   @override
   Widget build(BuildContext context) {
-    // TODO: Wrap in Run Update Bloc Builder
     return BlocBuilder<RunUpdateBloc, RunUpdateState>(
       builder: (BuildContext context, RunUpdateState state) {
         return Column(
@@ -91,7 +90,6 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
     print('RUN DOCUMENT CHANGED');
     RunModel runModel;
     querySnapshot.documents.forEach((DocumentSnapshot documentSnapshot) {
-      // TODO: Delete this for each print
       documentSnapshot.data.forEach((k, v) {
         print("$k: $v");
       });
