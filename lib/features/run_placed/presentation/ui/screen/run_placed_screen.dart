@@ -13,9 +13,14 @@ import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_sta
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
-class RunPlacedScreen extends StatelessWidget {
+class RunPlacedScreen extends StatefulWidget {
+  @override
+  _RunPlacedScreenState createState() => _RunPlacedScreenState();
+}
 
-  Stream<QuerySnapshot> returnCurrentRunStream (GetRunStream useCase, String id) async* {
+class _RunPlacedScreenState extends State<RunPlacedScreen> {
+  Stream<QuerySnapshot> returnCurrentRunStream(
+      GetRunStream useCase, String id) async* {
     final runStreamEither = await useCase(id);
     if (runStreamEither.isRight()) {
       yield* runStreamEither.getOrElse(null);
@@ -48,7 +53,8 @@ class RunPlacedScreen extends StatelessWidget {
                 SizedBox(width: 40),
                 Text("Status", style: TextStyle(fontSize: 24.0)),
                 SizedBox(width: 110),
-                OpenCloseChatButton(runModel: currRun, buttonText: 'Contact Customer'),
+                OpenCloseChatButton(
+                    runModel: currRun, buttonText: 'Contact Customer'),
               ],
             ),
             Row(
@@ -90,7 +96,8 @@ class RunPlacedScreen extends StatelessWidget {
                 SizedBox(width: 40),
                 Text("Status", style: TextStyle(fontSize: 24.0)),
                 SizedBox(width: 110),
-                OpenCloseChatButton(runModel: currRun, buttonText: 'Contact Runner'),
+                OpenCloseChatButton(
+                    runModel: currRun, buttonText: 'Contact Runner'),
               ],
             ),
             Row(
@@ -109,20 +116,58 @@ class RunPlacedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final currRun = navScreenBloc.state.runModel;
-    final GetRunStream getRunStream = sl();
-    final bool isRunner = BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
+    final bool isRunner =
+        BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
-    final runStream = returnCurrentRunStream(getRunStream, currRun.id);
-    return Container(
-      child: StreamBuilder(
-        stream: runStream,
-        builder: (context, snapshot) {
-          print("Isrunner variable is $isRunner");
-          return isRunner ? _runnerRunPlacedScreen(context, currRun) : _customerRunPlacedScreen(context, currRun);
-        }
-      ),
+            return isRunner
+                ? _runnerRunPlacedScreen(context, currRun)
+                : _customerRunPlacedScreen(context, currRun);
+  }
+
+  @override
+  void initState()  {
+    super.initState();
+    _listenForRunUpdates();
+  }
+
+  void _listenForRunUpdates() async {
+    final runId =
+        BlocProvider.of<NavigationScreenBloc>(context).state.runModel.id;
+    final runStream = await _getRunStream(
+      getRunStream: sl<GetRunStream>(),
+      runId: runId,
     );
+    runStream.listen(_handleRunUpdate);
+  }
+
+  Future<Stream<QuerySnapshot>> _getRunStream({
+    @required GetRunStream getRunStream,
+    @required String runId,
+  }) async {
+    final runStreamEither = await getRunStream(runId);
+    return runStreamEither.fold(
+      (_) => null,
+      (runStream) => runStream,
+    );
+  }
+
+  void _handleRunUpdate(QuerySnapshot querySnapshot) {
+    // TODO: Pass Run Model to Run Updated Event
+    print('RUN DOCUMENT CHANGED');
+    RunModel runModel;
+    querySnapshot.documents.forEach((DocumentSnapshot documentSnapshot) {
+      runModel = RunModel.fromJson(documentSnapshot.data);
+      documentSnapshot.data.forEach((String key, value) {
+        print('$key: $value');
+      });
+    });
+    final oldStatus =
+        BlocProvider.of<NavigationScreenBloc>(context).state.runModel.status;
+    if (runModel.status != oldStatus) {
+
+    }
+
   }
 }
