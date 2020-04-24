@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-import 'package:hotfoot/features/run_map/presentation/ui/widgets/fire_map.dart';
+import 'package:hotfoot/features/run_map/presentation/ui/widgets/customer_run_map.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
@@ -82,7 +82,7 @@ class RunPlacedScreen extends StatelessWidget {
 //                  child: Text("Live map being updated here",
 //                      style: TextStyle(fontSize: 24.0))),
 //              color: Colors.lightGreenAccent,
-              child: FireMap(),
+              child: CustomerRunMap(),
             ),
             SizedBox(height: 20),
             Row(
