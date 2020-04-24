@@ -23,6 +23,21 @@ class SearchResultsList extends StatelessWidget {
             return CircularProgressIndicator();
           } else if (state is ResultsWithMatchingAddressSearched) {
             print('search success');
+            if (state.resultsWithMatchingAddress.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Align(
+                  alignment: FractionalOffset.topCenter,
+                  child: Text(
+                    "No search results found!\n\nPlease locate the place manually...",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              );
+            }
             return _buildSearchResultsList(state.resultsWithMatchingAddress);
           } else if (state is ResultsWithMatchingAddressFailure) {
             return Text(state.message);

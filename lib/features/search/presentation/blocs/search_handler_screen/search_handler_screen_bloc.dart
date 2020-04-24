@@ -15,6 +15,8 @@ class SearchHandlerScreenBloc
       yield SearchHandlerScreenOpened();
     } else if (event is SearchResultSelectedFromList) {
       yield SearchHandlerScreenReturned(placeId: event.placeId);
+    } else if (event is ManuallyLocateButtonPressed) {
+      yield ManuallyLocateScreenOpened();
     } else {
       yield SearchHandlerScreenUninitialized();
     }

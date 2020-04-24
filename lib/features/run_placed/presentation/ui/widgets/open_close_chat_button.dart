@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_section.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class OpenCloseChatButton extends StatelessWidget {
+  final RunModel runModel;
+  final String buttonText;
+
+  OpenCloseChatButton({
+    @required this.runModel,
+    @required this.buttonText,
+  }) : assert(runModel != null),
+       assert(buttonText != null);
 
   Column _chatSection() {
     return 
     Column(children: <Widget>[
       Expanded(
-          child: ChatSection(),
+          child: ChatSection(runModel: runModel,),
         ),
       ],
     );
@@ -45,7 +54,7 @@ class OpenCloseChatButton extends StatelessWidget {
           },
         );
       },
-      label: Text('Contact Runner', style: TextStyle(color: Colors.white)),
+      label: Text(buttonText, style: TextStyle(color: Colors.white)),
       color: Colors.blueAccent,
       ),
     );

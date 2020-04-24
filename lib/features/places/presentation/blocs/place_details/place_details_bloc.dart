@@ -24,6 +24,8 @@ class PlaceDetailsBloc extends Bloc<PlaceDetailsEvent, PlaceDetailsState> {
     if (event is PlaceDetailsRequested) {
       final failureOrPlaceDetails = await getPlaceById(event.placeId);
       yield* _eitherPlaceDetailsLoadedOrFailureState(failureOrPlaceDetails);
+    } else if (event is CustomPlaceDetailsReceived) {
+      yield PlaceDetailsLoadSuccess(placeEntity: event.placeEntity);
     }
   }
 
