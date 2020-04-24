@@ -4,21 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/login/domain/repositories/login_repository.dart';
-import 'package:hotfoot/features/user/domain/use_cases/insert_or_update_user.dart';
 import 'package:meta/meta.dart';
 
 class LoginRepository implements ILoginRepository {
   final FirebaseAuth firebaseAuth;
   final GoogleSignIn googleSignIn;
-  final InsertOrUpdateUser insertOrUpdateUser;
 
   const LoginRepository({
     @required this.firebaseAuth,
     @required this.googleSignIn,
-    @required this.insertOrUpdateUser,
   })  : assert(firebaseAuth != null),
-        assert(googleSignIn != null),
-        assert(insertOrUpdateUser != null);
+        assert(googleSignIn != null);
 
   @override
   Future<Either<Failure, void>> signInWithCredentials({
@@ -32,7 +28,6 @@ class LoginRepository implements ILoginRepository {
       );
       final FirebaseUser user = result.user;
       if (user.isEmailVerified) {
-        // Update in firebase the user to have isEmailVerified = True
         return Right(result);
       }
       return Left(FirebaseAuthEmailUnverifiedFailure());
