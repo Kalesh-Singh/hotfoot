@@ -10,52 +10,59 @@ class OpenCloseChatButton extends StatelessWidget {
   OpenCloseChatButton({
     @required this.runModel,
     @required this.buttonText,
-  }) : assert(runModel != null),
-       assert(buttonText != null);
+  })  : assert(runModel != null),
+        assert(buttonText != null);
 
   Column _chatSection() {
-    return 
-    Column(children: <Widget>[
-      Expanded(
-          child: ChatSection(runModel: runModel,),
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ChatSection(
+            runModel: runModel,
+          ),
         ),
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme (
+    return ButtonTheme(
+      disabledColor: Colors.grey,
       minWidth: 140.0,
-      height: 40.0, 
-    child: RaisedButton.icon(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      icon: FaIcon(FontAwesomeIcons.comments, color: Colors.white),
-      onPressed: () {
-        print("Contact Runner Button Tapped");
-        showModalBottomSheet(
-          context: context, 
-          builder: (context) {
-            return Container (
-              color: Color(0xFF737373),
-              height: MediaQuery.of(context).copyWith().size.height * 0.75,
-              child:  Container(
-                child: _chatSection(),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(10),
-                    topRight: const Radius.circular(10),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-      label: Text(buttonText, style: TextStyle(color: Colors.white)),
-      color: Colors.blueAccent,
+      height: 40.0,
+      child: RaisedButton.icon(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        icon: FaIcon(FontAwesomeIcons.comments, color: Colors.white),
+        onPressed: (runModel.runnerId == null)
+            ? null
+            : () {
+                print("Contact Runner Button Tapped");
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      color: Color(0xFF737373),
+                      height:
+                          MediaQuery.of(context).copyWith().size.height * 0.75,
+                      child: Container(
+                        child: _chatSection(),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).canvasColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(10),
+                            topRight: const Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+        label: Text(buttonText, style: TextStyle(color: Colors.white)),
+        color: Colors.blueAccent,
       ),
     );
   }

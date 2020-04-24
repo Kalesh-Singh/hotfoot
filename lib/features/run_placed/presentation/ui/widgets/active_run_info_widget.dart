@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_event.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
@@ -21,22 +24,39 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: Wrap in Run Update Bloc Builder
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("${this.widget.runModel.status}", style: TextStyle(fontSize: 24.0)),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return BlocBuilder<RunUpdateBloc, RunUpdateState>(
+      builder: (BuildContext context, RunUpdateState state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CancelDeliveryButton(currRun: this.widget.runModel, updateOrInsertRun: sl()),
-            OpenCloseChatButton(runModel: this.widget.runModel, buttonText: 'Contact Runner'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                  state is RunUpdateUninitialized
+                      ? "${this.widget.runModel.status}"
+                      : state.runModel.status,
+                  style: TextStyle(fontSize: 24.0)),
+            ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CancelDeliveryButton(
+                    currRun: state is RunUpdateUninitialized
+                        ? this.widget.runModel
+                        : state.runModel,
+                    updateOrInsertRun: sl()),
+                OpenCloseChatButton(
+                    runModel: state is RunUpdateUninitialized
+                        ? this.widget.runModel
+                        : state.runModel,
+                    buttonText: 'Contact Runner'),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -68,15 +88,15 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   }
 
   void _handleRunUpdate(QuerySnapshot querySnapshot) {
-    // TODO: Pass Run Model to Run Updated Event
     print('RUN DOCUMENT CHANGED');
     RunModel runModel;
     querySnapshot.documents.forEach((DocumentSnapshot documentSnapshot) {
+      // TODO: Delete this for each print
       documentSnapshot.data.forEach((k, v) {
         print("$k: $v");
       });
       runModel = RunModel.fromJson(documentSnapshot.data);
     });
-    // TODO: Pass run model to the bloc.
+    BlocProvider.of<RunUpdateBloc>(context).add(RunUpdated(runModel: runModel));
   }
 }
