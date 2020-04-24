@@ -43,6 +43,10 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/run_map/data/repositories/runner_location_repository_impl.dart';
+import 'package:hotfoot/features/run_map/domain/repositories/runner_location_repository.dart';
+import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
+import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
@@ -151,6 +155,11 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => SearchHandlerScreenBloc());
   sl.registerFactory(() => UnknownPlaceScreenBloc());
+  sl.registerFactory(() => RunnerLocationBloc(
+        insertOrUpdateRunnerLocation: sl(),
+        updateOrInsertRun: sl(),
+        getPlaceById: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -222,6 +231,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRunById(
         runsRepository: sl(),
       ));
+  sl.registerLazySingleton(() => InsertOrUpdateRunnerLocation(
+        runnerLocationRepository: sl(),
+      ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -261,6 +273,10 @@ Future<void> init() async {
       () => SearchResultsRepository(
             searchResultsDataSource: sl(),
             networkInfo: sl(),
+          ));
+  sl.registerLazySingleton<IRunnerLocationRepository>(
+      () => RunnerLocationRepository(
+            firestore: sl(),
           ));
 
   // Data Sources
