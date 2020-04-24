@@ -78,7 +78,7 @@ class RegistrationState extends Equatable {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
-      isEmailVerified: true,
+      isEmailVerified: false,
       message: 'Email is unverified',
     );
   }

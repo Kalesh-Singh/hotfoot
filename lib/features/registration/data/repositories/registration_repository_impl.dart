@@ -24,7 +24,6 @@ class RegistrationRepository implements IRegistrationRepository {
     @required String password,
   }) async {
     try {
-      // TODO check if email in use
       final result = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -52,9 +51,7 @@ class RegistrationRepository implements IRegistrationRepository {
           return Left(FirebaseAuthEmailAlreadyInUseFailure());
         }
       }
-      else{
-        return Left(FirebaseAuthFailure());
-      }
+      return Left(FirebaseAuthFailure());
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_credentials.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
@@ -75,7 +76,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
     yield* resultEither.fold(
       (failure) async* {
-        yield LoginState.failure();
+        if (failure is FirebaseAuthInvalidEmailFailure) {
+          yield LoginState.failure("Email is not registered");
+        } else if (failure is FirebaseAuthEmailUnverifiedFailure) {
+          LoginState.failure("Please click the verification link sent to your email");
+        }
       },
       (success) async* {
         yield LoginState.success();

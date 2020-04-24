@@ -85,7 +85,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         }
       },
       (success) async* {
-        yield RegistrationState.success();
+        if(success.isEmailVerified) {
+          print("Success is yielded");
+          yield RegistrationState.success();
+        } else {
+          print("Success Unverified is yielded");
+          yield RegistrationState.successUnverified();
+        }
       },
     );
   }

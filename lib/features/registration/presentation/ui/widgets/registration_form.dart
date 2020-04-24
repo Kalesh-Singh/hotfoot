@@ -54,6 +54,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             );
         }
         if (state.isSuccess && state.isEmailVerified) {
+          print(state);
           BlocProvider.of<NavigationAuthBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
         }

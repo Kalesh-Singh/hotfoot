@@ -22,7 +22,7 @@ class UserModel extends UserEntity {
           name: (json['name'] as String),
           email: (json['email'] as String),
           type: _getUserTypeFromString(json['type'] as String),
-          isEmailVerified: (json['isEmailVerified'] as bool),
+          isEmailVerified: _getIsEmailVerifiedFromString(json['isEmailVerified'] as String),
         )
       : null;
 
@@ -39,6 +39,12 @@ class UserModel extends UserEntity {
   static UserType _getUserTypeFromString(String type) {
     return UserType.values
         .firstWhere((e) => e.toString() == type);
+  }
+  
+  static bool _getIsEmailVerifiedFromString(String isEmailVerified) {
+    print("YEEHAW");
+    print(isEmailVerified);
+    return isEmailVerified == "true";
   }
 
   UserModel copyWith({
