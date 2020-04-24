@@ -205,7 +205,7 @@ void main() {
       final expectedStates = [
         RegistrationState.empty(),
         RegistrationState.loading(),
-        RegistrationState.failure(),
+        RegistrationState.failure(''),
       ];
 
       expectLater(

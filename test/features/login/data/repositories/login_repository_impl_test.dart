@@ -71,8 +71,8 @@ void main() {
       ));
     });
 
-    test('should return Future<void> if sign in was successful', () async {
-      // arrange
+    test('should return FirebaseAuthFailure as  user can only sign in now if email is verified', () async {
+      // arrang
       when(mockFirebaseAuth.signInWithEmailAndPassword(
         email: anyNamed('email'),
         password: anyNamed('password'),
@@ -89,7 +89,7 @@ void main() {
         email: tEmail,
         password: tPassword,
       ));
-      expect(result, Right(tAuthResult));
+      expect(result, Left(FirebaseAuthFailure()));
     });
 
     test('should return [FirebaseAuthFailure] if an exception was thrown',

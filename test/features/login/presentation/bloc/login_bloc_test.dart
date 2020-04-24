@@ -4,13 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_credentials.dart';
-import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_google.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_bloc.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_state.dart';
 import 'package:mockito/mockito.dart';
-
-class MockSignInWithGoogle extends Mock implements SignInWithGoogle {}
 
 class MockSignInWithCredentials extends Mock implements SignInWithCredentials {}
 
@@ -22,12 +19,10 @@ class MockFirebaseUser extends Mock implements FirebaseUser {}
 
 void main() {
   LoginBloc bloc;
-  MockSignInWithGoogle mockSignInWithGoogle;
   MockSignInWithCredentials mockSignInWithCredentials;
   MockValidators mockValidators;
 
   setUp(() {
-    mockSignInWithGoogle = MockSignInWithGoogle();
     mockSignInWithCredentials = MockSignInWithCredentials();
     mockValidators = MockValidators();
 
@@ -210,7 +205,7 @@ void main() {
       // assert later
       final expectedStates = [
         LoginState.empty(),
-        LoginState.failure(),
+        LoginState.failure(''),
       ];
 
       expectLater(
@@ -223,50 +218,6 @@ void main() {
         email: tValidEmail,
         password: tValidPassword,
       ));
-    });
-  });
-
-  group('Log In With Google Pressed', () {
-    test('''should yield [LoginState.success()] if sign in with Google was 
-    successful''', () async {
-      // arrange
-      when(mockSignInWithGoogle(any))
-          .thenAnswer((_) async => Right(tFirebaseUser));
-
-      // assert later
-      final expectedStates = [
-        LoginState.empty(),
-        LoginState.success(),
-      ];
-
-      expectLater(
-        bloc.asBroadcastStream(),
-        emitsInOrder(expectedStates),
-      );
-
-      // act
-      bloc.add(LoginWithGooglePressed());
-    });
-
-    test('''should yield [LoginState.failure()] if sign in with Google was
-    not successful''', () async {
-      // arrange
-      when(mockSignInWithGoogle(any))
-          .thenAnswer((_) async => Left(FirebaseAuthFailure()));
-
-      // assert later
-      final expectedStates = [
-        LoginState.empty(),
-        LoginState.failure(),
-      ];
-
-      expectLater(
-        bloc.asBroadcastStream(),
-        emitsInOrder(expectedStates),
-      );
-
-      // act
-      bloc.add(LoginWithGooglePressed());
     });
   });
 }
