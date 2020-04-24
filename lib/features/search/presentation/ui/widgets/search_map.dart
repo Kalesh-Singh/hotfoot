@@ -25,6 +25,7 @@ class SearchMap extends StatelessWidget {
           return GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition: location,
+            zoomControlsEnabled: false,
             markers: Set<Marker>.of(_markers.values),
           );
         } else {
@@ -33,6 +34,7 @@ class SearchMap extends StatelessWidget {
             initialCameraPosition: CameraPosition(
               target: LatLng(0, 0),
             ),
+            zoomControlsEnabled: false,
           );
         }
       },

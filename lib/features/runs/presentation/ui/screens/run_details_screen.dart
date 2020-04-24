@@ -61,6 +61,9 @@ class RunDetailsScreen extends StatelessWidget {
                       },
                       (customPlace) {
                         // TODO: Handle event for CustomPlace
+                        BlocProvider.of<PlaceDetailsBloc>(context).add(
+                            CustomPlaceDetailsReceived(
+                                placeEntity: customPlace));
                       },
                     );
                     return Container(

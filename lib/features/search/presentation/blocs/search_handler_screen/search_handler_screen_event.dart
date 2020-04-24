@@ -17,3 +17,5 @@ class SearchResultSelectedFromList extends SearchHandlerScreenEvent {
 }
 
 class BackButtonPressed extends SearchHandlerScreenEvent {}
+
+class ManuallyLocateButtonPressed extends SearchHandlerScreenEvent {}

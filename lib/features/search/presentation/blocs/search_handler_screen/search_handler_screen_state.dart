@@ -20,3 +20,5 @@ class SearchHandlerScreenReturned extends SearchHandlerScreenState {
   @override
   List<Object> get props => [placeId];
 }
+
+class ManuallyLocateScreenOpened extends SearchHandlerScreenState {}
