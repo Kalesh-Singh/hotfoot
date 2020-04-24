@@ -35,10 +35,7 @@ class RunPlacedScreen extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: Center(
-                  child: Text("Live map being updated here",
-                      style: TextStyle(fontSize: 24.0))),
-              color: Colors.lightGreenAccent,
+              child: RunnerMapWidget(),
             ),
             SizedBox(height: 20),
             Row(
@@ -78,11 +75,10 @@ class RunPlacedScreen extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height / 1.5,
-//              child: Center(
-//                  child: Text("Live map being updated here",
-//                      style: TextStyle(fontSize: 24.0))),
-//              color: Colors.lightGreenAccent,
-              child: RunnerMapWidget(),
+              child: Center(
+                  child: Text("Live map being updated here",
+                      style: TextStyle(fontSize: 24.0))),
+              color: Colors.lightGreenAccent,
             ),
             SizedBox(height: 20),
             Row(
