@@ -5,7 +5,6 @@ import 'package:hotfoot/features/location/data/models/location_model.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_event.dart';
-import 'package:hotfoot/injection_container.dart';
 import 'package:location/location.dart' as DeviceLocation;
 
 class RunnerRunMap extends StatefulWidget {
@@ -19,15 +18,12 @@ class _RunnerRunMapState extends State<RunnerRunMap> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RunnerLocationBloc>(
-      create: (context) => sl<RunnerLocationBloc>(),
-      child: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(24.142, -110.321),
-          zoom: 15,
-        ),
-        onMapCreated: _onMapCreated,
+    return GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: LatLng(24.142, -110.321),
+        zoom: 15,
       ),
+      onMapCreated: _onMapCreated,
     );
   }
 
