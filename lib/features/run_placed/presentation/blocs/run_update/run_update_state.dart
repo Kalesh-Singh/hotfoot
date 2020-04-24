@@ -1,29 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:meta/meta.dart';
 
-abstract class PlacesIdsState extends Equatable {
-  const PlacesIdsState();
+abstract class RunUpdateState extends Equatable {
+  final RunModel runModel;
+
+  const RunUpdateState({@required this.runModel});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [runModel];
 }
 
-class PlacesIdsUninitialized extends PlacesIdsState {}
+class RunUpdateUninitialized extends RunUpdateState {}
 
-class PlacesIdsLoadSuccess extends PlacesIdsState {
-  final List<String> placesIds;
-
-  const PlacesIdsLoadSuccess({@required this.placesIds});
-
-  @override
-  List<Object> get props => [placesIds];
-}
-
-class PlacesIdsLoadFailure extends PlacesIdsState {
-  final String message;
-
-  const PlacesIdsLoadFailure({@required this.message});
-
-  @override
-  List<Object> get props => [message];
+class RunUpdateLoadSuccess extends RunUpdateState {
+  const RunUpdateLoadSuccess({@required RunModel runModel})
+      : super(runModel: runModel);
 }
