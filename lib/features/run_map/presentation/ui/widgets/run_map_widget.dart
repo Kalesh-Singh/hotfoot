@@ -8,7 +8,7 @@ import 'package:hotfoot/injection_container.dart';
 class RunMapWidget extends StatelessWidget {
   final UserType userType;
 
-  const RunMapWidget({Key key, this.userType}) : super(key: key);
+  const RunMapWidget({Key key, @required this.userType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
