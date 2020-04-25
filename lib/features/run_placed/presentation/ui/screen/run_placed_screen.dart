@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-import 'package:hotfoot/features/run_map/presentation/ui/widgets/runner_map_widget.dart';
+import 'package:hotfoot/features/run_map/presentation/ui/widgets/run_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
@@ -43,7 +43,7 @@ class RunPlacedScreen extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: RunnerMapWidget(),
+              child: RunMapWidget(),
             ),
             SizedBox(height: 20),
             Row(
