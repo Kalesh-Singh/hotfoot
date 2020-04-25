@@ -67,6 +67,11 @@ dependencies:
   google_maps_flutter: ^0.5.25
   # For DateFormat functions
   intl: ^0.16.1
+  # For firestore geo point
+  geoflutterfire: ^2.1.0
+  # For tracking the device's location
+  location: ^3.0.2
+
   # TODO: Maybe delete unused ones
   flutter_google_places: ^0.2.3
   google_maps_webservice: ^0.0.16
