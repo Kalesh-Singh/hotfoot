@@ -5,6 +5,7 @@ import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runne
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_state.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_event.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
 class RunnerLocationBloc
@@ -30,24 +31,34 @@ class RunnerLocationBloc
       final LocationModel pickupLocation = await _getPickupLocation(event);
       final LocationModel destinationLocation = _getDestinationLocation(event);
       final String runId = event.runModel.id;
+      final UserType userType = event.userType;
 
-      // Update the runner's location in firestore.
-      final updateLocationEither =
-          await insertOrUpdateRunnerLocation(RunnerLocationParams(
-        runId: runId,
-        runnerLocation: runnerLocation,
-      ));
+      if (userType == UserType.RUNNER) {
+        // Update the runner's location in firestore.
+        final updateLocationEither =
+            await insertOrUpdateRunnerLocation(RunnerLocationParams(
+          runId: runId,
+          runnerLocation: runnerLocation,
+        ));
 
-      // TODO: (zaykha) use insert or update run use case to update run status
-      // based on runner's proximity to pickup location, destination etc.
-      // For instance when the runner is X miles away from pick location,
-      // change status to "Picking up your order".
-      // When the runner is X miles away from destination location,
-      // change status to "Arriving soon"
+        updateLocationEither.fold(
+          (failure) => print('Failed to update runner location in firestore'),
+          (success) => print('Updated runner location in firestore'),
+        );
 
-      // TODO: (zaykha) Handle all map manipulation here
-      // you can get the controller from either the event or the state.
-      // doesn't really matter, its the same reference.
+        // TODO: (zaykha) use insert or update run use case to update run status
+        // based on runner's proximity to pickup location, destination etc.
+        // For instance when the runner is X miles away from pick location,
+        // change status to "Picking up your order".
+        // When the runner is X miles away from destination location,
+        // change status to "Arriving soon"
+
+        // TODO: (zaykha) Handle all map manipulation here
+        // you can get the controller from either the event or the state.
+        // doesn't really matter, its the same reference.
+      } else if (userType == UserType.CUSTOMER) {
+        // TODO: Handle updates to the customer map here.
+      }
 
       yield RunnerLocationUpdateSuccess(
         runModel: event.runModel,
