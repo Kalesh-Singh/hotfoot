@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
@@ -31,6 +32,10 @@ class RegistrationRepository implements IRegistrationRepository {
       if (_firebaseUser == null) {
         print("firebase user is null");
       }
+      // Send verification email here
+      else {
+        await _firebaseUser.sendEmailVerification();
+      }
       final either = await initUser(NoParams());
       return either.fold(
         (failure) {
@@ -41,7 +46,11 @@ class RegistrationRepository implements IRegistrationRepository {
         },
       );
     } catch (e) {
-      print(e);
+      if(e is PlatformException) {
+        if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          return Left(FirebaseAuthEmailAlreadyInUseFailure());
+        }
+      }
       return Left(FirebaseAuthFailure());
     }
   }

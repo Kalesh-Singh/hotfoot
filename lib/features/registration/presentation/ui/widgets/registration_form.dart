@@ -53,9 +53,26 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
             );
         }
-        if (state.isSuccess) {
+        if (state.isSuccess && state.isEmailVerified) {
+          print(state);
           BlocProvider.of<NavigationAuthBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
+        }
+        if (state.isSuccess && state.isEmailVerified == false) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Please verify your email address'),
+                    Icon(Icons.error),
+                  ],
+                ),
+                backgroundColor: Colors.blue,
+              ),
+            );
         }
         if (state.isFailure) {
           Scaffold.of(context)
@@ -65,7 +82,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registration Failure'),
+                    Text(state.message),
                     Icon(Icons.error),
                   ],
                 ),

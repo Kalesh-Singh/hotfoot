@@ -41,6 +41,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       name: firebaseUser.email,
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
+      isEmailVerified: firebaseUser.isEmailVerified,
     );
     return userModel;
   }
@@ -54,7 +55,21 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
         await (firestore.collection('users').document(userId).get());
     final userJson = userData.data;
     print('Pulled user info: ${json.encode(userJson)}');
-    return UserModel.fromJson(userJson);
+    // When a user first logs in firestore will say email verified is false
+    // it does not break naything right now but I just want to keep the information
+    // cleaan and true for clarity, if there is a better place you would like this updated
+    // you can do so or let me know, just trying to progress and finish other features now
+    UserModel initialUserModel = UserModel.fromJson(userJson);
+    if (initialUserModel.isEmailVerified == false) {
+      await firestore.collection('users')
+            .document(userId)
+            .setData(initialUserModel.copyWith(isEmailVerified: true).toJson());
+
+      return UserModel.fromJson(userJson).copyWith(isEmailVerified:true);
+    }
+    else {
+      return UserModel.fromJson(userJson);
+    }
   }
 
   @override

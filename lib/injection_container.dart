@@ -97,8 +97,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Bloc
   sl.registerFactory(() => LoginBloc(
-        signInWithGoogle: sl(),
-        signInWithCredentials: sl(),
+        signInWithCredentials: sl(), 
         validators: sl(),
       ));
   sl.registerFactory(() => RegistrationBloc(

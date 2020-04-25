@@ -1,25 +1,21 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/validators/validators.dart';
 import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_credentials.dart';
-import 'package:hotfoot/features/login/domain/use_cases/sign_in_with_google.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_event.dart';
 import 'package:hotfoot/features/login/presentation/bloc/login_state.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final SignInWithGoogle signInWithGoogle;
   final SignInWithCredentials signInWithCredentials;
   final Validators validators;
 
   LoginBloc({
-    @required this.signInWithGoogle,
     @required this.signInWithCredentials,
     @required this.validators,
-  })  : assert(signInWithGoogle != null),
-        assert(signInWithCredentials != null),
+  })  : assert(signInWithCredentials != null),
         assert(validators != null);
 
   @override
@@ -48,8 +44,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is PasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
-    } else if (event is LoginWithGooglePressed) {
-      yield* _mapLoginWithGooglePressedToState();
     } else if (event is LoginWithCredentialsPressed) {
       yield* _mapLoginWithCredentialsPressedToState(
         email: event.email,
@@ -70,18 +64,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    final resultEither = await signInWithGoogle(NoParams());
-    yield* resultEither.fold(
-      (failure) async* {
-        yield LoginState.failure();
-      },
-      (success) async* {
-        yield LoginState.success();
-      },
-    );
-  }
-
   Stream<LoginState> _mapLoginWithCredentialsPressedToState({
     String email,
     String password,
@@ -94,7 +76,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
     yield* resultEither.fold(
       (failure) async* {
-        yield LoginState.failure();
+        if (failure is FirebaseAuthInvalidEmailFailure) {
+          yield LoginState.failure("Email is not registered");
+        } else if (failure is FirebaseAuthEmailUnverifiedFailure) {
+          yield LoginState.failure("Please click the verification link sent to your email");
+        } else if (failure is FirebaseAuthFailure) {
+          print("Regular failure");
+          yield LoginState.failure('');
+        }
       },
       (success) async* {
         yield LoginState.success();
