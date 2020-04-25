@@ -160,6 +160,7 @@ Future<void> init() async {
         insertOrUpdateRunnerLocation: sl(),
         updateOrInsertRun: sl(),
         getPlaceById: sl(),
+      ));
   sl.registerFactory(() => AcceptRunBloc(
         getUserId: sl(),
         updateOrInsertRun: sl(),
