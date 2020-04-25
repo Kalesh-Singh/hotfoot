@@ -5,6 +5,7 @@ import 'package:hotfoot/features/location/data/models/location_model.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_event.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:location/location.dart' as DeviceLocation;
 
 class RunnerRunMap extends StatefulWidget {
@@ -46,6 +47,7 @@ class _RunnerRunMapState extends State<RunnerRunMap> {
       BlocProvider.of<RunnerLocationBloc>(context).add(RunnerLocationUpdated(
         runModel: runModel,
         runnerLocation: runnerLocation,
+        userType: UserType.RUNNER,
         mapController: mapController,
       ));
     });
