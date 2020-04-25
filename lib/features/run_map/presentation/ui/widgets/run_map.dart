@@ -71,12 +71,23 @@ class _RunMapState extends State<RunMap> {
 
   void _handleCustomerRunnerLocationUpdate(QuerySnapshot querySnapshot) {
     print('RUNNER LOCATION DOCUMENT CHANGED');
+    final runModel =
+        BlocProvider.of<NavigationScreenBloc>(context).state.runModel;
     LocationModel runnerLocation;
     querySnapshot.documents.forEach((DocumentSnapshot documentSnapshot) {
       documentSnapshot.data.forEach((k, v) {
         print("$k: $v");
       });
+      runnerLocation = LocationModel.fromJson(documentSnapshot.data);
     });
+    BlocProvider.of<RunnerLocationBloc>(context).add(
+      RunnerLocationUpdated(
+        runModel: runModel,
+        runnerLocation: runnerLocation,
+        userType: UserType.CUSTOMER,
+        mapController: mapController,
+      ),
+    );
   }
 
   void _handleRunnerRunnerLocationUpdate(
@@ -87,11 +98,13 @@ class _RunMapState extends State<RunMap> {
         LocationModel(lat: locationData.latitude, lng: locationData.longitude);
     print('DEVICE LOCATION UPDATED - RUNNER MAP');
     // Forward events to our custom bloc
-    BlocProvider.of<RunnerLocationBloc>(context).add(RunnerLocationUpdated(
-      runModel: runModel,
-      runnerLocation: runnerLocation,
-      userType: UserType.RUNNER,
-      mapController: mapController,
-    ));
+    BlocProvider.of<RunnerLocationBloc>(context).add(
+      RunnerLocationUpdated(
+        runModel: runModel,
+        runnerLocation: runnerLocation,
+        userType: UserType.RUNNER,
+        mapController: mapController,
+      ),
+    );
   }
 }

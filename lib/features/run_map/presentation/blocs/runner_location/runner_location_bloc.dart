@@ -27,6 +27,7 @@ class RunnerLocationBloc
   Stream<RunnerLocationState> mapEventToState(
       RunnerLocationEvent event) async* {
     if (event is RunnerLocationUpdated) {
+      // Important locations for maps provided below (@zayha)
       final LocationModel runnerLocation = event.runnerLocation;
       final LocationModel pickupLocation = await _getPickupLocation(event);
       final LocationModel destinationLocation = _getDestinationLocation(event);
@@ -46,18 +47,18 @@ class RunnerLocationBloc
           (success) => print('Updated runner location in firestore'),
         );
 
-        // TODO: (zaykha) use insert or update run use case to update run status
+        // TODO: (zaykha) use the updateOrInsertRun use case to update run status
         // based on runner's proximity to pickup location, destination etc.
         // For instance when the runner is X miles away from pick location,
         // change status to "Picking up your order".
         // When the runner is X miles away from destination location,
         // change status to "Arriving soon"
 
-        // TODO: (zaykha) Handle all map manipulation here
+        // TODO: (zaykha) Handle updates to runner's map here
         // you can get the controller from either the event or the state.
         // doesn't really matter, its the same reference.
       } else if (userType == UserType.CUSTOMER) {
-        // TODO: Handle updates to the customer map here.
+        // TODO: (zaykha) Handle updates to the customer's map here.
       }
 
       yield RunnerLocationUpdateSuccess(
