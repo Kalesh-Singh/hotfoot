@@ -115,7 +115,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     autovalidate: true,
                     validator: (_) {
                       return displayEmailErrorMessage(
-                          Text(_emailController.text).toString(), state);
+                          _emailController.text.toString(), state);
                     },
                   ),
                   TextFormField(
@@ -136,7 +136,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     autovalidate: true,
                     validator: (_) {
                       return displayPasswordErrorMessage(
-                          Text(_passwordController.text).toString(), state);
+                          _passwordController.text.toString(), state);
                     },
                   ),
                   Padding(padding: EdgeInsets.all(12.0)),
@@ -172,7 +172,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
       // Password needs to have at least 8 characters, one of which must be a number
       // I cannot think of an appropriate message to show here
       // So I will just put 'Password is invalid' for now
-      return 'Password is invalid';
+      if( !_password.contains(RegExp(r'[0-9]')) ) {
+        return 'Password needs at least 1 digit';
+      }
+      if (_password.length < 8) {
+        return 'Password must be 8 characters or more';
+      }
+      if( _password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>+/]'))) {
+        return 'Password should not have special characters';
+      }
+      return null;
     }
   }
 
