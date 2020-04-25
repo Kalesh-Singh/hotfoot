@@ -45,16 +45,16 @@ class _RunMapState extends State<RunMap> {
   void _listenForLocationUpdates() async {
     final UserType userType = this.widget.userType;
     if (userType == UserType.RUNNER) {
-      final locationStream = deviceLocation.onLocationChanged;
-      locationStream.listen(_handleRunnerRunnerLocationUpdate);
+      final deviceLocationStream = deviceLocation.onLocationChanged;
+      deviceLocationStream.listen(_handleRunnerRunnerLocationUpdate);
     } else if (userType == UserType.CUSTOMER) {
       final runId =
           BlocProvider.of<NavigationScreenBloc>(context).state.runModel.id;
-      final runStream = await _getRunnerLocationStream(
+      final runnerLocationStream = await _getRunnerLocationStream(
         getRunnerLocationStream: sl<GetRunnerLocationStream>(),
         runId: runId,
       );
-      runStream.listen(_handleCustomerRunnerLocationUpdate);
+      runnerLocationStream.listen(_handleCustomerRunnerLocationUpdate);
     }
   }
 
