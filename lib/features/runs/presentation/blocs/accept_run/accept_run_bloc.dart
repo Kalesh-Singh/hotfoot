@@ -24,19 +24,20 @@ class AcceptRunBloc extends Bloc<AcceptRunEvent, AcceptRunState> {
   Stream<AcceptRunState> mapEventToState(AcceptRunEvent event) async* {
     if (event is AcceptRunButtonPressed) {
       final failureOrUid = await getUserId(NoParams());
-      failureOrUid.fold(
-        (failure) {
-          AcceptRunFailure(message: _USER_ID_ERR_MSG);
+      yield* failureOrUid.fold(
+        (failure) async* {
+          yield AcceptRunFailure(message: _USER_ID_ERR_MSG);
         },
-        (runnerId) async {
+        (runnerId) async* {
           print("Runner id = $runnerId");
           print("Accepted Run id = ${event.runModel.id}");
           final failureOrAcceptRunSuccess = await updateOrInsertRun(
               event.runModel.copyWith(runnerId: runnerId, status: "Accepted"));
-          failureOrAcceptRunSuccess.fold(
-            (failure) => AcceptRunFailure(message: _UPDATE_ERR_MSG),
-            (_) => AcceptRunSuccess(),
-          );
+            if (failureOrAcceptRunSuccess.isRight()) {
+              yield AcceptRunSuccess();
+            } else {
+              yield AcceptRunFailure(message: _UPDATE_ERR_MSG);
+            }
         },
       );
     }
