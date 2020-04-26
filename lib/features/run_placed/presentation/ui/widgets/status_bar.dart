@@ -9,16 +9,14 @@ class StatusBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor;
     Color containerColor;
     if (status == "Accepted") {
-      textColor = Colors.white;
       containerColor = Colors.greenAccent;
     } else if (status == "Cancelled") {
-      textColor = Colors.white;
       containerColor = Colors.red;
-    } else {
-      textColor = Colors.white;
+    } else if (status == "Delivered") {
+      containerColor = Colors.lightBlueAccent;
+    }else {
       containerColor = Colors.grey;
     }
     return Container(
@@ -36,7 +34,7 @@ class StatusBar extends StatelessWidget {
           "Status: $status",
           style: TextStyle(
             fontSize: 15.0,
-            color: textColor,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),

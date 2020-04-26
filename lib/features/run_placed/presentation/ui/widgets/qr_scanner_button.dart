@@ -3,6 +3,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
 
 class QRScannerButton extends StatelessWidget {
@@ -31,6 +32,10 @@ class QRScannerButton extends StatelessWidget {
                   String qrScanResult = await FlutterBarcodeScanner.scanBarcode(
                       "#000000", "Cancel", true, ScanMode.QR);
                   print("Scanned QR = $qrScanResult");
+                  if (qrScanResult == state.counterpartQRCode) {
+                    BlocProvider.of<QRCodeBloc>(context)
+                        .add(CounterpartQRConfirmed());
+                  }
                 } catch (e) {
                   throw new Exception("Error scanning QRCode!");
                 }

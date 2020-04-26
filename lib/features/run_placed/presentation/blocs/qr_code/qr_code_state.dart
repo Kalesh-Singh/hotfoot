@@ -21,10 +21,10 @@ class QRCodeLoadSuccess extends QRCodeState {
   List<Object> get props => [ownQRCode, counterpartQRCode];
 }
 
-class QRCodeLoadFailure extends QRCodeState {
+class QRCodeFailure extends QRCodeState {
   final String message;
 
-  const QRCodeLoadFailure({@required this.message});
+  const QRCodeFailure({@required this.message});
 
   @override
   List<Object> get props => [message];

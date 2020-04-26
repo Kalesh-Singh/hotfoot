@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -15,4 +16,12 @@ class RunUpdatedInDatabase extends QRCodeEvent {
 
   const RunUpdatedInDatabase(
       {@required this.runEntity, @required this.isRunner});
+}
+
+class CounterpartQRConfirmed extends QRCodeEvent {
+  final RunModel runModel;
+  final bool isRunner;
+
+  const CounterpartQRConfirmed(
+      {@required this.runModel, @required this.isRunner});
 }
