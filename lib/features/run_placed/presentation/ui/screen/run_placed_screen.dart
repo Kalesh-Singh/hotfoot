@@ -4,25 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-import 'package:hotfoot/features/run_map/presentation/ui/widgets/runner_map_widget.dart';
+import 'package:hotfoot/features/run_map/presentation/ui/widgets/run_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class RunPlacedScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final currRun = navScreenBloc.state.runModel;
     final bool isRunner =
-    BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
+        BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
@@ -43,7 +43,7 @@ class RunPlacedScreen extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: RunnerMapWidget(),
+              child: RunMapWidget(userType: UserType.RUNNER),
             ),
             SizedBox(height: 20),
             Row(
@@ -85,10 +85,7 @@ class RunPlacedScreen extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.5,
-                child: Center(
-                    child: Text("Live map being updated here",
-                        style: TextStyle(fontSize: 24.0))),
-                color: Colors.lightGreenAccent,
+                child: RunMapWidget(userType: UserType.CUSTOMER),
               ),
               SizedBox(height: 20),
               ActiveRunInfoWidget(runModel: currRun),

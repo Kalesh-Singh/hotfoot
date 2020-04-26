@@ -20,7 +20,8 @@ abstract class IRunsRepository {
   Future<Either<Failure, RunEntity>> getRunById({@required String id});
 
   /// Returns a stream that can be listened to for run updates.
-  Future<Either<Failure, Stream<QuerySnapshot>>> getRunStream({@required String runId});
+  Future<Either<Failure, Stream<QuerySnapshot>>> getRunStream(
+      {@required String runId});
 
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsCustomer();
 
