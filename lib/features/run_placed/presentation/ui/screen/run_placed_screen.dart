@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
-import 'package:hotfoot/features/run_map/presentation/ui/widgets/runner_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
+import 'package:hotfoot/features/run_map/presentation/ui/widgets/run_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
@@ -44,7 +45,7 @@ class RunPlacedScreen extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
-                child: RunnerMapWidget(),
+                child: RunMapWidget(userType: UserType.RUNNER),
               ),
               ActiveRunInfoWidget(runModel: currRun),
             ],
@@ -68,10 +69,7 @@ class RunPlacedScreen extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
-                child: Center(
-                    child: Text("Live map being updated here",
-                        style: TextStyle(fontSize: 24.0))),
-                color: Colors.lightGreenAccent,
+                child: RunMapWidget(userType: UserType.CUSTOMER),
               ),
               ActiveRunInfoWidget(runModel: currRun),
             ],

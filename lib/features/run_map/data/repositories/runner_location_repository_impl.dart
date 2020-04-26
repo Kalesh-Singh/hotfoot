@@ -15,12 +15,9 @@ class RunnerLocationRepository implements IRunnerLocationRepository {
   Future<Either<Failure, void>> insertOrUpdateLocation(
       {String runId, LocationEntity runnerLocation}) async {
     try {
-      final result = await firestore
-          .collection('runs')
-          .document(runId)
-          .collection('run')
-          .document(runId)
-          .collection('runnerLocation')
+      final runnerLocationCollection =
+          _getRunnerLocationCollection(runId: runId);
+      final result = await runnerLocationCollection
           .document('location')
           .setData((runnerLocation as LocationModel).toJson());
       return Right(result);
@@ -28,5 +25,29 @@ class RunnerLocationRepository implements IRunnerLocationRepository {
       print(e);
       return Left(FirestoreFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, Stream<QuerySnapshot>>> getRunnerLocationStream(
+      {String runId}) async {
+    try {
+      final CollectionReference runnerLocationCollection =
+          _getRunnerLocationCollection(runId: runId);
+      final Stream<QuerySnapshot> runnerLocationStream =
+          runnerLocationCollection.snapshots();
+      return Right(runnerLocationStream);
+    } catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
+  CollectionReference _getRunnerLocationCollection({@required String runId}) {
+    return firestore
+        .collection('runs')
+        .document(runId)
+        .collection('run')
+        .document(runId)
+        .collection('runnerLocation');
   }
 }

@@ -45,6 +45,7 @@ import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
 import 'package:hotfoot/features/run_map/data/repositories/runner_location_repository_impl.dart';
 import 'package:hotfoot/features/run_map/domain/repositories/runner_location_repository.dart';
+import 'package:hotfoot/features/run_map/domain/use_cases/get_runner_location_stream.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
@@ -242,6 +243,9 @@ Future<void> init() async {
         runsRepository: sl(),
       ));
   sl.registerLazySingleton(() => InsertOrUpdateRunnerLocation(
+        runnerLocationRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetRunnerLocationStream(
         runnerLocationRepository: sl(),
       ));
 
