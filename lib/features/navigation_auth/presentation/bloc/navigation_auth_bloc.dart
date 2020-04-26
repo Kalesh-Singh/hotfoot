@@ -69,7 +69,11 @@ class NavigationAuthBloc
         throw UnimplementedError();
       },
       (email) async* {
-        yield Authenticated(email);
+        if (email == null) {
+          yield Unauthenticated();
+        } else {
+          yield Authenticated(email);
+        }
       },
     );
   }
