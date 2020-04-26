@@ -47,6 +47,7 @@ import 'package:hotfoot/features/run_map/data/repositories/runner_location_repos
 import 'package:hotfoot/features/run_map/domain/repositories/runner_location_repository.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
@@ -97,239 +98,240 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Bloc
   sl.registerFactory(() => LoginBloc(
-        signInWithCredentials: sl(), 
-        validators: sl(),
-      ));
+    signInWithCredentials: sl(),
+    validators: sl(),
+  ));
   sl.registerFactory(() => RegistrationBloc(
-        signUp: sl(),
-        validators: sl(),
-      ));
+    signUp: sl(),
+    validators: sl(),
+  ));
   sl.registerFactory(() => NavigationAuthBloc(
-        isSignedIn: sl(),
-        getUser: sl(),
-        signOut: sl(),
-      ));
+    isSignedIn: sl(),
+    getUser: sl(),
+    signOut: sl(),
+  ));
   sl.registerFactory(() => NavigationHomeBloc());
   sl.registerFactory(() => NavigationScreenBloc(
-        initRun: sl(),
-        updateOrInsertRun: sl(),
-      ));
+    initRun: sl(),
+    updateOrInsertRun: sl(),
+  ));
   sl.registerFactory(() => PlacesIdsBloc(
-        getPlacesIds: sl(),
-      ));
+    getPlacesIds: sl(),
+  ));
   sl.registerFactory(() => PlaceDetailsBloc(
-        getPlaceById: sl(),
-      ));
+    getPlaceById: sl(),
+  ));
   sl.registerFactory(() => PlacePhotoBloc(
-        getPlacePhoto: sl(),
-      ));
+    getPlacePhoto: sl(),
+  ));
   sl.registerFactory(() => LocationBloc(
-        getCurrentPlace: sl(),
-        getPlaceFromQuery: sl(),
-      ));
+    getCurrentPlace: sl(),
+    getPlaceFromQuery: sl(),
+  ));
   sl.registerFactory(() => UserTypeBloc(
-        toggleUserType: sl(),
-        getUserType: sl(),
-      ));
+    toggleUserType: sl(),
+    getUserType: sl(),
+  ));
   sl.registerFactory(() => ResultsWithMatchingAddressBloc(
-        getResultsWithMatchingAddress: sl(),
-      ));
+    getResultsWithMatchingAddress: sl(),
+  ));
   sl.registerFactory(() => SearchMapBloc(
-        getPlaceById: sl(),
-      ));
+    getPlaceById: sl(),
+  ));
   sl.registerFactory(() => DrawerContentsBloc(
-        getPlaceById: sl(),
-        getPlacePhoto: sl(),
-      ));
+    getPlaceById: sl(),
+    getPlacePhoto: sl(),
+  ));
   sl.registerFactory(() => SearchBottomDrawerBloc());
   sl.registerFactory(() => CustomerRunsIdsBloc(
-        getCustomerRunsIds: sl(),
-      ));
+    getCustomerRunsIds: sl(),
+  ));
   sl.registerFactory(() => RunnerRunsIdsBloc(
-        getRunnerRunsIds: sl(),
-      ));
+    getRunnerRunsIds: sl(),
+  ));
   sl.registerFactory(() => PendingRunsIdsBloc(
-        getPendingRunsIds: sl(),
-      ));
+    getPendingRunsIds: sl(),
+  ));
   sl.registerFactory(() => RunDetailsBloc(
-        getRunById: sl(),
-      ));
+    getRunById: sl(),
+  ));
   sl.registerFactory(() => SearchHandlerScreenBloc());
   sl.registerFactory(() => UnknownPlaceScreenBloc());
   sl.registerFactory(() => RunnerLocationBloc(
-        insertOrUpdateRunnerLocation: sl(),
-        updateOrInsertRun: sl(),
-        getPlaceById: sl(),
-      ));
+    insertOrUpdateRunnerLocation: sl(),
+    updateOrInsertRun: sl(),
+    getPlaceById: sl(),
+  ));
   sl.registerFactory(() => RunUpdateBloc());
   sl.registerFactory(() => AcceptRunBloc(
-        getUserId: sl(),
-        updateOrInsertRun: sl(),
-      ));
+    getUserId: sl(),
+    updateOrInsertRun: sl(),
+  ));
+  sl.registerFactory(() => QRCodeBloc());
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
-        loginRepository: sl(),
-      ));
+    loginRepository: sl(),
+  ));
   sl.registerLazySingleton(() => SignInWithCredentials(
-        loginRepository: sl(),
-      ));
+    loginRepository: sl(),
+  ));
   sl.registerLazySingleton(() => SignUp(
-        registrationRepository: sl(),
-      ));
+    registrationRepository: sl(),
+  ));
   sl.registerLazySingleton(() => IsSignedIn(
-        navigationAuthRepository: sl(),
-      ));
+    navigationAuthRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetUser(
-        navigationAuthRepository: sl(),
-      ));
+    navigationAuthRepository: sl(),
+  ));
   sl.registerLazySingleton(() => SignOut(
-        navigationAuthRepository: sl(),
-      ));
+    navigationAuthRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetPlacesIds(
-        placesRepository: sl(),
-      ));
+    placesRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetPlaceById(
-        placesRepository: sl(),
-      ));
+    placesRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetPlacePhoto(
-        placesRepository: sl(),
-      ));
+    placesRepository: sl(),
+  ));
   sl.registerLazySingleton(() => InitUser(
-        userRepository: sl(),
-      ));
+    userRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetCurrentPlace(
-        locationRepository: sl(),
-      ));
+    locationRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetPlaceFromQuery(
-        locationRepository: sl(),
-      ));
+    locationRepository: sl(),
+  ));
   sl.registerLazySingleton(() => InitRun(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetUserId(
-        userRepository: sl(),
-      ));
+    userRepository: sl(),
+  ));
   sl.registerLazySingleton(() => UpdateOrInsertRun(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => ToggleUserType(
-        userRepository: sl(),
-      ));
+    userRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetUserType(
-        userRepository: sl(),
-      ));
+    userRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
-        searchResultsRepository: sl(),
-      ));
+    searchResultsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetRunStream(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetCustomerRunsIds(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetRunnerRunsIds(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetPendingRunsIds(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => GetRunById(
-        runsRepository: sl(),
-      ));
+    runsRepository: sl(),
+  ));
   sl.registerLazySingleton(() => InsertOrUpdateRunnerLocation(
-        runnerLocationRepository: sl(),
-      ));
+    runnerLocationRepository: sl(),
+  ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
+    firebaseAuth: sl(),
+    googleSignIn: sl(),
+  ));
+  sl.registerLazySingleton<IRegistrationRepository>(
+          () => RegistrationRepository(
+        firebaseAuth: sl(),
+        initUser: sl(),
+      ));
+  sl.registerLazySingleton<INavigationAuthRepository>(
+          () => NavigationAuthRepository(
         firebaseAuth: sl(),
         googleSignIn: sl(),
       ));
-  sl.registerLazySingleton<IRegistrationRepository>(
-      () => RegistrationRepository(
-            firebaseAuth: sl(),
-            initUser: sl(),
-          ));
-  sl.registerLazySingleton<INavigationAuthRepository>(
-      () => NavigationAuthRepository(
-            firebaseAuth: sl(),
-            googleSignIn: sl(),
-          ));
   sl.registerLazySingleton<IPlacesRepository>(() => PlacesRepository(
-        placesLocalDataSource: sl(),
-        placesRemoteDataSource: sl(),
-        networkInfo: sl(),
-      ));
+    placesLocalDataSource: sl(),
+    placesRemoteDataSource: sl(),
+    networkInfo: sl(),
+  ));
   sl.registerLazySingleton<IUserRepository>(() => UserRepository(
-        networkInfo: sl(),
-        userLocalDataSource: sl(),
-        userRemoteDataSource: sl(),
-      ));
+    networkInfo: sl(),
+    userLocalDataSource: sl(),
+    userRemoteDataSource: sl(),
+  ));
   sl.registerLazySingleton<ILocationRepository>(() => LocationRepository(
-        geolocator: sl(),
-      ));
+    geolocator: sl(),
+  ));
   sl.registerLazySingleton<IRunsRepository>(() => RunsRepository(
-        runsLocalDataSource: sl(),
-        runsRemoteDataSource: sl(),
-        getUserId: sl(),
+    runsLocalDataSource: sl(),
+    runsRemoteDataSource: sl(),
+    getUserId: sl(),
+    networkInfo: sl(),
+  ));
+  sl.registerLazySingleton<ISearchResultsRepository>(
+          () => SearchResultsRepository(
+        searchResultsDataSource: sl(),
         networkInfo: sl(),
       ));
-  sl.registerLazySingleton<ISearchResultsRepository>(
-      () => SearchResultsRepository(
-            searchResultsDataSource: sl(),
-            networkInfo: sl(),
-          ));
   sl.registerLazySingleton<IRunnerLocationRepository>(
-      () => RunnerLocationRepository(
-            firestore: sl(),
-          ));
+          () => RunnerLocationRepository(
+        firestore: sl(),
+      ));
 
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
-        placeDao: sl(),
-        placePhotoDao: sl(),
-      ));
+    placeDao: sl(),
+    placePhotoDao: sl(),
+  ));
   sl.registerLazySingleton<IPlacesRemoteDataSource>(
-      () => PlacesRemoteDataSource(
-            firestore: sl(),
-            firebaseStorage: sl(),
-            tempPhotosDir: sl(),
-            cacheManager: sl(),
-          ));
+          () => PlacesRemoteDataSource(
+        firestore: sl(),
+        firebaseStorage: sl(),
+        tempPhotosDir: sl(),
+        cacheManager: sl(),
+      ));
   sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
-        userDao: sl(),
-      ));
+    userDao: sl(),
+  ));
   sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
-        firestore: sl(),
-        firebaseAuth: sl(),
-      ));
+    firestore: sl(),
+    firebaseAuth: sl(),
+  ));
   sl.registerLazySingleton<IRunsLocalDataSource>(() => RunsLocalDataSource(
-        runDao: sl(),
-      ));
+    runDao: sl(),
+  ));
   sl.registerLazySingleton<IRunsRemoteDataSource>(() => RunsRemoteDataSource(
-        firestore: sl(),
-        getUserId: sl(),
-      ));
+    firestore: sl(),
+    getUserId: sl(),
+  ));
   sl.registerLazySingleton<ISearchResultsDataSource>(
-      () => SearchResultsDataSource(
-            firestore: sl(),
-          ));
+          () => SearchResultsDataSource(
+        firestore: sl(),
+      ));
 
   // Data Access Objects
   sl.registerLazySingleton<IPlaceDao>(() => PlaceDao(
-        database: sl(),
-      ));
+    database: sl(),
+  ));
   sl.registerLazySingleton<IPlacePhotoDao>(() => PlacePhotoDao(
-        photosDir: sl(),
-      ));
+    photosDir: sl(),
+  ));
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
-        database: sl(),
-      ));
+    database: sl(),
+  ));
   sl.registerLazySingleton<IRunDao>(() => RunDao(
-        database: sl(),
-      ));
+    database: sl(),
+  ));
 
   // Local Dependencies
   final appDatabase = await AppDatabase.instance.database;
