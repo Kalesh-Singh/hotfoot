@@ -86,13 +86,12 @@ class RunPlacedScreen extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 1.6,
+                height: MediaQuery.of(context).size.height / 1.65,
                 child: Center(
                     child: Text("Live map being updated here",
                         style: TextStyle(fontSize: 24.0))),
                 color: Colors.lightGreenAccent,
               ),
-              SizedBox(height: 20),
               ActiveRunInfoWidget(runModel: currRun),
             ],
           ),

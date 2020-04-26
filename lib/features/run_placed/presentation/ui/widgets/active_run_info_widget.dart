@@ -11,6 +11,7 @@ import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_deliv
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/qr_code.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/qr_scanner_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/status_bar.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_stream.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
@@ -35,36 +36,45 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
           BlocProvider.of<QRCodeBloc>(context).add(RunUpdatedInDatabase(
               runEntity: state.runModel,
               isRunner: BlocProvider.of<UserTypeBloc>(context).state
-              is RunnerUserType));
+                  is RunnerUserType));
         }
-        return Row(
+        return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text("Your QR Code:"),
-                QRCode(),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            StatusBar(
+                status: state is RunUpdateUninitialized
+                    ? "${this.widget.runModel.status}"
+                    : state.runModel.status),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                QRScannerButton(
-                  qrCodeState: BlocProvider.of<QRCodeBloc>(context).state,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Your QR Code:"),
+                    QRCode(),
+                  ],
                 ),
-                OpenCloseChatButton(
-                    runModel: state is RunUpdateUninitialized
-                        ? this.widget.runModel
-                        : state.runModel,
-                    buttonText: 'Contact Runner'),
-                CancelDeliveryButton(
-                    currRun: state is RunUpdateUninitialized
-                        ? this.widget.runModel
-                        : state.runModel,
-                    updateOrInsertRun: sl()),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    QRScannerButton(
+                      qrCodeState: BlocProvider.of<QRCodeBloc>(context).state,
+                    ),
+                    OpenCloseChatButton(
+                        runModel: state is RunUpdateUninitialized
+                            ? this.widget.runModel
+                            : state.runModel,
+                        buttonText: 'Contact Runner'),
+                    CancelDeliveryButton(
+                        currRun: state is RunUpdateUninitialized
+                            ? this.widget.runModel
+                            : state.runModel,
+                        updateOrInsertRun: sl()),
+                  ],
+                ),
               ],
             ),
           ],
@@ -95,8 +105,8 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   }) async {
     final runStreamEither = await getRunStream(runId);
     return runStreamEither.fold(
-          (_) => null,
-          (runStream) => runStream,
+      (_) => null,
+      (runStream) => runStream,
     );
   }
 
