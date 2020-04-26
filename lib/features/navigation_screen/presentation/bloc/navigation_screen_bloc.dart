@@ -37,7 +37,7 @@ class NavigationScreenBloc
     } else if (event is EnteredSettings) {
       yield Settings();
     } else if (event is EnteredRunPlaced) {
-      yield* _mapEnteredRunPlacedToState(event.runModel);
+      yield* _mapEnteredRunPlacedToState(event.runModel, event.isRunner);
     } else if (event is EnteredAcceptRun) {
       yield AcceptRun(runModel: event.runModel);
     } else {
@@ -65,18 +65,22 @@ class NavigationScreenBloc
   }
 
   Stream<NavigationScreenState> _mapEnteredRunPlacedToState(
-      RunModel currentRun) async* {
-    final updateOrInsertRunEither = await updateOrInsertRun(currentRun);
-    yield* updateOrInsertRunEither.fold(
-      (failure) async* {
-        yield RunDetails(runModel: currentRun);
-      },
-      (run) async* {
-        print('Insert or update run');
-        yield RunPlaced(
-          runModel: currentRun.copyWith(id: run.id),
-        );
-      },
-    );
+      RunModel currentRun, bool isRunner) async* {
+    if (isRunner) {
+      yield RunPlaced(runModel: currentRun);
+    } else {
+      final updateOrInsertRunEither = await updateOrInsertRun(currentRun);
+      yield* updateOrInsertRunEither.fold(
+        (failure) async* {
+          yield RunDetails(runModel: currentRun);
+        },
+        (run) async* {
+          print('Insert or update run');
+          yield RunPlaced(
+            runModel: currentRun.copyWith(id: run.id),
+          );
+        },
+      );
+    }
   }
 }

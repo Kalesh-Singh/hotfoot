@@ -2,13 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/qr_code.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/qr_scanner_button.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/status_bar.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_stream.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class ActiveRunInfoWidget extends StatefulWidget {
@@ -25,32 +32,55 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<RunUpdateBloc, RunUpdateState>(
       builder: (BuildContext context, RunUpdateState state) {
+        final isRunner =
+            BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
+        if (state is RunUpdateLoadSuccess) {
+          BlocProvider.of<QRCodeBloc>(context).add(RunUpdatedInDatabase(
+            runEntity: state.runModel,
+            isRunner: isRunner,
+          ));
+        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                  state is RunUpdateUninitialized
-                      ? "${this.widget.runModel.status}"
-                      : state.runModel.status,
-                  style: TextStyle(fontSize: 24.0)),
-            ),
-            SizedBox(height: 16),
+            StatusBar(
+                status: state is RunUpdateUninitialized
+                    ? "${this.widget.runModel.status}"
+                    : state.runModel.status),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CancelDeliveryButton(
-                    currRun: state is RunUpdateUninitialized
-                        ? this.widget.runModel
-                        : state.runModel,
-                    updateOrInsertRun: sl()),
-                OpenCloseChatButton(
-                    runModel: state is RunUpdateUninitialized
-                        ? this.widget.runModel
-                        : state.runModel,
-                    buttonText: 'Contact Runner'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Your QR Code:"),
+                    QRCode(),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    QRScannerButton(
+                      runModel: state is RunUpdateUninitialized
+                          ? this.widget.runModel
+                          : state.runModel,
+                      isRunner: isRunner,
+                    ),
+                    OpenCloseChatButton(
+                        runModel: state is RunUpdateUninitialized
+                            ? this.widget.runModel
+                            : state.runModel,
+                        buttonText:
+                            'Contact ${isRunner ? 'Customer' : 'Runner'}'),
+                    CancelDeliveryButton(
+                        currRun: state is RunUpdateUninitialized
+                            ? this.widget.runModel
+                            : state.runModel,
+                        updateOrInsertRun: sl()),
+                  ],
+                ),
               ],
             ),
           ],

@@ -1,15 +1,12 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/ui/widgets/run_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
-import 'package:hotfoot/features/run_placed/presentation/ui/widgets/accept_delivery_button.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
-import 'package:hotfoot/features/run_placed/presentation/ui/widgets/cancel_delivery_button.dart';
-import 'package:hotfoot/features/run_placed/presentation/ui/widgets/open_close_chat_button.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
@@ -26,46 +23,33 @@ class RunPlacedScreen extends StatelessWidget {
     final json1 = json.encode(currRun.toJson());
     print('FROM NAV BLOC');
     print(json1);
-    return isRunner
-        ? _runnerRunPlacedScreen(context, currRun)
-        : _customerRunPlacedScreen(context, currRun);
+    return BlocProvider<QRCodeBloc>(
+      create: (context) => sl<QRCodeBloc>(),
+      child: isRunner
+          ? _runnerRunPlacedScreen(context, currRun)
+          : _customerRunPlacedScreen(context, currRun),
+    );
   }
 
   Widget _runnerRunPlacedScreen(BuildContext context, RunModel currRun) {
     return Scaffold(
       appBar: AppBar(title: Text('Run Status')),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            LinearProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 1.5,
-              child: RunMapWidget(userType: UserType.RUNNER),
-            ),
-            SizedBox(height: 20),
-            Row(
-              // Should use this here so formatting stays similar across
-              // all screen sizes
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(width: 40),
-                Text("Status", style: TextStyle(fontSize: 24.0)),
-                SizedBox(width: 110),
-                OpenCloseChatButton(
-                    runModel: currRun, buttonText: 'Contact Customer'),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CancelDeliveryButton(currRun: currRun, updateOrInsertRun: sl()),
-                AcceptDeliveryButton(),
-              ],
-            ),
-          ],
+      body: BlocProvider<RunUpdateBloc>(
+        create: (context) => sl<RunUpdateBloc>(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              LinearProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height / 1.65,
+                child: RunMapWidget(userType: UserType.RUNNER),
+              ),
+              ActiveRunInfoWidget(runModel: currRun),
+            ],
+          ),
         ),
       ),
     );
@@ -84,10 +68,9 @@ class RunPlacedScreen extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 1.5,
+                height: MediaQuery.of(context).size.height / 1.65,
                 child: RunMapWidget(userType: UserType.CUSTOMER),
               ),
-              SizedBox(height: 20),
               ActiveRunInfoWidget(runModel: currRun),
             ],
           ),

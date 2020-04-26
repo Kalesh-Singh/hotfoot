@@ -42,7 +42,12 @@ class AcceptRunScreen extends StatelessWidget {
                     print("Accept run button is pressed");
                     acceptRunBloc
                         .add(AcceptRunButtonPressed(runModel: runModel));
-                    // TODO: Go to run status page.
+                    navScreenBloc.add(
+                      EnteredRunPlaced(
+                        runModel: runModel,
+                        isRunner: true,
+                      ),
+                    );
                   },
                   label:
                       Text('Accept Run', style: TextStyle(color: Colors.white)),

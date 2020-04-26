@@ -48,6 +48,7 @@ import 'package:hotfoot/features/run_map/domain/repositories/runner_location_rep
 import 'package:hotfoot/features/run_map/domain/use_cases/get_runner_location_stream.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
@@ -165,6 +166,9 @@ Future<void> init() async {
   sl.registerFactory(() => RunUpdateBloc());
   sl.registerFactory(() => AcceptRunBloc(
         getUserId: sl(),
+        updateOrInsertRun: sl(),
+      ));
+  sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
       ));
 
