@@ -28,8 +28,8 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
     } else if (event is CounterpartQRConfirmed) {
       if (event.isRunner) {
         if (event.runModel.status == "ConfirmedByCustomer") {
-          final failureOrUpdateSuccess = await updateOrInsertRun(
-              event.runModel.copyWith(status: "Delivered"));
+          final failureOrUpdateSuccess = await updateOrInsertRun(event.runModel
+              .copyWith(status: "Delivered", timeDelivered: DateTime.now()));
           failureOrUpdateSuccess.fold(
             (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
             (_) => _QRCodeLoadSuccess(event.runModel, event.isRunner),

@@ -5,13 +5,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
+import 'package:hotfoot/features/runs/data/models/run_model.dart';
 
 class QRScannerButton extends StatelessWidget {
-  final QRCodeState qrCodeState;
+  final RunModel runModel;
+  final bool isRunner;
 
   QRScannerButton({
-    @required this.qrCodeState,
-  }) : assert(qrCodeState != null);
+    @required this.runModel,
+    @required this.isRunner,
+  })  : assert(runModel != null),
+        assert(isRunner != null);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +37,12 @@ class QRScannerButton extends StatelessWidget {
                       "#000000", "Cancel", true, ScanMode.QR);
                   print("Scanned QR = $qrScanResult");
                   if (qrScanResult == state.counterpartQRCode) {
+                    print("The scanned QR code matched!");
                     BlocProvider.of<QRCodeBloc>(context)
-                        .add(CounterpartQRConfirmed());
+                        .add(CounterpartQRConfirmed(
+                      runModel: runModel,
+                      isRunner: isRunner,
+                    ));
                   }
                 } catch (e) {
                   throw new Exception("Error scanning QRCode!");

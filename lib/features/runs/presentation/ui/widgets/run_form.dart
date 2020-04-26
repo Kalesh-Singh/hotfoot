@@ -49,6 +49,7 @@ class _RunFormState extends State<RunForm> {
             timePlaced: DateTime.now(),
             order: _orderController.text,
           ),
+          isRunner: false,
         ),
       );
     }

@@ -32,11 +32,13 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<RunUpdateBloc, RunUpdateState>(
       builder: (BuildContext context, RunUpdateState state) {
+        final isRunner =
+            BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
         if (state is RunUpdateLoadSuccess) {
           BlocProvider.of<QRCodeBloc>(context).add(RunUpdatedInDatabase(
-              runEntity: state.runModel,
-              isRunner: BlocProvider.of<UserTypeBloc>(context).state
-                  is RunnerUserType));
+            runEntity: state.runModel,
+            isRunner: isRunner,
+          ));
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -61,13 +63,17 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     QRScannerButton(
-                      qrCodeState: BlocProvider.of<QRCodeBloc>(context).state,
+                      runModel: state is RunUpdateUninitialized
+                          ? this.widget.runModel
+                          : state.runModel,
+                      isRunner: isRunner,
                     ),
                     OpenCloseChatButton(
                         runModel: state is RunUpdateUninitialized
                             ? this.widget.runModel
                             : state.runModel,
-                        buttonText: 'Contact Runner'),
+                        buttonText:
+                            'Contact ${isRunner ? 'Customer' : 'Runner'}'),
                     CancelDeliveryButton(
                         currRun: state is RunUpdateUninitialized
                             ? this.widget.runModel

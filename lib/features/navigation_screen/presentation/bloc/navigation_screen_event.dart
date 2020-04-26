@@ -17,7 +17,9 @@ class EnteredPurchaseFlow extends NavigationScreenEvent {
 }
 
 class EnteredRunPlaced extends NavigationScreenEvent {
-  const EnteredRunPlaced({@required RunModel runModel})
+  final bool isRunner;
+
+  const EnteredRunPlaced({@required RunModel runModel, @required this.isRunner})
       : super(runModel: runModel);
 }
 
