@@ -6,6 +6,6 @@ abstract class INavigationAuthRepository {
 
   Future<Either<Failure, void>> signOut();
 
-  /// Returns null if no user is signed in, else returns the user's email.
+  /// Returns null if no user is signed in or if the email is unverified, else returns the user's email.
   Future<Either<Failure, String>> getUser();
 }

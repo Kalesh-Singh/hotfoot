@@ -98,6 +98,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
             child: Form(
               child: ListView(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Image.asset('assets/HotFoot.png', height: 250),
+                  ),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     focusNode: _emailFocus,
