@@ -42,8 +42,6 @@ class UserModel extends UserEntity {
   }
   
   static bool _getIsEmailVerifiedFromString(String isEmailVerified) {
-    print("YEEHAW");
-    print(isEmailVerified);
     return isEmailVerified == "true";
   }
 

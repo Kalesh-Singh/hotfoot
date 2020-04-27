@@ -18,7 +18,7 @@ class NavigationAuthRepository implements INavigationAuthRepository {
   Future<Either<Failure, bool>> isSignedIn() async {
     try {
       final currentUser = await firebaseAuth.currentUser();
-      return Right(currentUser != null);
+      return Right(currentUser != null && currentUser.isEmailVerified);
     } catch (e) {
       print(e); // Log exceptions
       return Left(FirebaseAuthFailure());
@@ -35,6 +35,12 @@ class NavigationAuthRepository implements INavigationAuthRepository {
 
   @override
   Future<Either<Failure, String>> getUser() async {
-    return Right((await firebaseAuth.currentUser())?.email);
+    final user = await firebaseAuth.currentUser();
+    if(user == null || user.isEmailVerified == false) {
+      return Right(null);
+    }
+    else {
+      return Right(user.email);
+    }
   }
 }
