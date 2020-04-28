@@ -35,7 +35,7 @@ void main() {
   final MockFirebaseUser tFirebaseUser = MockFirebaseUser(email: tUserEmail);
 
   group('Is Signed In', () {
-    test('should return true if there is a user signed in', () async {
+    test('should return FirebaseFailure as now the isEmailVerified parameter should not be null', () async {
       // arrange
       when(mockFirebaseAuth.currentUser())
           .thenAnswer((_) async => tFirebaseUser);
@@ -45,7 +45,7 @@ void main() {
 
       // assert
       verify(mockFirebaseAuth.currentUser());
-      expect(result, equals(Right(true)));
+      expect(result, Left(FirebaseAuthFailure()));
     });
 
     test('should return false if there is no user signed in', () async {
