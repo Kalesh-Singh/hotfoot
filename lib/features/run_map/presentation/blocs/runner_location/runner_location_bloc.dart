@@ -18,6 +18,9 @@ class RunnerLocationBloc
   final UpdateOrInsertRun updateOrInsertRun;
   final GetPlaceById getPlaceById;
   final GetRouteBetweenPoints getRouteBetweenPoints;
+  Set<Polyline> polylines = {};
+  Set<Marker> markers = {};
+  LatLng cameraLocation;
 
   RunnerLocationBloc({
     @required this.insertOrUpdateRunnerLocation,
@@ -42,8 +45,6 @@ class RunnerLocationBloc
       print("DestinationLocation = $destinationLocation");
       final String runId = event.runModel.id;
       final UserType userType = event.userType;
-      Set<Polyline> polylines = {};
-      Set<Marker> markers = {};
 
       if (userType == UserType.RUNNER) {
         // Update the runner's location in firestore.
@@ -58,45 +59,33 @@ class RunnerLocationBloc
           (success) => print('Updated runner location in firestore'),
         );
 
-        // TODO: (zaykha) use the updateOrInsertRun use case to update run status
+        // TODO: use the updateOrInsertRun use case to update run status
         // based on runner's proximity to pickup location, destination etc.
         // For instance when the runner is X miles away from pick location,
         // change status to "Picking up your order".
         // When the runner is X miles away from destination location,
         // change status to "Arriving soon"
 
-        final routeEither1 = await getRouteBetweenPoints(
-            PolylineParams(l1: runnerLocation, l2: pickupLocation));
-        await routeEither1.fold(
-          (failure) {
-            print("Failed");
-            RunnerLocationUpdateFailure();
-          },
-          (route1) async {
-            print("Found route between Runner and Pickup");
-            final routeEither2 = await getRouteBetweenPoints(
-                PolylineParams(l1: pickupLocation, l2: destinationLocation));
-            routeEither2.fold((failure) => RunnerLocationUpdateFailure(),
-                (route2) {
-              print("Found route between Pickup and Destination");
-              polylines.add(_makePolyline("poly1", route1));
-              polylines.add(_makePolyline("poly2", route2));
-              markers.add(_makeMarker("runner", runnerLocation));
-              markers.add(_makeMarker("pickup", pickupLocation));
-              markers.add(_makeMarker("destination", destinationLocation));
-            });
-          },
-        );
+        await _allMarkersAndRoutes(
+            runnerLocation, pickupLocation, destinationLocation);
       } else if (userType == UserType.CUSTOMER) {
-        // TODO: (zaykha) Handle updates to the customer's map here.
-
+        if (runnerLocation == null) {
+          print("Runner location not available");
+          markers.add(_makeMarker("pickup", pickupLocation));
+          markers.add(_makeMarker("destination", destinationLocation));
+          cameraLocation = LatLng(pickupLocation.lat, pickupLocation.lng);
+        } else {
+          await _allMarkersAndRoutes(
+              runnerLocation, pickupLocation, destinationLocation);
+        }
       }
-      print("State marker be = $markers");
+
       yield RunnerLocationUpdateSuccess(
         runModel: event.runModel,
         runnerLocation: event.runnerLocation,
         polylines: polylines,
         markers: markers,
+        cameraLocation: cameraLocation,
       );
     }
   }
@@ -129,15 +118,45 @@ class RunnerLocationBloc
   Polyline _makePolyline(String id, List<LatLng> points) {
     return Polyline(
         polylineId: PolylineId(id),
-        width: 10,
+        width: 5,
         points: points,
         color: Colors.black);
   }
 
+  // TODO: Different marker description and icons
   Marker _makeMarker(String id, LocationEntity position) {
     return Marker(
         markerId: MarkerId(id),
         position: LatLng(position.lat, position.lng),
         icon: BitmapDescriptor.defaultMarker);
+  }
+
+  Future<void> _allMarkersAndRoutes(
+    LocationModel runnerLocation,
+    LocationModel pickupLocation,
+    LocationModel destinationLocation,
+  ) async {
+    final routeEither1 = await getRouteBetweenPoints(
+        PolylineParams(l1: runnerLocation, l2: pickupLocation));
+    await routeEither1.fold(
+      (failure) {
+        print("Failed");
+        RunnerLocationUpdateFailure();
+      },
+      (route1) async {
+        print("Found route between Runner and Pickup");
+        final routeEither2 = await getRouteBetweenPoints(
+            PolylineParams(l1: pickupLocation, l2: destinationLocation));
+        routeEither2.fold((failure) => RunnerLocationUpdateFailure(), (route2) {
+          print("Found route between Pickup and Destination");
+          polylines.add(_makePolyline("poly1", route1));
+          polylines.add(_makePolyline("poly2", route2));
+          markers.add(_makeMarker("runner", runnerLocation));
+          markers.add(_makeMarker("pickup", pickupLocation));
+          markers.add(_makeMarker("destination", destinationLocation));
+          cameraLocation = LatLng(runnerLocation.lat, runnerLocation.lng);
+        });
+      },
+    );
   }
 }

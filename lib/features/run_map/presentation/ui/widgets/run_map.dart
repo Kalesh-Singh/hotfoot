@@ -35,7 +35,11 @@ class _RunMapState extends State<RunMap> {
           setState(() {
             polylines = state.polylines;
             markers = state.markers;
-            // TODO: animate camera
+            mapController
+                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: state.cameraLocation,
+              zoom: 15,
+            )));
           });
         }
       },
@@ -80,8 +84,8 @@ class _RunMapState extends State<RunMap> {
   }) async {
     final runnerLocationStreamEither = await getRunnerLocationStream(runId);
     return runnerLocationStreamEither.fold(
-          (_) => null,
-          (runStream) => runStream,
+      (_) => null,
+      (runStream) => runStream,
     );
   }
 
@@ -110,7 +114,7 @@ class _RunMapState extends State<RunMap> {
     final runModel =
         BlocProvider.of<NavigationScreenBloc>(context).state.runModel;
     final runnerLocation =
-    LocationModel(lat: locationData.latitude, lng: locationData.longitude);
+        LocationModel(lat: locationData.latitude, lng: locationData.longitude);
     print('DEVICE LOCATION UPDATED - RUNNER MAP');
     // Forward events to our custom bloc
     BlocProvider.of<RunnerLocationBloc>(context).add(

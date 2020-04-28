@@ -18,21 +18,24 @@ class RunnerLocationUpdateSuccess extends RunnerLocationState {
   final LocationModel runnerLocation;
   final Set<Polyline> polylines;
   final Set<Marker> markers;
+  final LatLng cameraLocation;
 
   const RunnerLocationUpdateSuccess({
     @required this.runModel,
     @required this.runnerLocation,
     @required this.polylines,
     @required this.markers,
+    @required this.cameraLocation,
   });
 
   @override
   List<Object> get props => [
-    runModel,
-    runnerLocation,
-    polylines,
-    markers,
-  ];
+        runModel,
+        runnerLocation,
+        polylines,
+        markers,
+        cameraLocation,
+      ];
 }
 
 class RunnerLocationUpdateFailure extends RunnerLocationState {
