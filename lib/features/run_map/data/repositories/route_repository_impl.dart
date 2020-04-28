@@ -6,6 +6,7 @@ import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
 import 'package:hotfoot/features/run_map/domain/repositories/route_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 class RouteRepository implements IRouteRepository {
   // TODO: API Key.
@@ -13,7 +14,7 @@ class RouteRepository implements IRouteRepository {
 
   @override
   Future<Either<Failure, List<LatLng>>> getRouteBetweenPoints(
-      {LocationEntity l1, LocationEntity l2}) async {
+      {@required LocationEntity l1, @required LocationEntity l2}) async {
     try {
       final String request =
           "https://maps.googleapis.com/maps/api/directions/json?" +
@@ -22,7 +23,8 @@ class RouteRepository implements IRouteRepository {
               "key=$apiKey";
       final http.Response response = await http.get(request);
       final String polyline =
-      jsonDecode(response.body)["routes"][0]["overview_polyline"]["points"];
+          jsonDecode(response.body)["routes"][0]["overview_polyline"]["points"];
+      print("Route received from REST call");
       return Right(_convertToLatLng(_decodePolyline(polyline)));
     } catch (e) {
       print(e);

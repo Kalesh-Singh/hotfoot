@@ -37,22 +37,25 @@ class RunnerLocationBloc
       final LocationModel runnerLocation = event.runnerLocation;
       final LocationModel pickupLocation = await _getPickupLocation(event);
       final LocationModel destinationLocation = _getDestinationLocation(event);
+      print("RunnerLocation = $runnerLocation");
+      print("PickupLocation = $pickupLocation");
+      print("DestinationLocation = $destinationLocation");
       final String runId = event.runModel.id;
       final UserType userType = event.userType;
-      Set<Polyline> polylines;
-      Set<Marker> markers;
+      Set<Polyline> polylines = {};
+      Set<Marker> markers = {};
 
       if (userType == UserType.RUNNER) {
         // Update the runner's location in firestore.
         final updateLocationEither =
-        await insertOrUpdateRunnerLocation(RunnerLocationParams(
+            await insertOrUpdateRunnerLocation(RunnerLocationParams(
           runId: runId,
           runnerLocation: runnerLocation,
         ));
 
         updateLocationEither.fold(
-              (failure) => print('Failed to update runner location in firestore'),
-              (success) => print('Updated runner location in firestore'),
+          (failure) => print('Failed to update runner location in firestore'),
+          (success) => print('Updated runner location in firestore'),
         );
 
         // TODO: (zaykha) use the updateOrInsertRun use case to update run status
@@ -64,26 +67,31 @@ class RunnerLocationBloc
 
         final routeEither1 = await getRouteBetweenPoints(
             PolylineParams(l1: runnerLocation, l2: pickupLocation));
-        routeEither1.fold(
-              (failure) => RunnerLocationUpdateFailure(),
-              (route1) async {
+        await routeEither1.fold(
+          (failure) {
+            print("Failed");
+            RunnerLocationUpdateFailure();
+          },
+          (route1) async {
+            print("Found route between Runner and Pickup");
             final routeEither2 = await getRouteBetweenPoints(
                 PolylineParams(l1: pickupLocation, l2: destinationLocation));
             routeEither2.fold((failure) => RunnerLocationUpdateFailure(),
-                    (route2) {
-                  polylines.add(_makePolyline("poly1", route1));
-                  polylines.add(_makePolyline("poly2", route2));
-                  markers.add(_makeMarker("runner", runnerLocation));
-                  markers.add(_makeMarker("pickup", pickupLocation));
-                  markers.add(_makeMarker("destination", destinationLocation));
-                });
+                (route2) {
+              print("Found route between Pickup and Destination");
+              polylines.add(_makePolyline("poly1", route1));
+              polylines.add(_makePolyline("poly2", route2));
+              markers.add(_makeMarker("runner", runnerLocation));
+              markers.add(_makeMarker("pickup", pickupLocation));
+              markers.add(_makeMarker("destination", destinationLocation));
+            });
           },
         );
       } else if (userType == UserType.CUSTOMER) {
         // TODO: (zaykha) Handle updates to the customer's map here.
 
       }
-
+      print("State marker be = $markers");
       yield RunnerLocationUpdateSuccess(
         runModel: event.runModel,
         runnerLocation: event.runnerLocation,
@@ -95,19 +103,19 @@ class RunnerLocationBloc
 
   Future<LocationModel> _getPickupLocation(RunnerLocationUpdated event) async {
     LocationModel pickupLocation;
-    event.runModel.pickupPlaceIdOrCustomPlace.fold(
-          (pickupPlaceId) async {
+    await event.runModel.pickupPlaceIdOrCustomPlace.fold(
+      (pickupPlaceId) async {
         final placeDetailEither = await getPlaceById(pickupPlaceId);
         placeDetailEither.fold(
-              (failure) {
+          (failure) {
             print('Failed to get Pickup Place Details');
           },
-              (placeEntity) {
+          (placeEntity) {
             pickupLocation = placeEntity.locationEntity;
           },
         );
       },
-          (customPickupPlace) {
+      (customPickupPlace) {
         pickupLocation = customPickupPlace.locationEntity;
       },
     );

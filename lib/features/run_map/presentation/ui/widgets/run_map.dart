@@ -24,8 +24,8 @@ class RunMap extends StatefulWidget {
 class _RunMapState extends State<RunMap> {
   GoogleMapController mapController;
   DeviceLocation.Location deviceLocation = DeviceLocation.Location();
-  Set<Polyline> polylines;
-  Set<Marker> markers;
+  Set<Polyline> polylines = {};
+  Set<Marker> markers = {};
 
   @override
   Widget build(BuildContext context) {
