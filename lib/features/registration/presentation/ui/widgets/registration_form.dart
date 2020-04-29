@@ -6,7 +6,7 @@ import 'package:hotfoot/features/registration/presentation/bloc/registration_blo
 import 'package:hotfoot/features/registration/presentation/bloc/registration_event.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_state.dart';
 import 'package:hotfoot/features/registration/presentation/ui/widgets/registration_button.dart';
-
+import 'package:hotfoot/src/utils/style.dart';
 class RegistrationForm extends StatefulWidget {
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
@@ -99,7 +99,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Image.asset('assets/HotFoot.png', height: 250),
                   ),
                   TextFormField(
@@ -110,9 +110,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       FocusScope.of(context).requestFocus(_passwordFocus);
                     },
                     controller: _emailController,
+                    style: style.copyWith(fontSize: 16.0),
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
                       labelText: 'Email',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
@@ -122,6 +124,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           _emailController.text.toString(), state);
                     },
                   ),
+                  SizedBox(height: 14.0,),
                   TextFormField(
                     textInputAction: TextInputAction.done,
                     focusNode: _passwordFocus,
@@ -131,9 +134,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       }
                     },
                     controller: _passwordController,
+                    style: style.copyWith(fontSize: 16.0),
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
                       labelText: 'Password',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
                     obscureText: true,
                     autocorrect: false,
