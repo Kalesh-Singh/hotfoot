@@ -6,6 +6,7 @@ import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_name.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_run_button.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
+import 'package:hotfoot/src/utils/style.dart';
 
 class RunForm extends StatefulWidget {
   final PlaceEntity placeEntity;
@@ -79,6 +80,7 @@ class _RunFormState extends State<RunForm> {
                 return null;
               },
               controller: _orderController,
+              style: style.copyWith(fontSize:16),
               decoration: InputDecoration(
                 labelText: 'What would you like to request?',
                 border: new OutlineInputBorder(

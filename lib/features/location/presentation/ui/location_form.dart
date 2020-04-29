@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
+import 'package:hotfoot/src/utils/style.dart';
 
 class LocationForm extends StatefulWidget {
   State<LocationForm> createState() => _LocationFormState();
@@ -68,6 +69,7 @@ class _LocationFormState extends State<LocationForm> {
                   // TODO: Hide keyboard;
                 },
                 controller: _addressController,
+                style: style.copyWith(fontSize: 13),
                 decoration: InputDecoration(
                   icon: Icon(Icons.location_on),
                   labelText: 'Delivery Location',
