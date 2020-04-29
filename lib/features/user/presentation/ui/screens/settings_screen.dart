@@ -6,6 +6,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_widget.dart';
+import 'package:hotfoot/src/utils/style.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
               Center(
                   child: Text(
                 '$user',
-                style: TextStyle(fontSize: 20),
+                style: style.copyWith(fontWeight: FontWeight.bold),
               )),
               SizedBox(height: 24),
               UserTypeWidget(),
@@ -61,14 +62,29 @@ class SettingsScreen extends StatelessWidget {
 }
 
 Widget signOutButton(context) {
-  return RaisedButton(
-    onPressed: () {
-      // Log out of application
-      BlocProvider.of<NavigationAuthBloc>(context).add(
-        LoggedOut(),
-      );
-    },
-    color: Colors.amber,
-    child: Text('Signout'),
+  return ButtonTheme(
+      minWidth: 150,
+      child: RaisedButton(
+        elevation: 3,
+      padding: EdgeInsets.fromLTRB(0.0, 12.5, 0.0, 12.5),
+      color: Colors.amber,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+      onPressed: () {
+        // Log out of application
+        BlocProvider.of<NavigationAuthBloc>(context).add(
+          LoggedOut(),
+        );
+      },
+      child: Text('Signout',
+        textAlign: TextAlign.center,
+        style: style.copyWith(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
+      ),
+    ),
   );
 }
