@@ -5,30 +5,44 @@ import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:meta/meta.dart';
 
 abstract class RunnerLocationState extends Equatable {
-  final RunModel runModel;
-  final LocationModel runnerLocation;
-  final GoogleMapController mapController;
-
-  const RunnerLocationState({
-    @required this.runModel,
-    @required this.runnerLocation,
-    @required this.mapController,
-  });
+  const RunnerLocationState();
 
   @override
-  List<Object> get props => [runModel, runnerLocation];
+  List<Object> get props => [];
 }
 
 class RunnerLocationUninitialized extends RunnerLocationState {}
 
 class RunnerLocationUpdateSuccess extends RunnerLocationState {
+  final RunModel runModel;
+  final LocationModel runnerLocation;
+  final Set<Polyline> polylines;
+  final Set<Marker> markers;
+  final LatLng cameraLocation;
+
   const RunnerLocationUpdateSuccess({
-    @required RunModel runModel,
-    @required LocationModel runnerLocation,
-    @required GoogleMapController mapController,
-  }) : super(
-          runModel: runModel,
-          runnerLocation: runnerLocation,
-          mapController: mapController,
-        );
+    @required this.runModel,
+    @required this.runnerLocation,
+    @required this.polylines,
+    @required this.markers,
+    @required this.cameraLocation,
+  });
+
+  @override
+  List<Object> get props => [
+        runModel,
+        runnerLocation,
+        polylines,
+        markers,
+        cameraLocation,
+      ];
+}
+
+class RunnerLocationUpdateFailure extends RunnerLocationState {
+  final String message;
+
+  const RunnerLocationUpdateFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
 }

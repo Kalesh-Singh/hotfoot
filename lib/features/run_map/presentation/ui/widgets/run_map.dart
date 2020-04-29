@@ -7,6 +7,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/run_map/domain/use_cases/get_runner_location_stream.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_event.dart';
+import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_state.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:location/location.dart' as DeviceLocation;
@@ -23,15 +24,34 @@ class RunMap extends StatefulWidget {
 class _RunMapState extends State<RunMap> {
   GoogleMapController mapController;
   DeviceLocation.Location deviceLocation = DeviceLocation.Location();
+  Set<Polyline> polylines = {};
+  Set<Marker> markers = {};
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: LatLng(24.142, -110.321),
-        zoom: 15,
+    return BlocListener<RunnerLocationBloc, RunnerLocationState>(
+      listener: (context, state) {
+        if (state is RunnerLocationUpdateSuccess) {
+          setState(() {
+            polylines = state.polylines;
+            markers = state.markers;
+            mapController
+                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: state.cameraLocation,
+              zoom: 15,
+            )));
+          });
+        }
+      },
+      child: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(24.142, -110.321),
+          zoom: 15,
+        ),
+        onMapCreated: _onMapCreated,
+        polylines: polylines,
+        markers: markers,
       ),
-      onMapCreated: _onMapCreated,
     );
   }
 
@@ -85,7 +105,6 @@ class _RunMapState extends State<RunMap> {
         runModel: runModel,
         runnerLocation: runnerLocation,
         userType: UserType.CUSTOMER,
-        mapController: mapController,
       ),
     );
   }
@@ -103,7 +122,6 @@ class _RunMapState extends State<RunMap> {
         runModel: runModel,
         runnerLocation: runnerLocation,
         userType: UserType.RUNNER,
-        mapController: mapController,
       ),
     );
   }

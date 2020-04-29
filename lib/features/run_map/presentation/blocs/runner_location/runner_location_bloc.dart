@@ -1,6 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hotfoot/features/location/data/models/location_model.dart';
+import 'package:hotfoot/features/location/domain/entities/location_entity.dart';
 import 'package:hotfoot/features/places/domain/use_cases/get_place_by_id.dart';
+import 'package:hotfoot/features/run_map/domain/use_cases/get_route_between_points.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_state.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_event.dart';
@@ -13,11 +17,16 @@ class RunnerLocationBloc
   final InsertOrUpdateRunnerLocation insertOrUpdateRunnerLocation;
   final UpdateOrInsertRun updateOrInsertRun;
   final GetPlaceById getPlaceById;
+  final GetRouteBetweenPoints getRouteBetweenPoints;
+  Set<Polyline> polylines = {};
+  Set<Marker> markers = {};
+  LatLng cameraLocation;
 
   RunnerLocationBloc({
     @required this.insertOrUpdateRunnerLocation,
     @required this.updateOrInsertRun,
     @required this.getPlaceById,
+    @required this.getRouteBetweenPoints,
   });
 
   @override
@@ -27,10 +36,13 @@ class RunnerLocationBloc
   Stream<RunnerLocationState> mapEventToState(
       RunnerLocationEvent event) async* {
     if (event is RunnerLocationUpdated) {
-      // Important locations for maps provided below (@zayha)
+      // Important locations for maps provided below.
       final LocationModel runnerLocation = event.runnerLocation;
       final LocationModel pickupLocation = await _getPickupLocation(event);
       final LocationModel destinationLocation = _getDestinationLocation(event);
+      print("RunnerLocation = $runnerLocation");
+      print("PickupLocation = $pickupLocation");
+      print("DestinationLocation = $destinationLocation");
       final String runId = event.runModel.id;
       final UserType userType = event.userType;
 
@@ -47,31 +59,40 @@ class RunnerLocationBloc
           (success) => print('Updated runner location in firestore'),
         );
 
-        // TODO: (zaykha) use the updateOrInsertRun use case to update run status
+        // TODO: use the updateOrInsertRun use case to update run status
         // based on runner's proximity to pickup location, destination etc.
         // For instance when the runner is X miles away from pick location,
         // change status to "Picking up your order".
         // When the runner is X miles away from destination location,
         // change status to "Arriving soon"
 
-        // TODO: (zaykha) Handle updates to runner's map here
-        // you can get the controller from either the event or the state.
-        // doesn't really matter, its the same reference.
+        await _allMarkersAndRoutes(
+            runnerLocation, pickupLocation, destinationLocation);
       } else if (userType == UserType.CUSTOMER) {
-        // TODO: (zaykha) Handle updates to the customer's map here.
+        if (runnerLocation == null) {
+          print("Runner location not available");
+          markers.add(_makeMarker("pickup", pickupLocation));
+          markers.add(_makeMarker("destination", destinationLocation));
+          cameraLocation = LatLng(pickupLocation.lat, pickupLocation.lng);
+        } else {
+          await _allMarkersAndRoutes(
+              runnerLocation, pickupLocation, destinationLocation);
+        }
       }
 
       yield RunnerLocationUpdateSuccess(
         runModel: event.runModel,
         runnerLocation: event.runnerLocation,
-        mapController: event.mapController,
+        polylines: polylines,
+        markers: markers,
+        cameraLocation: cameraLocation,
       );
     }
   }
 
   Future<LocationModel> _getPickupLocation(RunnerLocationUpdated event) async {
     LocationModel pickupLocation;
-    event.runModel.pickupPlaceIdOrCustomPlace.fold(
+    await event.runModel.pickupPlaceIdOrCustomPlace.fold(
       (pickupPlaceId) async {
         final placeDetailEither = await getPlaceById(pickupPlaceId);
         placeDetailEither.fold(
@@ -92,5 +113,50 @@ class RunnerLocationBloc
 
   LocationModel _getDestinationLocation(RunnerLocationUpdated event) {
     return event.runModel.destinationPlace.locationEntity;
+  }
+
+  Polyline _makePolyline(String id, List<LatLng> points) {
+    return Polyline(
+        polylineId: PolylineId(id),
+        width: 5,
+        points: points,
+        color: Colors.black);
+  }
+
+  // TODO: Different marker description and icons
+  Marker _makeMarker(String id, LocationEntity position) {
+    return Marker(
+        markerId: MarkerId(id),
+        position: LatLng(position.lat, position.lng),
+        icon: BitmapDescriptor.defaultMarker);
+  }
+
+  Future<void> _allMarkersAndRoutes(
+    LocationModel runnerLocation,
+    LocationModel pickupLocation,
+    LocationModel destinationLocation,
+  ) async {
+    final routeEither1 = await getRouteBetweenPoints(
+        PolylineParams(l1: runnerLocation, l2: pickupLocation));
+    await routeEither1.fold(
+      (failure) {
+        print("Failed");
+        RunnerLocationUpdateFailure();
+      },
+      (route1) async {
+        print("Found route between Runner and Pickup");
+        final routeEither2 = await getRouteBetweenPoints(
+            PolylineParams(l1: pickupLocation, l2: destinationLocation));
+        routeEither2.fold((failure) => RunnerLocationUpdateFailure(), (route2) {
+          print("Found route between Pickup and Destination");
+          polylines.add(_makePolyline("poly1", route1));
+          polylines.add(_makePolyline("poly2", route2));
+          markers.add(_makeMarker("runner", runnerLocation));
+          markers.add(_makeMarker("pickup", pickupLocation));
+          markers.add(_makeMarker("destination", destinationLocation));
+          cameraLocation = LatLng(runnerLocation.lat, runnerLocation.lng);
+        });
+      },
+    );
   }
 }

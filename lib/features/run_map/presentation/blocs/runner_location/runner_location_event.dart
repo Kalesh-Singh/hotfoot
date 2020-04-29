@@ -9,13 +9,11 @@ abstract class RunnerLocationEvent extends Equatable {
   final RunModel runModel;
   final LocationModel runnerLocation;
   final UserType userType;
-  final GoogleMapController mapController;
 
   const RunnerLocationEvent({
     @required this.runModel,
     @required this.runnerLocation,
     @required this.userType,
-    @required this.mapController,
   });
 
   @override
@@ -27,11 +25,9 @@ class RunnerLocationUpdated extends RunnerLocationEvent {
     @required RunModel runModel,
     @required LocationModel runnerLocation,
     @required UserType userType,
-    @required GoogleMapController mapController,
   }) : super(
-          runModel: runModel,
-          runnerLocation: runnerLocation,
-          userType: userType,
-          mapController: mapController,
-        );
+    runModel: runModel,
+    runnerLocation: runnerLocation,
+    userType: userType,
+  );
 }

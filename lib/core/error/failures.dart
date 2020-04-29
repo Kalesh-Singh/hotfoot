@@ -21,3 +21,5 @@ class FirestoreFailure extends Failure {}
 class FirebaseStorageFailure extends Failure {}
 
 class NetworkFailure extends Failure {}
+
+class GoogleMapsFailure extends Failure {}

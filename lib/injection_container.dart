@@ -43,8 +43,11 @@ import 'package:hotfoot/features/registration/data/repositories/registration_rep
 import 'package:hotfoot/features/registration/domain/repositories/registration_repository.dart';
 import 'package:hotfoot/features/registration/domain/use_cases/sign_up.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_bloc.dart';
+import 'package:hotfoot/features/run_map/data/repositories/route_repository_impl.dart';
 import 'package:hotfoot/features/run_map/data/repositories/runner_location_repository_impl.dart';
+import 'package:hotfoot/features/run_map/domain/repositories/route_repository.dart';
 import 'package:hotfoot/features/run_map/domain/repositories/runner_location_repository.dart';
+import 'package:hotfoot/features/run_map/domain/use_cases/get_route_between_points.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/get_runner_location_stream.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
@@ -162,6 +165,7 @@ Future<void> init() async {
         insertOrUpdateRunnerLocation: sl(),
         updateOrInsertRun: sl(),
         getPlaceById: sl(),
+        getRouteBetweenPoints: sl(),
       ));
   sl.registerFactory(() => RunUpdateBloc());
   sl.registerFactory(() => AcceptRunBloc(
@@ -248,6 +252,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRunnerLocationStream(
         runnerLocationRepository: sl(),
       ));
+  sl.registerLazySingleton(() => GetRouteBetweenPoints(
+        routeRepository: sl(),
+      ));
 
   // Repositories
   sl.registerLazySingleton<ILoginRepository>(() => LoginRepository(
@@ -292,6 +299,7 @@ Future<void> init() async {
       () => RunnerLocationRepository(
             firestore: sl(),
           ));
+  sl.registerLazySingleton<IRouteRepository>(() => RouteRepository());
 
   // Data Sources
   sl.registerLazySingleton<IPlacesLocalDataSource>(() => PlacesLocalDataSource(
