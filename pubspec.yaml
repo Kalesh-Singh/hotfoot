@@ -75,13 +75,14 @@ dependencies:
   qr_flutter: ^3.2.0
   # For scanning QR codes
   flutter_barcode_scanner: ^0.1.7
+  # For the speed dial button
+  flutter_speed_dial: ^1.2.5
 
   # TODO: Maybe delete unused ones
   flutter_google_places: ^0.2.3
   google_maps_webservice: ^0.0.16
 
   rxdart: ^0.23.0
-  flutter_speed_dial: ^1.2.4
 
 dev_dependencies:
   # Flutter Unit Tests
