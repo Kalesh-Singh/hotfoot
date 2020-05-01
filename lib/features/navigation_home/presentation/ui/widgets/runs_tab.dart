@@ -11,6 +11,7 @@ import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class RunsTab extends StatelessWidget {
   @override
@@ -76,7 +77,7 @@ class RunsTab extends StatelessWidget {
           builder: (BuildContext context, CustomerRunsIdsState state) {
             if (state is CustomerRunsIdsLoadSuccess) {
               if (state.customerRunsIds.length == 0) {
-                return Text('No runs requested yet.');
+                return Text('No runs requested yet.', style: style.copyWith(fontSize: 18.0),);
               } else {
                 return RunsList(
                   runsIds: state.customerRunsIds,
@@ -85,7 +86,7 @@ class RunsTab extends StatelessWidget {
                 );
               }
             } else if (state is CustomerRunsIdsLoadFailure) {
-              return Text(state.message);
+              return Text(state.message, style: style.copyWith(fontSize: 18.0),);
             } else if (state is CustomerRunsIdsUninitialized) {
               BlocProvider.of<CustomerRunsIdsBloc>(context)
                   .add(CustomerRunsRequested());

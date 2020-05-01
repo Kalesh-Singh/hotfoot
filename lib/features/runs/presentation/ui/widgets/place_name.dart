@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class PlaceName extends StatelessWidget {
   final String name;
@@ -11,7 +12,7 @@ class PlaceName extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
       child: Text(
         name,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        style: style.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

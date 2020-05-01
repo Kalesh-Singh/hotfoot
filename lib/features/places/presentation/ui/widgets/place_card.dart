@@ -9,6 +9,7 @@ import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;
@@ -93,8 +94,8 @@ class PlaceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(child: Text(placeEntity.name)),
-                      Expanded(child: Text(placeEntity.address)),
+                      Expanded(child: Text(placeEntity.name, style: style.copyWith(fontSize: 16, fontWeight: FontWeight.bold),)),
+                      Expanded(child: Text(placeEntity.address, style: style.copyWith(fontSize: 14),)),
                     ],
                   ),
                 ),

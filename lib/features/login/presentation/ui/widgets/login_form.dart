@@ -7,6 +7,7 @@ import 'package:hotfoot/features/login/presentation/ui/widgets/create_account_bu
 import 'package:hotfoot/features/login/presentation/ui/widgets/login_button.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
@@ -91,9 +92,11 @@ class _LoginFormState extends State<LoginForm> {
                       FocusScope.of(context).requestFocus(_passwordFocus);
                     },
                     controller: _emailController,
+                    style: style.copyWith(fontSize: 16.0),
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
                       labelText: 'Email',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autovalidate: true,
@@ -103,6 +106,7 @@ class _LoginFormState extends State<LoginForm> {
                           Text(_emailController.text).toString(), state);
                     },
                   ),
+                  SizedBox(height: 14.0,),
                   TextFormField(
                     textInputAction: TextInputAction.done,
                     focusNode: _passwordFocus,
@@ -112,9 +116,11 @@ class _LoginFormState extends State<LoginForm> {
                       }
                     },
                     controller: _passwordController,
+                    style: style.copyWith(fontSize: 16.0),
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
                       labelText: 'Password',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
                     obscureText: true,
                     autovalidate: true,
@@ -127,13 +133,16 @@ class _LoginFormState extends State<LoginForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        LoginButton(
-                          onPressed: isLoginButtonEnabled(state)
-                              ? _onFormSubmitted
-                              : null,
+                        ButtonTheme(
+                          minWidth:MediaQuery.of(context).size.width * 8 / 9,
+                          child: LoginButton(
+                            onPressed: isLoginButtonEnabled(state)
+                                ? _onFormSubmitted
+                                : null,
+                          ),
                         ),
+                        SizedBox(height: 10,),
                         CreateAccountButton(),
                       ],
                     ),
@@ -162,9 +171,6 @@ class _LoginFormState extends State<LoginForm> {
     if (_passwordState.isPasswordValid) {
       return null;
     } else {
-      // Password needs to have at least 8 characters, one of which must be a number
-      // I cannot think of an appropriate message to show here
-      // So I will just put 'Password is invalid' for now
       return 'Password is invalid';
     }
   }
