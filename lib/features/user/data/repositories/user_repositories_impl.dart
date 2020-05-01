@@ -71,10 +71,10 @@ class UserRepository implements IUserRepository {
     }
     final either = await insertOrUpdateUser(userModel: userModel);
     return either.fold(
-      (failure) {
+          (failure) {
         return Left(failure);
       },
-      (success) {
+          (success) {
         return Right(success);
       },
     );
@@ -84,10 +84,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, UserType>> getUserType() async {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
-      (failure) {
+          (failure) {
         return Left(failure);
       },
-      (userModel) {
+          (userModel) {
         return Right(userModel.type);
       },
     );
@@ -97,28 +97,40 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, UserType>> toggleUserType() async {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
-      (failure) {
+          (failure) {
         print('FAILED TO GET USER INFO');
         return Left(failure);
       },
-      (userModel) async {
+          (userModel) async {
         final currUserType = userModel.type;
         final newUserType = (currUserType == UserType.CUSTOMER)
             ? UserType.RUNNER
             : UserType.CUSTOMER;
         UserModel newUserModel =
-            (userModel as UserModel).copyWith(type: newUserType);
+        (userModel as UserModel).copyWith(type: newUserType);
         final updateEither = await insertOrUpdateUser(userModel: newUserModel);
         return updateEither.fold(
-          (failure) {
+              (failure) {
             print('FAILED TO UPDATE USER MODEL');
             return Left(failure);
           },
-          (userModel) {
+              (userModel) {
             return Right(userModel.type);
           },
         );
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserInfoById({String userId}) async {
+    try {
+      final UserModel userModel =
+      await userRemoteDataSource.getUserInfoById(userId: userId);
+      return Right(userModel);
+    } catch (e) {
+      print('FIRESTORE FAILURE: $e');
+      return Left(FirestoreFailure());
+    }
   }
 }
