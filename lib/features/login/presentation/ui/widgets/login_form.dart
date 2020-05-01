@@ -7,7 +7,7 @@ import 'package:hotfoot/features/login/presentation/ui/widgets/create_account_bu
 import 'package:hotfoot/features/login/presentation/ui/widgets/login_button.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();

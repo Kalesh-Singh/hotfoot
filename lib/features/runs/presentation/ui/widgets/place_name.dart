@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class PlaceName extends StatelessWidget {
   final String name;

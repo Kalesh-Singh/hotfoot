@@ -11,7 +11,7 @@ import 'package:hotfoot/features/runs/presentation/blocs/runner_runs_ids/runner_
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class RunsTab extends StatelessWidget {
   @override

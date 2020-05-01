@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_event.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class LocationForm extends StatefulWidget {
   State<LocationForm> createState() => _LocationFormState();

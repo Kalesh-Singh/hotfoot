@@ -9,7 +9,7 @@ import 'package:hotfoot/features/places/data/models/place_model.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceEntity placeEntity;

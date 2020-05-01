@@ -6,7 +6,7 @@ import 'package:hotfoot/features/registration/presentation/bloc/registration_blo
 import 'package:hotfoot/features/registration/presentation/bloc/registration_event.dart';
 import 'package:hotfoot/features/registration/presentation/bloc/registration_state.dart';
 import 'package:hotfoot/features/registration/presentation/ui/widgets/registration_button.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 class RegistrationForm extends StatefulWidget {
   State<RegistrationForm> createState() => _RegistrationFormState();
 }

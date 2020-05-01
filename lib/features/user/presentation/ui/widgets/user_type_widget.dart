@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_toggle_switch.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class UserTypeWidget extends StatelessWidget {
   @override

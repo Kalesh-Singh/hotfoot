@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotfoot/features/registration/presentation/ui/screen/registration_screen.dart';
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class CreateAccountButton extends StatelessWidget {
   @override

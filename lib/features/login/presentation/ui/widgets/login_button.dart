@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // For font styling across the app
-import 'package:hotfoot/src/utils/style.dart';
+import 'package:hotfoot/core/style/style.dart';
 class LoginButton extends StatelessWidget {
   final VoidCallback _onPressed;
 
