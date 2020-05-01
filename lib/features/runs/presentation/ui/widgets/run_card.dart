@@ -5,6 +5,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:intl/intl.dart';
 
 class RunCard extends StatelessWidget {
@@ -46,14 +47,14 @@ class RunCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     runEntity.order,
-                    style: TextStyle(fontSize: 20),
+                    style: style.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Expanded(
                 child: Center(
                   child: Text(
-                    DateFormat.yMMMMEEEEd().format(runEntity.timePlaced),
+                    DateFormat.yMMMMEEEEd().format(runEntity.timePlaced), style: style.copyWith(fontSize: 16.0),
                   ),
                 ),
               ),
