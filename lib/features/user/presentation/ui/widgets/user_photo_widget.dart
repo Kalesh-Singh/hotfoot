@@ -2,10 +2,12 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_event.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_state.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class UserPhotoWidget extends StatelessWidget {
+  final String userId;
   final double radius;
   final double borderWidth;
   final String initialsText;
@@ -13,6 +15,7 @@ class UserPhotoWidget extends StatelessWidget {
   final void Function() onTap;
 
   UserPhotoWidget({
+    @required this.userId,
     @required this.radius,
     @required this.borderWidth,
     @required this.initialsText,
@@ -23,7 +26,8 @@ class UserPhotoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<UserPhotoBloc>(),
+      create: (context) =>
+          sl<UserPhotoBloc>()..add(UserPhotoRequested(userId: null)),
       child: Container(
         child: BlocBuilder<UserPhotoBloc, UserPhotoState>(
             builder: (BuildContext context, UserPhotoState state) {
@@ -46,12 +50,12 @@ class UserPhotoWidget extends StatelessWidget {
                     TextStyle(fontSize: initialsTextSize, color: Colors.white),
               ),
               // sets initials text, set your own style, default Text('')
-              borderColor: Colors.deepOrange,
+              borderColor: Colors.deepOrange.shade400,
               // sets border color, default Colors.white
               elevation: 5.0,
               // sets elevation (shadow of the profile picture),
               // default value is 0.0
-              foregroundColor: Colors.deepOrange.withOpacity(0.5),
+              foregroundColor: Colors.deepOrange.shade400,
               //sets foreground colour, it works if
               // showInitialTextAbovePicture = true , default Colors.transparent
               cacheImage: true,
