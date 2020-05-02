@@ -39,10 +39,6 @@ class RunPlacedScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              LinearProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
                 child: RunMapWidget(userType: UserType.RUNNER),
@@ -63,10 +59,6 @@ class RunPlacedScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              LinearProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
                 child: RunMapWidget(userType: UserType.CUSTOMER),

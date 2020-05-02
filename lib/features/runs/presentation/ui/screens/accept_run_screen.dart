@@ -69,7 +69,7 @@ class AcceptRunScreen extends StatelessWidget {
                                 _getLabelAndTextBody(
                                     label: 'Compensation: \$',
                                     textBody:
-                                        '${_calculateRunnerFee(runModel.cost).toStringAsFixed(2)}'),
+                                        '${calculateRunnerFee(runModel.cost).toStringAsFixed(2)}'),
                               ],
                             ),
                           ),
@@ -132,10 +132,10 @@ class AcceptRunScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  // TODO: Add calculation logic using distance, request load, etc.
-  double _calculateRunnerFee(double totalCost) {
-    return totalCost != null ? (1 / 5 * totalCost) : 0.0;
-  }
+// TODO: Add calculation logic using distance, request load, etc.
+double calculateRunnerFee(double totalCost) {
+  return totalCost != null ? (1 / 5 * totalCost) : 0.0;
 }
 

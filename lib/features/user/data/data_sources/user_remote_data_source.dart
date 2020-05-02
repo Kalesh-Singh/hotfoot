@@ -14,6 +14,8 @@ abstract class IUserRemoteDataSource {
   Future<UserModel> getUserInfo();
 
   Future<UserModel> insertOrUpdateUser({@required UserModel userModel});
+
+  Future<UserModel> getUserInfoById({@required String userId});
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -50,25 +52,20 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   Future<UserModel> getUserInfo() async {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
-    print('USER ID: $userId');
-    final userData =
-        await (firestore.collection('users').document(userId).get());
-    final userJson = userData.data;
-    print('Pulled user info: ${json.encode(userJson)}');
+    UserModel userModel = await getUserInfoById(userId: userId);
     // When a user first logs in firestore will say email verified is false
     // it does not break naything right now but I just want to keep the information
     // cleaan and true for clarity, if there is a better place you would like this updated
     // you can do so or let me know, just trying to progress and finish other features now
-    UserModel initialUserModel = UserModel.fromJson(userJson);
-    if (initialUserModel.isEmailVerified == false) {
-      await firestore.collection('users')
-            .document(userId)
-            .setData(initialUserModel.copyWith(isEmailVerified: true).toJson());
+    if (userModel.isEmailVerified == false) {
+      await firestore
+          .collection('users')
+          .document(userId)
+          .setData(userModel.copyWith(isEmailVerified: true).toJson());
 
-      return UserModel.fromJson(userJson).copyWith(isEmailVerified:true);
-    }
-    else {
-      return UserModel.fromJson(userJson);
+      return userModel.copyWith(isEmailVerified: true);
+    } else {
+      return userModel;
     }
   }
 
@@ -86,5 +83,15 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   @override
   Future<String> getUserId() async {
     return (await firebaseAuth.currentUser()).uid;
+  }
+
+  @override
+  Future<UserModel> getUserInfoById({String userId}) async {
+    print('Got USER ID: $userId');
+    final userData =
+        await (firestore.collection('users').document(userId).get());
+    final userJson = userData.data;
+    print('Pulled user info: ${json.encode(userJson)}');
+    return UserModel.fromJson(userJson);
   }
 }

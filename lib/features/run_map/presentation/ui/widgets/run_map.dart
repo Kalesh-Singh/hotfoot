@@ -51,6 +51,7 @@ class _RunMapState extends State<RunMap> {
         onMapCreated: _onMapCreated,
         polylines: polylines,
         markers: markers,
+        zoomControlsEnabled: false,
       ),
     );
   }

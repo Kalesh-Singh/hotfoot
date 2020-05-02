@@ -122,6 +122,17 @@ class UserRepository implements IUserRepository {
     );
   }
 
+  Future<Either<Failure, UserEntity>> getUserInfoById({String userId}) async {
+    try {
+      final UserModel userModel =
+          await userRemoteDataSource.getUserInfoById(userId: userId);
+      return Right(userModel);
+    } catch (e) {
+      print('FIRESTORE FAILURE: $e');
+      return Left(FirestoreFailure());
+    }
+  }
+
   @override
   Future<Either<Failure, double>> getUserFunds() async {
     final userModelEither = await getUserInfo();
@@ -174,10 +185,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
     final userFundsEither = await getUserFunds();
     return userFundsEither.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (userFunds) async {
+      (userFunds) async {
         final newFunds = userFunds - funds;
         final updateFundsEither = await updateUserFunds(funds: newFunds);
         return updateFundsEither.fold((failure) {

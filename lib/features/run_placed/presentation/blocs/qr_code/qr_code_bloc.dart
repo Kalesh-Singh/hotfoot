@@ -3,6 +3,7 @@ import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_e
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
+import 'package:hotfoot/features/runs/presentation/ui/screens/accept_run_screen.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:meta/meta.dart';
@@ -39,7 +40,7 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
           failureOrUpdateSuccess.fold(
             (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
             (_) async {
-              await addUserFunds(_calculateRunnerFee(event.runModel.cost));
+              await addUserFunds(calculateRunnerFee(event.runModel.cost));
               _QRCodeLoadSuccess(event.runModel, event.isRunner);
             },
           );
@@ -64,10 +65,5 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
     return isRunner
         ? QRCodeLoadSuccess(ownQRCode: runnerQR, counterpartQRCode: customerQR)
         : QRCodeLoadSuccess(ownQRCode: customerQR, counterpartQRCode: runnerQR);
-  }
-
-  // TODO: Add calculation logic using distance, request load, etc.
-  double _calculateRunnerFee(double totalCost) {
-    return totalCost != null ? (1 / 5 * totalCost) : 0.0;
   }
 }
