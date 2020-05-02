@@ -203,9 +203,24 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, void>> insertOrUpdateUserPhoto() {
-    // TODO: implement insertOrUpdateUserPhoto
-    return null;
+  Future<Either<Failure, File>> insertOrUpdateUserPhoto(
+      {File userPhotoFile}) async {
+    // Only if updating remotely succeeds then we
+    // update the local cache.
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+
+    try {
+      await userRemoteDataSource.insertOrUpdateUserPhoto(
+          userPhotoFile: userPhotoFile);
+      final photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+          userPhotoFile: userPhotoFile);
+      return Right(photoFile);
+    } catch (e) {
+      print(e);
+      return Left(FirebaseStorageFailure());
+    }
   }
 
   @override

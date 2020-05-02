@@ -20,6 +20,7 @@ abstract class IUserRepository {
   Future<Either<Failure, UserEntity>> insertOrUpdateUser(
       {@required UserModel userModel});
 
+<<<<<<< HEAD
   Future<Either<Failure, UserEntity>> getUserInfoById(
       {@required String userId});
 
@@ -31,7 +32,8 @@ abstract class IUserRepository {
 
   Future<Either<Failure, double>> subtractUserFunds({@required double funds});
 
-  Future<Either<Failure, void>> insertOrUpdateUserPhoto();
+  Future<Either<Failure, File>> insertOrUpdateUserPhoto(
+      {@required File userPhotoFile});
 
   Future<Either<Failure, File>> getUserPhoto();
 }
