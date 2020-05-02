@@ -6,10 +6,10 @@ import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:meta/meta.dart';
 
-class GetUsePhoto implements UseCase<File, NoParams> {
+class GetUserPhoto implements UseCase<File, NoParams> {
   final IUserRepository userRepository;
 
-  const GetUsePhoto({@required this.userRepository});
+  const GetUserPhoto({@required this.userRepository});
 
   @override
   Future<Either<Failure, File>> call(NoParams params) async {
