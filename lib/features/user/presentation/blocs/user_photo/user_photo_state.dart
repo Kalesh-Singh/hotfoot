@@ -29,3 +29,21 @@ class UserPhotoLoadSuccess extends UserPhotoState {
   @override
   List<Object> get props => [userPhoto];
 }
+
+class UserPhotoUpdateSuccess extends UserPhotoState {
+  final File userPhoto;
+
+  const UserPhotoUpdateSuccess({@required this.userPhoto});
+
+  @override
+  List<Object> get props => [userPhoto];
+}
+
+class UserPhotoUpdateFailure extends UserPhotoState {
+  final String message;
+
+  const UserPhotoUpdateFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
