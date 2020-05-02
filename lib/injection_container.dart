@@ -80,9 +80,12 @@ import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.d
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_info.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
+import 'package:hotfoot/features/user/domain/use_cases/insert_or_update_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'features/search/data/data_sources/search_results_data_source.dart';
@@ -175,6 +178,10 @@ Future<void> init() async {
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
       ));
+  sl.registerFactory(() => UserFundsBloc(
+        getUserInfo: sl(),
+        insertOrUpdateUser: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -226,6 +233,12 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetUserType(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserInfo(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => InsertOrUpdateUser(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
