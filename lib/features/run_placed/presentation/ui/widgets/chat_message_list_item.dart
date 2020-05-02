@@ -27,13 +27,24 @@ class ChatMessageListItem extends StatelessWidget {
     );
   }
 
+  String _capitalize(String name) {
+    return name[0].toUpperCase() + name.substring(1);
+  }
+
+  String _parseBisonEmail(String email) {
+    String firstNameDotLastname = email.substring(0, email.indexOf('@'));
+    final nameArray = firstNameDotLastname.split(".");
+    return _capitalize(nameArray[0]) + " " + _capitalize(nameArray[1]);
+  }
+
   List<Widget> getSentMessageLayout() {
+    String senderName = _parseBisonEmail(messageSnapshot.value['senderName']);
     return <Widget>[
        Expanded(
         child:  Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-             Text(messageSnapshot.value['senderName'],
+             Text(senderName,
                 style: style.copyWith(
                   color: Colors.black, 
                   fontSize: 14, 
@@ -59,6 +70,7 @@ class ChatMessageListItem extends StatelessWidget {
   }
 
   List<Widget> getReceivedMessageLayout() {
+    String senderName = _parseBisonEmail(messageSnapshot.value['senderName']);
     return <Widget>[
        Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +85,7 @@ class ChatMessageListItem extends StatelessWidget {
         child:  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-             Text(messageSnapshot.value['senderName'],
+             Text(senderName,
                 style:  style.copyWith(
                   color: Colors.black, 
                   fontSize: 14, fontWeight: 

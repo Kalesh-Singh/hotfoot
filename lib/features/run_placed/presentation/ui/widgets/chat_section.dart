@@ -36,7 +36,7 @@ class ChatSection extends StatelessWidget {
     }
     else {
       // Can also append date or whatever discerning factors to create unique chatrooms
-      String referenceId = runModel.customerId+runModel.runnerId;
+      String referenceId = runModel.customerId+runModel.runnerId+runModel.timePlaced.toString();
       print(referenceId);
       return referenceId;
     }
