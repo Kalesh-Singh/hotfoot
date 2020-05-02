@@ -121,4 +121,71 @@ class UserRepository implements IUserRepository {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, double>> getUserFunds() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) {
+        return userModel.funds != null ? Right(userModel.funds) : Right(0.0);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserFunds({double funds}) async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(funds: funds);
+        final result = await insertOrUpdateUser(userModel: newUserModel);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, double>> addUserFunds({double funds}) async {
+    final userFundsEither = await getUserFunds();
+    return userFundsEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userFunds) async {
+        final newFunds = userFunds + funds;
+        final updateFundsEither = await updateUserFunds(funds: newFunds);
+        return updateFundsEither.fold((failure) {
+          return Left(failure);
+        }, (_) {
+          return Right(newFunds);
+        });
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
+    final userFundsEither = await getUserFunds();
+    return userFundsEither.fold(
+          (failure) {
+        return Left(failure);
+      },
+          (userFunds) async {
+        final newFunds = userFunds - funds;
+        final updateFundsEither = await updateUserFunds(funds: newFunds);
+        return updateFundsEither.fold((failure) {
+          return Left(failure);
+        }, (_) {
+          return Right(newFunds);
+        });
+      },
+    );
+  }
 }

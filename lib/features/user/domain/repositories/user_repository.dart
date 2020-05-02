@@ -17,4 +17,12 @@ abstract class IUserRepository {
 
   Future<Either<Failure, UserEntity>> insertOrUpdateUser(
       {@required UserModel userModel});
+
+  Future<Either<Failure, double>> getUserFunds();
+
+  Future<Either<Failure, void>> updateUserFunds({@required double funds});
+
+  Future<Either<Failure, double>> addUserFunds({@required double funds});
+
+  Future<Either<Failure, double>> subtractUserFunds({@required double funds});
 }
