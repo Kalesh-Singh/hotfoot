@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 
 abstract class IUserRemoteDataSource {
   Future<UserModel> getUserFromFirebase();
@@ -19,23 +20,29 @@ abstract class IUserRemoteDataSource {
 
   Future<UserModel> getUserInfoById({@required String userId});
 
-  Future<void> insertOrUpdateUserPhoto({@required File userPhotoFile});
+  Future<File> insertOrUpdateUserPhoto({@required File userPhotoFile});
 
   Future<File> getUserPhoto();
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
+  static const String _TEMP_PHOTOS_DIR = 'photos';
+
+  final String _photosDir;
   final Firestore firestore;
   final FirebaseAuth firebaseAuth;
   final FirebaseStorage firebaseStorage;
+
 
   UserRemoteDataSource({
     @required this.firestore,
     @required this.firebaseAuth,
     @required this.firebaseStorage,
+    @required Directory tempPhotosDir,
   })  : assert(firestore != null),
         assert(firebaseAuth != null),
-        assert(firebaseStorage != null);
+        assert(firebaseStorage != null),
+        this._photosDir = join(tempPhotosDir.path, _TEMP_PHOTOS_DIR);
 
   @override
   Future<UserModel> getUserFromFirebase() async {
@@ -104,23 +111,44 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     return UserModel.fromJson(userJson);
   }
 
-  Future<void> insertOrUpdateUserPhoto({File userPhotoFile}) async {
+  Future<File> insertOrUpdateUserPhoto({File userPhotoFile}) async {
     final userId = await getUserId();
+
     StorageReference storageReference =
         FirebaseStorage().ref().child('photos').child(userId);
     print('STORAGE REFERENCE: ${storageReference.path}');
     StorageUploadTask uploadTask = storageReference.putFile(userPhotoFile);
     await uploadTask.onComplete;
+
     String photoUrl = await storageReference.getDownloadURL();
     await firestore
         .collection('users')
         .document(userId)
         .updateData({'photoUrl': photoUrl});
+
+    return userPhotoFile;
   }
 
   @override
-  Future<File> getUserPhoto() {
-    // TODO: implement getUserPhoto
-    return null;
+  Future<File> getUserPhoto() async {
+    final userId = await getUserId();
+    StorageReference ref = firebaseStorage.ref().child('photos').child(userId);
+    print('Storage Ref: ${ref.path}');
+    final File tempPhotoFile = File('$_photosDir/temp$userId.png');
+    if (tempPhotoFile.existsSync()) {
+      await tempPhotoFile.delete();
+    }
+    await tempPhotoFile.create(recursive: true);
+    final StorageFileDownloadTask downloadTask = ref.writeToFile(tempPhotoFile);
+    int downloadedBytes = (await downloadTask.future).totalByteCount;
+
+    if (downloadedBytes == 0) {
+      print('NOTHING DONWLOADED');
+    }
+
+    final size = tempPhotoFile.lengthSync();
+    print('PHOTO SIZE DATA SOURCE: $size');
+
+    return tempPhotoFile;
   }
 }
