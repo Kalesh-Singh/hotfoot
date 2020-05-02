@@ -209,8 +209,34 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, File>> getUserPhoto() {
-    // TODO: implement getUserPhoto
-    return null;
+  Future<Either<Failure, File>> getUserPhoto() async {
+    // Only reach out to remote repository if there is no image
+    // cached locally
+    print('Getting photo from local repo');
+    File photoFile = await userLocalDataSource.getUserPhoto();
+
+    if (photoFile != null) {
+      print('Got photo form local repo');
+      return Right(photoFile);
+    }
+
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+
+    try {
+      print('Getting photo form remote repo');
+      photoFile = await userRemoteDataSource.getUserPhoto();
+      print('Got photo from remote repo');
+      photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+        userPhotoFile: photoFile,
+      );
+      final bytes = photoFile.lengthSync();
+      print('PHOTO SIZE REPO: $bytes');
+      return Right(photoFile);
+    } catch (e) {
+      print('Exception: $e');
+      return Left(FirebaseStorageFailure());
+    }
   }
 }
