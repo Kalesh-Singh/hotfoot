@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
@@ -18,7 +19,7 @@ abstract class IUserRemoteDataSource {
 
   Future<UserModel> getUserInfoById({@required String userId});
 
-  Future<void> insertOrUpdateUserPhoto();
+  Future<void> insertOrUpdateUserPhoto({@required File userPhotoFile});
 
   Future<File> getUserPhoto();
 }
@@ -26,12 +27,15 @@ abstract class IUserRemoteDataSource {
 class UserRemoteDataSource implements IUserRemoteDataSource {
   final Firestore firestore;
   final FirebaseAuth firebaseAuth;
+  final FirebaseStorage firebaseStorage;
 
   UserRemoteDataSource({
     @required this.firestore,
     @required this.firebaseAuth,
+    @required this.firebaseStorage,
   })  : assert(firestore != null),
-        assert(firebaseAuth != null);
+        assert(firebaseAuth != null),
+        assert(firebaseStorage != null);
 
   @override
   Future<UserModel> getUserFromFirebase() async {
@@ -100,9 +104,18 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     return UserModel.fromJson(userJson);
   }
 
-  Future<void> insertOrUpdateUserPhoto() {
-    // TODO: implement insertOrUpdateUserPhoto
-    return null;
+  Future<void> insertOrUpdateUserPhoto({File userPhotoFile}) async {
+    final userId = await getUserId();
+    StorageReference storageReference =
+        FirebaseStorage().ref().child('photos').child(userId);
+    print('STORAGE REFERENCE: ${storageReference.path}');
+    StorageUploadTask uploadTask = storageReference.putFile(userPhotoFile);
+    await uploadTask.onComplete;
+    String photoUrl = await storageReference.getDownloadURL();
+    await firestore
+        .collection('users')
+        .document(userId)
+        .updateData({'photoUrl': photoUrl});
   }
 
   @override
