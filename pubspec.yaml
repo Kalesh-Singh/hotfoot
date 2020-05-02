@@ -77,6 +77,8 @@ dependencies:
   flutter_barcode_scanner: ^0.1.7
   # For the speed dial button
   flutter_speed_dial: ^1.2.5
+  # For user avatars
+  circular_profile_avatar: ^1.0.6
 
   # TODO: Maybe delete unused ones
   flutter_google_places: ^0.2.3

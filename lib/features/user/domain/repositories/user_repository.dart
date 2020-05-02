@@ -20,7 +20,6 @@ abstract class IUserRepository {
   Future<Either<Failure, UserEntity>> insertOrUpdateUser(
       {@required UserModel userModel});
 
-<<<<<<< HEAD
   Future<Either<Failure, UserEntity>> getUserInfoById(
       {@required String userId});
 
