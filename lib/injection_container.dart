@@ -180,6 +180,8 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
+        addUserFunds: sl(),
+        subtractUserFunds: sl(),
       ));
   sl.registerFactory(() => UserFundsBloc(
         getUserFunds: sl(),

@@ -138,3 +138,4 @@ class AcceptRunScreen extends StatelessWidget {
     return totalCost != null ? (1 / 5 * totalCost) : 0.0;
   }
 }
+
