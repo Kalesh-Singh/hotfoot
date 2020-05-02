@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,10 @@ abstract class IUserRemoteDataSource {
   Future<UserModel> insertOrUpdateUser({@required UserModel userModel});
 
   Future<UserModel> getUserInfoById({@required String userId});
+
+  Future<void> insertOrUpdateUserPhoto();
+
+  Future<File> getUserPhoto();
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -89,9 +94,20 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   Future<UserModel> getUserInfoById({String userId}) async {
     print('Got USER ID: $userId');
     final userData =
-        await (firestore.collection('users').document(userId).get());
+    await (firestore.collection('users').document(userId).get());
     final userJson = userData.data;
     print('Pulled user info: ${json.encode(userJson)}');
     return UserModel.fromJson(userJson);
+  }
+
+  Future<void> insertOrUpdateUserPhoto() {
+    // TODO: implement insertOrUpdateUserPhoto
+    return null;
+  }
+
+  @override
+  Future<File> getUserPhoto() {
+    // TODO: implement getUserPhoto
+    return null;
   }
 }

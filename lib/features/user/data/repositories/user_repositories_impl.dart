@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
@@ -185,10 +187,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
     final userFundsEither = await getUserFunds();
     return userFundsEither.fold(
-      (failure) {
+          (failure) {
         return Left(failure);
       },
-      (userFunds) async {
+          (userFunds) async {
         final newFunds = userFunds - funds;
         final updateFundsEither = await updateUserFunds(funds: newFunds);
         return updateFundsEither.fold((failure) {
@@ -198,5 +200,17 @@ class UserRepository implements IUserRepository {
         });
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> insertOrUpdateUserPhoto() {
+    // TODO: implement insertOrUpdateUserPhoto
+    return null;
+  }
+
+  @override
+  Future<Either<Failure, File>> getUserPhoto() {
+    // TODO: implement getUserPhoto
+    return null;
   }
 }

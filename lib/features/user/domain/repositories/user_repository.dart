@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
@@ -28,4 +30,8 @@ abstract class IUserRepository {
   Future<Either<Failure, double>> addUserFunds({@required double funds});
 
   Future<Either<Failure, double>> subtractUserFunds({@required double funds});
+
+  Future<Either<Failure, void>> insertOrUpdateUserPhoto();
+
+  Future<Either<Failure, File>> getUserPhoto();
 }
