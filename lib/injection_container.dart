@@ -75,6 +75,7 @@ import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/unknown_place_screen/unknown_place_screen_bloc.dart';
+import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_photo_dao.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -342,10 +343,13 @@ Future<void> init() async {
           ));
   sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
         userDao: sl(),
+        userPhotoDao: sl(),
       ));
   sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
         firestore: sl(),
         firebaseAuth: sl(),
+        tempPhotosDir: sl(),
+        firebaseStorage: sl(),
       ));
   sl.registerLazySingleton<IRunsLocalDataSource>(() => RunsLocalDataSource(
         runDao: sl(),
@@ -369,6 +373,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
         database: sl(),
+      ));
+  sl.registerLazySingleton<IUserPhotoDao>(() => UserPhotoDao(
+        photosDir: sl(),
       ));
   sl.registerLazySingleton<IRunDao>(() => RunDao(
         database: sl(),
