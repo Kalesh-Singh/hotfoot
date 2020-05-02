@@ -41,8 +41,7 @@ class RunPlacedScreen extends StatelessWidget {
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
-                child:
-                    RunMapWidget(userType: UserType.RUNNER, runModel: currRun),
+                child: RunMapWidget(userType: UserType.RUNNER),
               ),
               ActiveRunInfoWidget(runModel: currRun),
             ],
@@ -62,8 +61,7 @@ class RunPlacedScreen extends StatelessWidget {
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height / 1.65,
-                child: RunMapWidget(
-                    userType: UserType.CUSTOMER, runModel: currRun),
+                child: RunMapWidget(userType: UserType.CUSTOMER),
               ),
               ActiveRunInfoWidget(runModel: currRun),
             ],
