@@ -71,10 +71,10 @@ class UserRepository implements IUserRepository {
     }
     final either = await insertOrUpdateUser(userModel: userModel);
     return either.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (success) {
+      (success) {
         return Right(success);
       },
     );
@@ -84,10 +84,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, UserType>> getUserType() async {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (userModel) {
+      (userModel) {
         return Right(userModel.type);
       },
     );
@@ -97,24 +97,24 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, UserType>> toggleUserType() async {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
-          (failure) {
+      (failure) {
         print('FAILED TO GET USER INFO');
         return Left(failure);
       },
-          (userModel) async {
+      (userModel) async {
         final currUserType = userModel.type;
         final newUserType = (currUserType == UserType.CUSTOMER)
             ? UserType.RUNNER
             : UserType.CUSTOMER;
         UserModel newUserModel =
-        (userModel as UserModel).copyWith(type: newUserType);
+            (userModel as UserModel).copyWith(type: newUserType);
         final updateEither = await insertOrUpdateUser(userModel: newUserModel);
         return updateEither.fold(
-              (failure) {
+          (failure) {
             print('FAILED TO UPDATE USER MODEL');
             return Left(failure);
           },
-              (userModel) {
+          (userModel) {
             return Right(userModel.type);
           },
         );
@@ -122,15 +122,81 @@ class UserRepository implements IUserRepository {
     );
   }
 
-  @override
   Future<Either<Failure, UserEntity>> getUserInfoById({String userId}) async {
     try {
       final UserModel userModel =
-      await userRemoteDataSource.getUserInfoById(userId: userId);
+          await userRemoteDataSource.getUserInfoById(userId: userId);
       return Right(userModel);
     } catch (e) {
       print('FIRESTORE FAILURE: $e');
       return Left(FirestoreFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, double>> getUserFunds() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) {
+        return userModel.funds != null ? Right(userModel.funds) : Right(0.0);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserFunds({double funds}) async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(funds: funds);
+        final result = await insertOrUpdateUser(userModel: newUserModel);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, double>> addUserFunds({double funds}) async {
+    final userFundsEither = await getUserFunds();
+    return userFundsEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userFunds) async {
+        final newFunds = userFunds + funds;
+        final updateFundsEither = await updateUserFunds(funds: newFunds);
+        return updateFundsEither.fold((failure) {
+          return Left(failure);
+        }, (_) {
+          return Right(newFunds);
+        });
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
+    final userFundsEither = await getUserFunds();
+    return userFundsEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userFunds) async {
+        final newFunds = userFunds - funds;
+        final updateFundsEither = await updateUserFunds(funds: newFunds);
+        return updateFundsEither.fold((failure) {
+          return Left(failure);
+        }, (_) {
+          return Right(newFunds);
+        });
+      },
+    );
   }
 }

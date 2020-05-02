@@ -20,8 +20,8 @@ class AcceptRunScreen extends StatelessWidget {
           title: const Text('Run Details'),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () =>
-                BlocProvider.of<NavigationScreenBloc>(context).add(EnteredHome()),
+            onPressed: () => BlocProvider.of<NavigationScreenBloc>(context)
+                .add(EnteredHome()),
           ),
         ),
         body: WillPopScope(
@@ -30,9 +30,10 @@ class AcceptRunScreen extends StatelessWidget {
           },
           child: SafeArea(
             child: BlocBuilder<AcceptRunBloc, AcceptRunState>(
-              builder: (BuildContext context, AcceptRunState state){
+              builder: (BuildContext context, AcceptRunState state) {
                 if (state is AcceptRunSuccess) {
-                  BlocProvider.of<NavigationScreenBloc>(context).add(EnteredRunPlaced(runModel: runModel, isRunner: true));
+                  BlocProvider.of<NavigationScreenBloc>(context).add(
+                      EnteredRunPlaced(runModel: runModel, isRunner: true));
                   return Container(
                     child: Center(
                       child: CircularProgressIndicator(),
@@ -40,66 +41,66 @@ class AcceptRunScreen extends StatelessWidget {
                   );
                 } else {
                   return Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          height: 300,
-                          width: double.maxFinite,
-                          child: Card(
-                            margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  SizedBox(height: 28.0,),
-                                  Text("Maybe image of restaurant here?", 
-                                    style: TextStyle(
-                                      fontSize: 18, 
-                                      color: Colors.black
-                                    ),
-                                  ),
-                                  SizedBox(height: 18.0,),
-                                  Text(runModel.destinationPlace.address, 
-                                    style: TextStyle(
-                                      fontSize: 18, 
-                                      color: Colors.black
-                                    ),
-                                  ),
-                                  SizedBox(height: 18.0,),
-                                  Text(
-                                    runModel.order,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                      child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 300,
+                        width: double.maxFinite,
+                        child: Card(
+                          margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                          child: Center(
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 28.0,
+                                ),
+                                Text(
+                                  "Maybe image of restaurant here?",
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                                _getLabelAndTextBody(
+                                    label: 'Address: ',
+                                    textBody:
+                                        runModel.destinationPlace.address),
+                                _getLabelAndTextBody(
+                                    label: 'Request: ',
+                                    textBody: runModel.order),
+                                _getLabelAndTextBody(
+                                    label: 'Compensation: \$',
+                                    textBody:
+                                        '${calculateRunnerFee(runModel.cost).toStringAsFixed(2)}'),
+                              ],
                             ),
                           ),
                         ),
-                        SizedBox(height: 50.0,),
-                        Center(
-                          child: ButtonTheme(
-                            minWidth: 140.0,
-                            height: 40.0,
-                            child: RaisedButton.icon(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              icon: FaIcon(FontAwesomeIcons.check, color: Colors.white),
-                              onPressed: () {
-                                print("Accept run button is pressed");
-                                BlocProvider.of<AcceptRunBloc>(context).add(AcceptRunButtonPressed(runModel: runModel));
-                              },
-                              label:
-                                  Text('Accept Run', style: TextStyle(color: Colors.white)),
-                              color: Colors.lightBlueAccent,
+                      ),
+                      SizedBox(
+                        height: 50.0,
+                      ),
+                      Center(
+                        child: ButtonTheme(
+                          minWidth: 140.0,
+                          height: 40.0,
+                          child: RaisedButton.icon(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
+                            icon: FaIcon(FontAwesomeIcons.check,
+                                color: Colors.white),
+                            onPressed: () {
+                              print("Accept run button is pressed");
+                              BlocProvider.of<AcceptRunBloc>(context).add(
+                                  AcceptRunButtonPressed(runModel: runModel));
+                            },
+                            label: Text('Accept Run',
+                                style: TextStyle(color: Colors.white)),
+                            color: Colors.lightBlueAccent,
                           ),
                         ),
-                      ],
-                    )
-                  );
+                      ),
+                    ],
+                  ));
                 }
               },
             ),
@@ -108,4 +109,33 @@ class AcceptRunScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _getLabelAndTextBody(
+      {@required String label, @required String textBody}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(fontSize: 18),
+          ),
+          Expanded(
+            child: Text(
+              textBody,
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
+// TODO: Add calculation logic using distance, request load, etc.
+double calculateRunnerFee(double totalCost) {
+  return totalCost != null ? (1 / 5 * totalCost) : 0.0;
+}
+

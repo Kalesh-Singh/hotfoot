@@ -35,7 +35,7 @@ class MoreInfoSpeedDial extends StatelessWidget {
             onTap: () => showDialog(
                 context: context,
                 builder: (context) {
-                  return OrderDetailsPopUp();
+                  return OrderDetailsPopUp(userType: userType);
                 }),
             label: 'Order Details',
             labelStyle:

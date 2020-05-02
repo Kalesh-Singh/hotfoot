@@ -80,11 +80,15 @@ import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.d
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_info_by_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
+import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'features/search/data/data_sources/search_results_data_source.dart';
@@ -176,6 +180,12 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
+        addUserFunds: sl(),
+        subtractUserFunds: sl(),
+      ));
+  sl.registerFactory(() => UserFundsBloc(
+        getUserFunds: sl(),
+        addUserFunds: sl(),
       ));
   sl.registerFactory(() => OtherUserDetailsBloc(
         getUserInfoById: sl(),
@@ -262,6 +272,15 @@ Future<void> init() async {
       ));
   sl.registerLazySingleton(() => GetRouteBetweenPoints(
         routeRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserFunds(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => AddUserFunds(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => SubtractUserFunds(
+        userRepository: sl(),
       ));
 
   // Repositories

@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/cost_confirmation_popup.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/cost_confirmation_popup.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/cost_confirmation_popup.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_name.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/place_run_button.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
@@ -41,18 +44,27 @@ class _RunFormState extends State<RunForm> {
     return _orderController.text.isNotEmpty;
   }
 
-  void _onFormSubmitted() {
+  void _onFormSubmitted() async {
     if (_isPlaceRunEnabled()) {
       final currRun = _navigationScreenBloc.state.runModel;
-      _navigationScreenBloc.add(
-        EnteredRunPlaced(
-          runModel: currRun.copyWith(
-            timePlaced: DateTime.now(),
-            order: _orderController.text,
+      final double cost = _calculateTotalCost();
+      final bool isConfirmed = await showDialog(
+          context: context,
+          builder: (_) {
+            return CostConfirmationPopUp(cost: cost);
+          });
+      if (isConfirmed) {
+        _navigationScreenBloc.add(
+          EnteredRunPlaced(
+            runModel: currRun.copyWith(
+              cost: cost,
+              timePlaced: DateTime.now(),
+              order: _orderController.text,
+            ),
+            isRunner: false,
           ),
-          isRunner: false,
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -80,7 +92,7 @@ class _RunFormState extends State<RunForm> {
                 return null;
               },
               controller: _orderController,
-              style: style.copyWith(fontSize:16),
+              style: style.copyWith(fontSize: 16),
               decoration: InputDecoration(
                 labelText: 'What would you like to request?',
                 border: new OutlineInputBorder(
@@ -110,5 +122,10 @@ class _RunFormState extends State<RunForm> {
   void dispose() {
     _orderController.dispose();
     super.dispose();
+  }
+
+  // TODO: Add calculation logic using distance, request load, etc.
+  double _calculateTotalCost() {
+    return 8.29;
   }
 }
