@@ -17,4 +17,6 @@ abstract class IUserRepository {
 
   Future<Either<Failure, UserEntity>> insertOrUpdateUser(
       {@required UserModel userModel});
+
+  Future<Either<Failure, double>> getCustomerRating();
 }

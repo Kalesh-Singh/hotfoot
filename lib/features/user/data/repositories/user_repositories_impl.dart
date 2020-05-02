@@ -121,4 +121,19 @@ class UserRepository implements IUserRepository {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, double>> getCustomerRating() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) {
+        return (userModel.customerRating != null)
+            ? Right(userModel.customerRating)
+            : Right(0.0);
+      },
+    );
+  }
 }

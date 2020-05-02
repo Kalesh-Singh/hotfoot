@@ -11,6 +11,7 @@ class UserEntity extends Equatable {
   final String email;
   final UserType type;
   final bool isEmailVerified;
+  final double customerRating;
 
   const UserEntity({
     @required this.id,
@@ -18,6 +19,7 @@ class UserEntity extends Equatable {
     @required this.email,
     @required this.type,
     @required this.isEmailVerified,
+    @required this.customerRating,
   });
 
   @override
@@ -30,5 +32,6 @@ class UserEntity extends Equatable {
         email,
         type,
         isEmailVerified,
+        customerRating,
       ];
 }
