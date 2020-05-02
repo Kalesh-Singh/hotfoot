@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class UserPhotoEvent extends Equatable {
@@ -10,7 +9,8 @@ abstract class UserPhotoEvent extends Equatable {
 }
 
 class UserPhotoRequested extends UserPhotoEvent {
-  final UserEntity userEntity;
+  final String userId;
 
-  const UserPhotoRequested({@required this.userEntity});
+  /// Passing null for [userId] gives the current user photo.
+  const UserPhotoRequested({@required this.userId});
 }

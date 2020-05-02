@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/core/error/failures.dart';
-import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_photo.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_event.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_state.dart';
@@ -23,7 +22,7 @@ class UserPhotoBloc extends Bloc<UserPhotoEvent, UserPhotoState> {
   @override
   Stream<UserPhotoState> mapEventToState(UserPhotoEvent event) async* {
     if (event is UserPhotoRequested) {
-      final failureOrUserPhoto = await getUserPhoto(NoParams());
+      final failureOrUserPhoto = await getUserPhoto(event.userId);
       yield* _eitherUserPhotoLoadedOrFailureState(failureOrUserPhoto);
     }
   }

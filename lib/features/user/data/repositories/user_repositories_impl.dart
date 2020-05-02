@@ -224,11 +224,11 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, File>> getUserPhoto() async {
+  Future<Either<Failure, File>> getUserPhoto([String userId]) async {
     // Only reach out to remote repository if there is no image
     // cached locally
     print('Getting photo from local repo');
-    File photoFile = await userLocalDataSource.getUserPhoto();
+    File photoFile = await userLocalDataSource.getUserPhoto(userId);
 
     if (photoFile != null) {
       print('Got photo form local repo');
@@ -241,7 +241,7 @@ class UserRepository implements IUserRepository {
 
     try {
       print('Getting photo form remote repo');
-      photoFile = await userRemoteDataSource.getUserPhoto();
+      photoFile = await userRemoteDataSource.getUserPhoto(userId);
       print('Got photo from remote repo');
       photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
         userPhotoFile: photoFile,

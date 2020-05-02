@@ -22,7 +22,7 @@ abstract class IUserRemoteDataSource {
 
   Future<File> insertOrUpdateUserPhoto({@required File userPhotoFile});
 
-  Future<File> getUserPhoto();
+  Future<File> getUserPhoto([String userId]);
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -130,11 +130,11 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   }
 
   @override
-  Future<File> getUserPhoto() async {
-    final userId = await getUserId();
-    StorageReference ref = firebaseStorage.ref().child('photos').child(userId);
+  Future<File> getUserPhoto([String userId]) async {
+    final id = userId ?? await getUserId();
+    StorageReference ref = firebaseStorage.ref().child('photos').child(id);
     print('Storage Ref: ${ref.path}');
-    final File tempPhotoFile = File('$_photosDir/temp$userId.png');
+    final File tempPhotoFile = File('$_photosDir/temp$id.png');
     if (tempPhotoFile.existsSync()) {
       await tempPhotoFile.delete();
     }

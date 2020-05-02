@@ -35,5 +35,8 @@ abstract class IUserRepository {
   Future<Either<Failure, File>> insertOrUpdateUserPhoto(
       {@required File userPhotoFile});
 
-  Future<Either<Failure, File>> getUserPhoto();
+  /// If no [userId] is provided gets the photo of the
+  /// currently signed in user. Else gets the photo
+  /// for the provided [userId].
+  Future<Either<Failure, File>> getUserPhoto([String userId]);
 }
