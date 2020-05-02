@@ -16,7 +16,7 @@ abstract class IPlacesRemoteDataSource {
 }
 
 class PlacesRemoteDataSource implements IPlacesRemoteDataSource {
-  static const String _TEMP_PHOTOS_DIR = 'photos';
+  static const String _TEMP_PHOTOS_DIR = 'place_photos';
   final String _photosDir;
   final Firestore firestore;
   final FirebaseStorage firebaseStorage;

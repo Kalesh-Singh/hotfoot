@@ -7,6 +7,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_funds_widget.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_widget.dart';
 import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/injection_container.dart';
@@ -40,9 +41,12 @@ class SettingsScreen extends StatelessWidget {
                 SizedBox(height: 70.0),
                 Column(
                   children: <Widget>[
-                    Icon(
-                      Icons.account_circle,
-                      size: 130.0,
+                    UserPhotoWidget(
+                      borderWidth: 15,
+                      radius: 120,
+                      initialsTextSize: 15,
+                      initialsText: 'KS',
+                      onTap: null,
                     ),
                   ],
                 ),
@@ -61,6 +65,7 @@ class SettingsScreen extends StatelessWidget {
                 )
               ],
             ),
+
           ),
         ),
       ),
