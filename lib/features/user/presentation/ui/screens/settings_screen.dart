@@ -42,9 +42,10 @@ class SettingsScreen extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     UserPhotoWidget(
+                      userId: null,
                       borderWidth: 15,
-                      radius: 120,
-                      initialsTextSize: 15,
+                      radius: 110,
+                      initialsTextSize: 60,
                       initialsText: 'KS',
                       onTap: null,
                     ),
@@ -65,7 +66,6 @@ class SettingsScreen extends StatelessWidget {
                 )
               ],
             ),
-
           ),
         ),
       ),
