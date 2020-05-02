@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_state.dart';
@@ -39,17 +40,12 @@ class SettingsScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               children: <Widget>[
                 SizedBox(height: 70.0),
-                Column(
-                  children: <Widget>[
-                    UserPhotoWidget(
-                      userId: null,
-                      borderWidth: 15,
-                      radius: 110,
-                      initialsTextSize: 60,
-                      initialsText: 'KS',
-                      onTap: null,
-                    ),
-                  ],
+                UserPhotoWidget(
+                  userId: null,
+                  borderWidth: 15,
+                  radius: 120,
+                  editable: true,
+                  onTap: null,
                 ),
                 SizedBox(height: 24.0),
                 Center(
