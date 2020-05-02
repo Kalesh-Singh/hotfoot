@@ -50,6 +50,7 @@ import 'package:hotfoot/features/run_map/domain/repositories/runner_location_rep
 import 'package:hotfoot/features/run_map/domain/use_cases/get_route_between_points.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/get_runner_location_stream.dart';
 import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runner_location.dart';
+import 'package:hotfoot/features/run_map/presentation/blocs/other_user_details/other_user_details_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
@@ -80,6 +81,7 @@ import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.d
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_info_by_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
@@ -175,6 +177,9 @@ Future<void> init() async {
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
       ));
+  sl.registerFactory(() => OtherUserDetailsBloc(
+        getUserInfoById: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -226,6 +231,9 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetUserType(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserInfoById(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
