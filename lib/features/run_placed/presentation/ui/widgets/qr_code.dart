@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -30,7 +31,7 @@ class QRCode extends StatelessWidget {
             height: 130,
             child: Align(
               alignment: Alignment.center,
-              child: Text("Code not ready yet"),
+              child: Text("Code not ready yet", style: style.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
             ),
           );
         });
