@@ -33,7 +33,6 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseStorage firebaseStorage;
 
-
   UserRemoteDataSource({
     @required this.firestore,
     @required this.firebaseAuth,
@@ -60,6 +59,8 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
       isEmailVerified: firebaseUser.isEmailVerified,
+      photoUrl: null,
+      funds: 0,
     );
     return userModel;
   }
@@ -105,7 +106,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   Future<UserModel> getUserInfoById({String userId}) async {
     print('Got USER ID: $userId');
     final userData =
-    await (firestore.collection('users').document(userId).get());
+        await (firestore.collection('users').document(userId).get());
     final userJson = userData.data;
     print('Pulled user info: ${json.encode(userJson)}');
     return UserModel.fromJson(userJson);
