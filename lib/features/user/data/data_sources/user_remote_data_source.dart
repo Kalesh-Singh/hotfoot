@@ -70,6 +70,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
     UserModel userModel = await getUserInfoById(userId: userId);
+    // TODO: (ruel gordon) This should only be called once preferably in the same listener that will do the auto login after verification
     // When a user first logs in firestore will say email verified is false
     // it does not break naything right now but I just want to keep the information
     // cleaan and true for clarity, if there is a better place you would like this updated
