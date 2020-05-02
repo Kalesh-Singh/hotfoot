@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
@@ -5,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_event.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_state.dart';
 import 'package:hotfoot/injection_container.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserPhotoWidget extends StatelessWidget {
   final String userId;
@@ -24,8 +27,8 @@ class UserPhotoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<UserPhotoBloc>(),
-//        ..add(UserPhotoRequested(userId: null)),
+      create: (context) =>
+          sl<UserPhotoBloc>()..add(UserPhotoRequested(userId: null)),
       child: Container(
         child: BlocBuilder<UserPhotoBloc, UserPhotoState>(
             builder: (BuildContext context, UserPhotoState state) {
@@ -39,7 +42,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _iconAvatar(),
-                      (editable) ? _editWidget() : Container(),
+                      (editable) ? _editWidget(context) : Container(),
                     ],
                   ),
                 ],
@@ -54,7 +57,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget() : Container(),
+                      (editable) ? _editWidget(context) : Container(),
                     ],
                   ),
                 ],
@@ -69,7 +72,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget() : Container(),
+                      (editable) ? _editWidget(context) : Container(),
                     ],
                   ),
                 ],
@@ -82,20 +85,23 @@ class UserPhotoWidget extends StatelessWidget {
     );
   }
 
-  Widget _editWidget() {
+  Widget _editWidget(BuildContext context) {
     return Positioned(
       right: 5,
       bottom: 1,
       height: 0.5 * radius,
       child: FloatingActionButton(
         child: FaIcon(FontAwesomeIcons.edit, color: Colors.white),
-        onPressed: _pickImage,
+        onPressed: () => _pickImage(context),
       ),
     );
   }
 
-  void _pickImage() {
-
+  void _pickImage(BuildContext context) async {
+    File selectedPhoto =
+        await ImagePicker.pickImage(source: ImageSource.gallery);
+    BlocProvider.of<UserPhotoBloc>(context)
+        .add(UserPhotoUpdated(userPhoto: selectedPhoto));
   }
 
   Widget _photoAvatar(Uint8List photoBytes) {

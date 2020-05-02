@@ -50,7 +50,6 @@ dependencies:
   # For chat
   firebase_database:
   firebase_analytics:
-  image_picker:
   # To use font awesome icons
   # instead of using Icon() use FaIcon()
   # Find available icons here => https://fontawesome.com/icons?d=gallery&q
@@ -79,6 +78,8 @@ dependencies:
   flutter_speed_dial: ^1.2.5
   # For user avatars
   circular_profile_avatar: ^1.0.6
+  # Image Picker for Gallery and Camera
+  image_picker: ^0.6.5+3
 
   # TODO: Maybe delete unused ones
   flutter_google_places: ^0.2.3
