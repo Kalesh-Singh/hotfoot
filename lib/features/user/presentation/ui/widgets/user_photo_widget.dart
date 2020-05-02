@@ -42,7 +42,12 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _iconAvatar(),
-                      (editable) ? _editWidget(context) : Container(),
+                      (editable)
+                          ? _editWidget(context)
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            ),
                     ],
                   ),
                 ],
@@ -57,7 +62,12 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget(context) : Container(),
+                      (editable)
+                          ? _editWidget(context)
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            ),
                     ],
                   ),
                 ],
@@ -72,7 +82,12 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget(context) : Container(),
+                      (editable)
+                          ? _editWidget(context)
+                          : Container(
+                              height: 0,
+                              width: 0,
+                            ),
                     ],
                   ),
                 ],
