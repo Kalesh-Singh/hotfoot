@@ -45,7 +45,6 @@ class SettingsScreen extends StatelessWidget {
                   borderWidth: 15,
                   radius: 120,
                   editable: true,
-                  onTap: null,
                 ),
                 SizedBox(height: 24.0),
                 Center(

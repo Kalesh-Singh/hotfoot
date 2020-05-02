@@ -13,14 +13,12 @@ class UserPhotoWidget extends StatelessWidget {
   final double radius;
   final double borderWidth;
   final bool editable;
-  final void Function() onTap;
 
   UserPhotoWidget({
     @required this.userId,
     @required this.radius,
     @required this.borderWidth,
     @required this.editable,
-    @required this.onTap,
   });
 
   @override
@@ -41,7 +39,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _iconAvatar(),
-                      (editable) ? _editWidget(onTap) : Container(),
+                      (editable) ? _editWidget() : Container(),
                     ],
                   ),
                 ],
@@ -56,7 +54,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget(onTap) : Container(),
+                      (editable) ? _editWidget() : Container(),
                     ],
                   ),
                 ],
@@ -71,7 +69,7 @@ class UserPhotoWidget extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _photoAvatar(photoBytes),
-                      (editable) ? _editWidget(onTap) : Container(),
+                      (editable) ? _editWidget() : Container(),
                     ],
                   ),
                 ],
@@ -84,16 +82,20 @@ class UserPhotoWidget extends StatelessWidget {
     );
   }
 
-  Widget _editWidget(void Function() onTap) {
+  Widget _editWidget() {
     return Positioned(
       right: 5,
       bottom: 1,
       height: 0.5 * radius,
       child: FloatingActionButton(
         child: FaIcon(FontAwesomeIcons.edit, color: Colors.white),
-        onPressed: onTap,
+        onPressed: _pickImage,
       ),
     );
+  }
+
+  void _pickImage() {
+
   }
 
   Widget _photoAvatar(Uint8List photoBytes) {
