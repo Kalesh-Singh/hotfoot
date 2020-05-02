@@ -26,7 +26,7 @@ abstract class IUserRemoteDataSource {
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
-  static const String _TEMP_PHOTOS_DIR = 'photos';
+  static const String _TEMP_PHOTOS_DIR = 'user_photos';
 
   final String _photosDir;
   final Firestore firestore;
