@@ -257,6 +257,21 @@ class UserRepository implements IUserRepository {
     }
   }
 
+  Future<Either<Failure, void>> insertOrUpdateUserById(
+      {String userId, UserModel userModel}) async {
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+    try {
+      final result = await userRemoteDataSource.insertOrUpdateUserById(
+          userId: userId, userModel: userModel);
+      return Right(result);
+    } catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
   @override
   Future<Either<Failure, RatingsEntity>> getUserRatings() async {
     final userModelEither = await getUserInfo();
@@ -268,6 +283,60 @@ class UserRepository implements IUserRepository {
         return (userModel.ratings != null)
             ? Right(userModel.ratings)
             : Right(RatingsModel.empty());
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> addCustomerRating(
+      {String userId, double rating}) async {
+    final userModelEither = await getUserInfoById(userId: userId);
+    return await userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        final RatingsEntity ratings = userModel.ratings;
+        final int newRatingsCount = ratings.customerRatingCount + 1;
+        final double newRating =
+            (ratings.customerRating * ratings.customerRatingCount + rating) /
+                newRatingsCount;
+        final RatingsModel newRatingsModel = (ratings as RatingsModel).copyWith(
+          customerRating: newRating,
+          customerRatingCount: newRatingsCount,
+        );
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(ratings: newRatingsModel);
+        final result = await insertOrUpdateUserById(
+            userId: userId, userModel: newUserModel);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> addRunnerRating(
+      {String userId, double rating}) async {
+    final userModelEither = await getUserInfoById(userId: userId);
+    return await userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        final RatingsEntity ratings = userModel.ratings;
+        final int newRatingsCount = ratings.runnerRatingCount + 1;
+        final double newRating =
+            (ratings.runnerRating * ratings.runnerRatingCount + rating) /
+                newRatingsCount;
+        final RatingsModel newRatingsModel = (ratings as RatingsModel).copyWith(
+          runnerRating: newRating,
+          runnerRatingCount: newRatingsCount,
+        );
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(ratings: newRatingsModel);
+        final result = await insertOrUpdateUserById(
+            userId: userId, userModel: newUserModel);
+        return Right(result);
       },
     );
   }

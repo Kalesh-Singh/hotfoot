@@ -53,6 +53,7 @@ import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runne
 import 'package:hotfoot/features/run_map/presentation/blocs/other_user_details/other_user_details_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/run_finalizer/run_finalizer_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
@@ -188,8 +189,6 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
-        addUserFunds: sl(),
-        subtractUserFunds: sl(),
       ));
   sl.registerFactory(() => UserFundsBloc(
         getUserFunds: sl(),
@@ -204,6 +203,10 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => UserRatingsBloc(
         getUserRatings: sl(),
+      ));
+  sl.registerFactory(() => RunFinalizerBloc(
+        addUserFunds: sl(),
+        subtractUserFunds: sl(),
       ));
 
   // Use cases

@@ -3,22 +3,15 @@ import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_e
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
-import 'package:hotfoot/features/runs/presentation/ui/screens/accept_run_screen.dart';
-import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
-import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:meta/meta.dart';
 
 class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
   static const String _RUNNER_ERR_MSG = 'Runner ID is null';
   static const String _UPDATE_ERR_MSG = 'Failed to update run status';
   final UpdateOrInsertRun updateOrInsertRun;
-  final AddUserFunds addUserFunds;
-  final SubtractUserFunds subtractUserFunds;
 
   QRCodeBloc({
     @required this.updateOrInsertRun,
-    @required this.addUserFunds,
-    @required this.subtractUserFunds,
   });
 
   @override
@@ -40,7 +33,6 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
           failureOrUpdateSuccess.fold(
             (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
             (_) async {
-              await addUserFunds(calculateRunnerFee(event.runModel.cost));
               _QRCodeLoadSuccess(event.runModel, event.isRunner);
             },
           );
@@ -51,7 +43,6 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
         failureOrUpdateSuccess.fold(
           (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
           (_) async {
-            await subtractUserFunds(event.runModel.cost);
             _QRCodeLoadSuccess(event.runModel, event.isRunner);
           },
         );

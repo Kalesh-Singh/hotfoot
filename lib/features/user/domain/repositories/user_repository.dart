@@ -41,4 +41,10 @@ abstract class IUserRepository {
   Future<Either<Failure, File>> getUserPhoto([String userId]);
 
   Future<Either<Failure, RatingsEntity>> getUserRatings();
+
+  Future<Either<Failure, void>> addCustomerRating(
+      {@required String userId, @required double rating});
+
+  Future<Either<Failure, void>> addRunnerRating(
+      {@required String userId, @required double rating});
 }

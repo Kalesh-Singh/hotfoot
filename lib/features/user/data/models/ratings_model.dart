@@ -45,4 +45,18 @@ class RatingsModel extends RatingsEntity {
       runnerRatingCount: 0,
     );
   }
+
+  RatingsModel copyWith({
+    double customerRating,
+    int customerRatingCount,
+    double runnerRating,
+    int runnerRatingCount,
+  }) {
+    return RatingsModel(
+      customerRating: customerRating ?? this.customerRating,
+      customerRatingCount: customerRatingCount ?? this.customerRatingCount,
+      runnerRating: runnerRating ?? this.runnerRating,
+      runnerRatingCount: runnerRatingCount ?? this.runnerRatingCount,
+    );
+  }
 }
