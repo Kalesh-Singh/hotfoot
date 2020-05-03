@@ -41,4 +41,24 @@ class UserEntity extends Equatable {
         photoUrl,
         ratings,
       ];
+
+  UserEntity copyWith({
+    String id,
+    String name,
+    String email,
+    UserType type,
+    bool isEmailVerified,
+    double funds,
+    String photoUrl
+  }) {
+    return UserEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      type: type ?? this.type,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      funds: funds ?? this.funds,
+      photoUrl: photoUrl ?? this.photoUrl
+    );
+  }
 }
