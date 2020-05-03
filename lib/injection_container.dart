@@ -75,6 +75,7 @@ import 'package:hotfoot/features/search/presentation/blocs/search_bottom_drawer/
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_map/search_map_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/unknown_place_screen/unknown_place_screen_bloc.dart';
+import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_photo_dao.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
 import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
@@ -89,6 +90,9 @@ import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_photo.dart';
+import 'package:hotfoot/features/user/domain/use_cases/insert_or_update_user_photo.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_photo/user_photo_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'features/search/data/data_sources/search_results_data_source.dart';
@@ -190,6 +194,10 @@ Future<void> init() async {
   sl.registerFactory(() => OtherUserDetailsBloc(
         getUserInfoById: sl(),
       ));
+  sl.registerFactory(() => UserPhotoBloc(
+        insertOrUpdateUserPhoto: sl(),
+        getUserPhoto: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -280,6 +288,12 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => SubtractUserFunds(
+    userRepository: sl(),
+  ));
+  sl.registerLazySingleton(() => GetUserPhoto(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => InsertOrUpdateUserPhoto(
         userRepository: sl(),
       ));
 
@@ -342,10 +356,13 @@ Future<void> init() async {
           ));
   sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
         userDao: sl(),
+        userPhotoDao: sl(),
       ));
   sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
         firestore: sl(),
         firebaseAuth: sl(),
+        tempPhotosDir: sl(),
+        firebaseStorage: sl(),
       ));
   sl.registerLazySingleton<IRunsLocalDataSource>(() => RunsLocalDataSource(
         runDao: sl(),
@@ -369,6 +386,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IUserDao>(() => UserDao(
         database: sl(),
+      ));
+  sl.registerLazySingleton<IUserPhotoDao>(() => UserPhotoDao(
+        photosDir: sl(),
       ));
   sl.registerLazySingleton<IRunDao>(() => RunDao(
         database: sl(),

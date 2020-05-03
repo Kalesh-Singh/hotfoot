@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
@@ -185,10 +187,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
     final userFundsEither = await getUserFunds();
     return userFundsEither.fold(
-      (failure) {
+          (failure) {
         return Left(failure);
       },
-      (userFunds) async {
+          (userFunds) async {
         final newFunds = userFunds - funds;
         final updateFundsEither = await updateUserFunds(funds: newFunds);
         return updateFundsEither.fold((failure) {
@@ -198,5 +200,58 @@ class UserRepository implements IUserRepository {
         });
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, File>> insertOrUpdateUserPhoto(
+      {File userPhotoFile}) async {
+    // Only if updating remotely succeeds then we
+    // update the local cache.
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+
+    try {
+      await userRemoteDataSource.insertOrUpdateUserPhoto(
+          userPhotoFile: userPhotoFile);
+      final photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+          userPhotoFile: userPhotoFile);
+      return Right(photoFile);
+    } catch (e) {
+      print(e);
+      return Left(FirebaseStorageFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, File>> getUserPhoto([String userId]) async {
+    // Only reach out to remote repository if there is no image
+    // cached locally
+    print('Getting photo from local repo');
+    File photoFile = await userLocalDataSource.getUserPhoto(userId);
+
+    if (photoFile != null) {
+      print('Got photo form local repo');
+      return Right(photoFile);
+    }
+
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+
+    try {
+      print('Getting photo form remote repo');
+      photoFile = await userRemoteDataSource.getUserPhoto(userId);
+      print('Got photo from remote repo');
+      photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+        userPhotoFile: photoFile,
+      );
+      final bytes = photoFile.lengthSync();
+      print('PHOTO SIZE REPO: $bytes');
+      return Right(photoFile);
+    } catch (e) {
+      print('Exception: $e');
+      return Left(FirebaseStorageFailure());
+    }
   }
 }

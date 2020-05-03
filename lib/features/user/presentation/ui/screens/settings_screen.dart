@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_state.dart';
@@ -7,6 +8,7 @@ import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_funds_widget.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_widget.dart';
 import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/injection_container.dart';
@@ -38,13 +40,11 @@ class SettingsScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               children: <Widget>[
                 SizedBox(height: 70.0),
-                Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.account_circle,
-                      size: 130.0,
-                    ),
-                  ],
+                UserPhotoWidget(
+                  userId: null,
+                  borderWidth: 15,
+                  radius: 120,
+                  editable: true,
                 ),
                 SizedBox(height: 24.0),
                 Center(
