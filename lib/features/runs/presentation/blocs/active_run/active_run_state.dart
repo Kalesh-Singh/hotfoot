@@ -21,3 +21,12 @@ class RunActive extends ActiveRunState {
   @override
   List<Object> get props => [activeRun];
 }
+
+class ActiveRunLoadFailure extends ActiveRunState {
+  final String message;
+
+  const ActiveRunLoadFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

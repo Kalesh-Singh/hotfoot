@@ -267,9 +267,9 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   @override
   Future<RunModel> getActiveRun({UserType userType}) async {
-    // NOTE: There should only be one active run at any given time.
     final List<String> activeRunsIds =
         await _getActiveRunsIds(userType: userType);
+    // NOTE: There should only be one active run at any given time.
     if (activeRunsIds.length > 1) {
       throw Exception(
           'Inconsistent State: Multiple active runs for the same user');
