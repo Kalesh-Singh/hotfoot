@@ -244,22 +244,27 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
         print('failed to getUser');
       },
       (userId) async {
-        final pendingRunsIds = await _getRunsIds(
-          userIdField: userIdField,
-          userId: userId,
-          runStatus: RunStatus.PENDING,
-        );
-        final acceptedRunsIds = await _getRunsIds(
-          userIdField: userIdField,
-          userId: userId,
-          runStatus: RunStatus.ACCEPTED,
-        );
-        final customerConfirmedRuns = await _getRunsIds(
-          userIdField: userIdField,
-          userId: userId,
-          runStatus: RunStatus.CUSTOMER_CONFIRMATION,
-        );
-        _runsIds = pendingRunsIds + acceptedRunsIds + customerConfirmedRuns;
+        try {
+          final pendingRunsIds = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.PENDING,
+          );
+          final acceptedRunsIds = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.ACCEPTED,
+          );
+          final customerConfirmedRuns = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.CUSTOMER_CONFIRMATION,
+          );
+          _runsIds = pendingRunsIds + acceptedRunsIds + customerConfirmedRuns;
+        } catch (e) {
+          print(e);
+          throw e;
+        }
       },
     );
     return _runsIds;
