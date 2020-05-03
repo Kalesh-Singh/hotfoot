@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
@@ -54,7 +55,7 @@ class _ActiveRunInfoWidgetState extends State<ActiveRunInfoWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("Your QR Code:"),
+                    Text("Your QR Code:", style: style.copyWith(fontSize: 12),),
                     QRCode(),
                   ],
                 ),

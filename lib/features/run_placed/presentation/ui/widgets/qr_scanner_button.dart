@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
@@ -48,7 +49,7 @@ class QRScannerButton extends StatelessWidget {
                   throw new Exception("Error scanning QRCode!");
                 }
               },
-              label: Text('Scan QR', style: TextStyle(color: Colors.white)),
+              label: Text('Scan QR', style: style.copyWith(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
               color: Colors.blue,
             ),
           );
@@ -62,7 +63,7 @@ class QRScannerButton extends StatelessWidget {
             ),
             icon: FaIcon(FontAwesomeIcons.qrcode, color: Colors.white),
             onPressed: null,
-            label: Text('Scan QR', style: TextStyle(color: Colors.white)),
+            label: Text('Scan QR', style: style.copyWith(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
             color: Colors.grey,
           ),
         );
