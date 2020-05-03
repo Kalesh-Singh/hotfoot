@@ -1,3 +1,5 @@
+import 'package:hotfoot/features/user/data/models/ratings_model.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 
@@ -10,7 +12,7 @@ class UserModel extends UserEntity {
     @required bool isEmailVerified,
     @required double funds,
     @required String photoUrl,
-    @required double customerRating,
+    @required RatingsEntity ratings,
   }) : super(
           id: id,
           name: name,
@@ -19,7 +21,7 @@ class UserModel extends UserEntity {
           isEmailVerified: isEmailVerified,
           funds: funds,
           photoUrl: photoUrl,
-          customerRating: customerRating,
+          ratings: ratings,
         );
 
   factory UserModel.fromJson(Map json) => json != null
@@ -32,7 +34,7 @@ class UserModel extends UserEntity {
               _getIsEmailVerifiedFromString(json['isEmailVerified'] as String),
           funds: (json['funds'] as double),
           photoUrl: (json['photoUrl'] as String),
-          customerRating: (json['customerRating'] as double),
+          ratings: RatingsModel.fromJson(json['ratings']),
         )
       : null;
 
@@ -45,7 +47,7 @@ class UserModel extends UserEntity {
     map['isEmailVerified'] = isEmailVerified.toString();
     map['funds'] = funds;
     map['photoUrl'] = photoUrl;
-    map['customerRating'] = customerRating;
+    map['ratings'] = (ratings as RatingsModel)?.toJson();
     return map;
   }
 
@@ -66,7 +68,7 @@ class UserModel extends UserEntity {
     bool isEmailVerified,
     double funds,
     String photoUrl,
-    double customerRating,
+    RatingsEntity ratings,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -76,7 +78,7 @@ class UserModel extends UserEntity {
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       funds: funds ?? this.funds,
       photoUrl: photoUrl ?? this.photoUrl,
-      customerRating: customerRating ?? this.customerRating,
+      ratings: ratings ?? this.ratings,
     );
   }
 }

@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
+import 'package:hotfoot/features/user/data/models/ratings_model.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
@@ -256,16 +258,16 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, double>> getCustomerRating() async {
+  Future<Either<Failure, RatingsEntity>> getUserRatings() async {
     final userModelEither = await getUserInfo();
     return userModelEither.fold(
       (failure) {
         return Left(failure);
       },
       (userModel) {
-        return (userModel.customerRating != null)
-            ? Right(userModel.customerRating)
-            : Right(0.0);
+        return (userModel.ratings != null)
+            ? Right(userModel.ratings)
+            : Right(RatingsModel.empty());
       },
     );
   }

@@ -1,18 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
-import 'package:hotfoot/features/user/domain/use_cases/get_customer_rating.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_ratings.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_ratings/user_ratings_event.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_ratings/user_ratings_state.dart';
 import 'package:meta/meta.dart';
 
 class UserRatingsBloc extends Bloc<UserRatingsEvent, UserRatingsState> {
-  static const String _CUSTOMER_ERR_MSG = 'Failed to get customer rating';
-  static const String _RUNNER_ERR_MSG = 'Failed to get runner rating';
+  static const String _ERR_MSG = 'Failed to get user ratings';
 
-  final GetCustomerRating getCustomerRating;
+  final GetUserRatings getUserRatings;
 
   UserRatingsBloc({
-    @required this.getCustomerRating,
+    @required this.getUserRatings,
   });
 
   @override
@@ -21,10 +20,10 @@ class UserRatingsBloc extends Bloc<UserRatingsEvent, UserRatingsState> {
   @override
   Stream<UserRatingsState> mapEventToState(UserRatingsEvent event) async* {
     if (event is UserRatingsRequested) {
-      final failureOrCustomerRating = await getCustomerRating(NoParams());
-      yield failureOrCustomerRating.fold(
-        (failure) => UserRatingsFailure(message: _CUSTOMER_ERR_MSG),
-        (customerRating) => UserRatingsLoaded(customerRating: customerRating),
+      final failureOrUserRatings = await getUserRatings(NoParams());
+      yield failureOrUserRatings.fold(
+        (failure) => UserRatingsFailure(message: _ERR_MSG),
+        (ratings) => UserRatingsLoaded(ratings: ratings),
       );
     }
   }

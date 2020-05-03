@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class UserRatingsState extends Equatable {
@@ -11,14 +12,12 @@ abstract class UserRatingsState extends Equatable {
 class UserRatingsUninitialized extends UserRatingsState {}
 
 class UserRatingsLoaded extends UserRatingsState {
-  final double customerRating;
-  final double runnerRating;
+  final RatingsEntity ratings;
 
-  const UserRatingsLoaded(
-      {@required this.customerRating, @required this.runnerRating});
+  const UserRatingsLoaded({@required this.ratings});
 
   @override
-  List<Object> get props => [customerRating, runnerRating];
+  List<Object> get props => [ratings];
 }
 
 class UserRatingsFailure extends UserRatingsState {

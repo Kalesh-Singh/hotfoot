@@ -81,13 +81,15 @@ import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.d
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
-import 'package:hotfoot/features/user/domain/use_cases/get_customer_rating.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_info.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_ratings.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_info_by_id.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
+import 'package:hotfoot/features/user/domain/use_cases/insert_or_update_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_ratings/user_ratings_bloc.dart';
@@ -201,7 +203,7 @@ Future<void> init() async {
         getUserPhoto: sl(),
       ));
   sl.registerFactory(() => UserRatingsBloc(
-        getCustomerRating: sl(),
+        getUserRatings: sl(),
       ));
 
   // Use cases
@@ -301,7 +303,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => InsertOrUpdateUserPhoto(
         userRepository: sl(),
       ));
-  sl.registerLazySingleton(() => GetCustomerRating(
+  sl.registerLazySingleton(() => GetUserRatings(
         userRepository: sl(),
       ));
 
