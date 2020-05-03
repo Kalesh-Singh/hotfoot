@@ -3,9 +3,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/places/domain/entities/place_entity.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_event.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_state.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_bloc.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_event.dart';
+import 'package:hotfoot/features/places/presentation/blocs/place_photo/place_photo_state.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_state.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_event.dart';
+import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class AcceptRunScreen extends StatelessWidget {
@@ -13,8 +21,18 @@ class AcceptRunScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
     final runModel = navScreenBloc.state.runModel;
-    return BlocProvider(
-      create: (context) => sl<AcceptRunBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AcceptRunBloc>(
+          create: (context) => sl<AcceptRunBloc>(),
+        ),
+        BlocProvider<PlaceDetailsBloc>(
+          create: (context) => sl<PlaceDetailsBloc>(),
+        ),
+        BlocProvider<PlacePhotoBloc>(
+          create: (context) => sl<PlacePhotoBloc>(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Run Details'),
@@ -43,8 +61,38 @@ class AcceptRunScreen extends StatelessWidget {
                   return Container(
                       child: Column(
                     children: <Widget>[
+                      BlocBuilder<PlaceDetailsBloc,
+                          PlaceDetailsState>(
+                        builder: (BuildContext context,
+                            PlaceDetailsState state) {
+                          PlaceEntity placeEntity;
+                          if (state is PlaceDetailsUninitialized) {
+                            runModel.pickupPlaceIdOrCustomPlace.fold(
+                                  (pickupPlaceId) {
+                                BlocProvider.of<PlaceDetailsBloc>(
+                                    context)
+                                    .add(PlaceDetailsRequested(
+                                    placeId: pickupPlaceId));
+                              },
+                                  (customPlace) {
+                                placeEntity = customPlace;
+                              },
+                            );
+                          } else if (state
+                          is PlaceDetailsLoadSuccess) {
+                            placeEntity = state.placeEntity;
+                            BlocProvider.of<PlacePhotoBloc>(context)
+                                .add(PlacePhotoRequested(
+                                placeEntity: state.placeEntity));
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: RunPhoto(placeEntity: placeEntity),
+                          );
+                        },
+                      ),
                       Container(
-                        height: 300,
+                        height: 220,
                         width: double.maxFinite,
                         child: Card(
                           margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
@@ -53,11 +101,6 @@ class AcceptRunScreen extends StatelessWidget {
                               children: <Widget>[
                                 SizedBox(
                                   height: 28.0,
-                                ),
-                                Text(
-                                  "Maybe image of restaurant here?",
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
                                 ),
                                 _getLabelAndTextBody(
                                     label: 'Address: ',
@@ -138,4 +181,3 @@ class AcceptRunScreen extends StatelessWidget {
 double calculateRunnerFee(double totalCost) {
   return totalCost != null ? (1 / 5 * totalCost) : 0.0;
 }
-
