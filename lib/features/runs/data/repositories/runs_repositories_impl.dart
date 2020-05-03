@@ -166,8 +166,7 @@ class RunsRepository implements IRunsRepository {
   @override
   Future<Either<Failure, List<String>>> getPendingRunsIds() async {
     try {
-      final pendingRunsIds =
-          await runsRemoteDataSource.getPendingRunsIds();
+      final pendingRunsIds = await runsRemoteDataSource.getPendingRunsIds();
       return Right(pendingRunsIds);
     } on Exception catch (e) {
       print(e);
@@ -176,11 +175,11 @@ class RunsRepository implements IRunsRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> hasActiveRun({UserType userType}) async {
+  Future<Either<Failure, RunModel>> getActiveRun({UserType userType}) async {
     try {
-      final bool hasRunActive =
-          await runsRemoteDataSource.hasActiveRun(userType: userType);
-      return Right(hasRunActive);
+      final RunModel activeRun =
+          await runsRemoteDataSource.getActiveRun(userType: userType);
+      return Right(activeRun);
     } on Exception catch (e) {
       print(e);
       return Left(FirestoreFailure());

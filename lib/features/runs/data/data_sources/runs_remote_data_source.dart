@@ -28,7 +28,7 @@ abstract class IRunsRemoteDataSource {
 
   Future<List<String>> getPendingRunsIds();
 
-  Future<bool> hasActiveRun({@required UserType userType});
+  Future<RunModel> getActiveRun({@required UserType userType});
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -204,13 +204,70 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     return _runsIds;
   }
 
-  @override
-  Future<bool> hasActiveRun({UserType userType}) {
-    if (UserType is RunnerUserType) {
-      final runneRuns =
-
-    } else if (UserType is CustomerUserType) {
-
+  Future<List<String>> _getRunsIds({
+    @required String userIdField,
+    @required String userId,
+    @required String runStatus,
+  }) async {
+    List<String> _runsIds = List<String>();
+    final Query _runsCollectionGroup = firestore.collectionGroup('run');
+    print('Created Collection group');
+    try {
+      final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+          .where(userIdField, isEqualTo: userId)
+          .where('status', isEqualTo: runStatus)
+          .getDocuments();
+      print('Got collection group');
+      _runsSnapshot.documents.forEach(
+        (document) {
+          _runsIds.add(document.documentID);
+        },
+      );
+    } on Exception catch (e) {
+      throw e;
     }
+    print('Runs Ids');
+    for (final id in _runsIds) {
+      print(id);
+    }
+    return _runsIds;
+  }
+
+  Future<List<String>> _getActiveRunsIds({@required UserType userType}) async {
+    final String userIdField =
+        (userType is RunnerUserType) ? 'runnerId' : 'customerId';
+    final userEither = await getUserId(NoParams());
+    print('Got user either');
+    List<String> _runsIds;
+    await userEither.fold(
+      (failure) async {
+        print('failed to getUser');
+      },
+      (userId) async {
+        final pendingRunsIds = await _getRunsIds(
+          userIdField: userIdField,
+          userId: userId,
+          runStatus: RunStatus.PENDING,
+        );
+        final acceptedRunsIds = await _getRunsIds(
+          userIdField: userIdField,
+          userId: userId,
+          runStatus: RunStatus.ACCEPTED,
+        );
+        final customerConfirmedRuns = await _getRunsIds(
+          userIdField: userIdField,
+          userId: userId,
+          runStatus: RunStatus.CUSTOMER_CONFIRMATION,
+        );
+        _runsIds = pendingRunsIds + acceptedRunsIds + customerConfirmedRuns;
+      },
+    );
+    return _runsIds;
+  }
+
+  @override
+  Future<RunModel> getActiveRun({UserType userType}) {
+    if (UserType is RunnerUserType) {
+    } else if (UserType is CustomerUserType) {}
   }
 }

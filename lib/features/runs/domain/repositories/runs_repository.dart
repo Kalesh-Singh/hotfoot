@@ -30,5 +30,6 @@ abstract class IRunsRepository {
 
   Future<Either<Failure, List<String>>> getPendingRunsIds();
 
-  Future<Either<Failure, bool>> hasActiveRun({@required UserType userType});
+  /// Returns [Right(null)] if there is no active run.
+  Future<Either<Failure, RunModel>> getActiveRun({@required UserType userType});
 }
