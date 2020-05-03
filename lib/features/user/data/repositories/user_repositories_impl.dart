@@ -296,7 +296,8 @@ class UserRepository implements IUserRepository {
         return Left(failure);
       },
       (userModel) async {
-        final RatingsEntity ratings = userModel.ratings;
+        final RatingsEntity ratings = userModel.ratings ?? RatingsModel.empty();
+        print("Got here! Ratings = $ratings");
         final int newRatingsCount = ratings.customerRatingCount + 1;
         final double newRating =
             (ratings.customerRating * ratings.customerRatingCount + rating) /
@@ -323,7 +324,7 @@ class UserRepository implements IUserRepository {
         return Left(failure);
       },
       (userModel) async {
-        final RatingsEntity ratings = userModel.ratings;
+        final RatingsEntity ratings = userModel.ratings ?? RatingsModel.empty();
         final int newRatingsCount = ratings.runnerRatingCount + 1;
         final double newRating =
             (ratings.runnerRating * ratings.runnerRatingCount + rating) /

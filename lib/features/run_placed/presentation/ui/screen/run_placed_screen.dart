@@ -11,6 +11,7 @@ import 'package:hotfoot/features/run_placed/presentation/blocs/run_finalizer/run
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/give_rating_popup.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
@@ -45,15 +46,38 @@ class RunPlacedScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is RunUpdateLoadSuccess &&
                 state.runModel.status == 'Delivered') {
+              currRun = state.runModel;
               BlocProvider.of<RunFinalizerBloc>(context).add(
                   DeliveryConfirmed(isRunner: isRunner, cost: currRun.cost));
             }
           },
         ),
         BlocListener<RunFinalizerBloc, RunFinalizerState>(
-            listener: (context, state) {
-              // TODO: Show ratings popup.
-          if (state is RunFinalizerFundsUpdated) {}
+            listener: (context, state) async {
+          if (state is RunFinalizerFundsUpdated) {
+            final ratingOrNull = await showDialog(
+                context: context,
+                builder: (_) {
+                  return GiveRatingPopUp(isRunner: isRunner);
+                });
+            if (ratingOrNull != null) {
+              if (isRunner) {
+                BlocProvider.of<RunFinalizerBloc>(context).add(RatingGiven(
+                    isRunner: isRunner,
+                    userId: currRun.customerId,
+                    rating: ratingOrNull));
+              } else {
+                BlocProvider.of<RunFinalizerBloc>(context).add(RatingGiven(
+                    isRunner: isRunner,
+                    userId: currRun.runnerId,
+                    rating: ratingOrNull));
+              }
+            } else {
+              // TODO: Simply finish the run screen
+            }
+          } else if (state is RunFinalizerDone) {
+            print("Run is finalized!");
+          }
         }),
       ],
       child: isRunner

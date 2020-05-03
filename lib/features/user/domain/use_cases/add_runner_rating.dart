@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
+import 'package:hotfoot/features/user/domain/use_cases/add_customer_rating.dart';
 import 'package:meta/meta.dart';
 
 class AddRunnerRating implements UseCase<void, RatingParams> {
@@ -18,12 +19,3 @@ class AddRunnerRating implements UseCase<void, RatingParams> {
   }
 }
 
-class RatingParams {
-  final String userId;
-  final double rating;
-
-  const RatingParams({
-    @required this.userId,
-    @required this.rating,
-  });
-}
