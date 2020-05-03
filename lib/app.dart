@@ -11,6 +11,7 @@ import 'package:hotfoot/features/runs/presentation/ui/screens/accept_run_screen.
 import 'package:hotfoot/features/runs/presentation/ui/screens/run_details_screen.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_event.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:hotfoot/features/user/presentation/ui/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,30 +33,52 @@ class App extends StatelessWidget {
             } else if (state is Authenticated) {
               print('Authenticated');
               BlocProvider.of<UserTypeBloc>(context).add(UserTypeRequested());
-              return BlocBuilder<NavigationScreenBloc, NavigationScreenState>(
-                  builder: (context, state) {
-                print('NAV BLOC STATE TYPE: ${state.runtimeType}');
-                if (state is Home) {
-                  print('HOME');
-                  return HomeScreen();
-                } else if (state is RunDetails) {
-                  print('RUN DETAILS');
-                  return RunDetailsScreen();
-                } else if (state is RunPlaced) {
-                  print('RUN PLACED');
-                  return RunPlacedScreen();
-                } else if (state is Settings) {
-                  print('SETTINGS');
-                  return SettingsScreen();
-                } else if (state is Login) {
-                  print('LOGIN');
-                  return LoginScreen();
-                } else if (state is AcceptRun) {
-                  print('ACCEPT RUN');
-                  return AcceptRunScreen();
-                }
-                return Container();
-              });
+
+              return BlocBuilder<UserTypeBloc, UserTypeState>(
+                builder: (context, state) {
+                  if (state is UserTypeLoading) {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else {
+                    // TODO: Active run BlocBuilder
+                    // if (ActiveRunUnknown) {
+                    // return ProgressIndicator();
+                    // else if (ActiveRun)
+                    // Go to run placed screen
+                    // else if (NoRunsActive)
+                    // return the following bloc builder
+                    return BlocBuilder<NavigationScreenBloc,
+                        NavigationScreenState>(
+                      builder: (context, state) {
+                        print('NAV BLOC STATE TYPE: ${state.runtimeType}');
+                        if (state is Home) {
+                          print('HOME');
+                          return HomeScreen();
+                        } else if (state is RunDetails) {
+                          print('RUN DETAILS');
+                          return RunDetailsScreen();
+                        } else if (state is RunPlaced) {
+                          print('RUN PLACED');
+                          return RunPlacedScreen();
+                        } else if (state is Settings) {
+                          print('SETTINGS');
+                          return SettingsScreen();
+                        } else if (state is Login) {
+                          print('LOGIN');
+                          return LoginScreen();
+                        } else if (state is AcceptRun) {
+                          print('ACCEPT RUN');
+                          return AcceptRunScreen();
+                        }
+                        return Container();
+                      },
+                    );
+                  }
+                },
+              );
             } else if (state is Unauthenticated) {
               print('Not logged in');
               return LoginScreen();
