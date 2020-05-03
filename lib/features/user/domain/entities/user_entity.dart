@@ -49,7 +49,8 @@ class UserEntity extends Equatable {
     UserType type,
     bool isEmailVerified,
     double funds,
-    String photoUrl
+    String photoUrl,
+    RatingsEntity ratings,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -58,7 +59,8 @@ class UserEntity extends Equatable {
       type: type ?? this.type,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       funds: funds ?? this.funds,
-      photoUrl: photoUrl ?? this.photoUrl
+      photoUrl: photoUrl ?? this.photoUrl,
+      ratings: ratings ?? this.ratings,
     );
   }
 }
