@@ -59,6 +59,7 @@ import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.d
 import 'package:hotfoot/features/runs/data/data_sources/runs_remote_data_source.dart';
 import 'package:hotfoot/features/runs/data/repositories/runs_repositories_impl.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:hotfoot/features/runs/domain/use_cases/get_active_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_customer_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_pending_runs_ids.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/get_run_by_id.dart';
@@ -66,6 +67,7 @@ import 'package:hotfoot/features/runs/domain/use_cases/get_runner_runs_ids.dart'
 import 'package:hotfoot/features/runs/domain/use_cases/init_run.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_bloc.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/active_run/active_run_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/customer_runs_ids/customer_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/pending_runs_ids/pending_runs_ids_bloc.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/run_details/run_details_bloc.dart';
@@ -198,6 +200,9 @@ Future<void> init() async {
         insertOrUpdateUserPhoto: sl(),
         getUserPhoto: sl(),
       ));
+  sl.registerFactory(() => ActiveRunBloc(
+        getActiveRun: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => SignInWithGoogle(
@@ -288,13 +293,16 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => SubtractUserFunds(
-    userRepository: sl(),
-  ));
+        userRepository: sl(),
+      ));
   sl.registerLazySingleton(() => GetUserPhoto(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => InsertOrUpdateUserPhoto(
         userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetActiveRun(
+        runsRepository: sl(),
       ));
 
   // Repositories
