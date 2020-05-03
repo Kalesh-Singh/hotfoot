@@ -36,7 +36,9 @@ class ChatSection extends StatelessWidget {
     }
     else {
       // Can also append date or whatever discerning factors to create unique chatrooms
-      String referenceId = runModel.customerId+runModel.runnerId;
+      // ! Regex will remove all special characters, appends the date as a series of numbers at the end to ENSURE unique chat room
+      String referenceId = runModel.customerId+runModel.runnerId + runModel.timePlaced.toString().
+                                                                  replaceAll(RegExp(r'[^A-Za-z0-9]'), '');
       print(referenceId);
       return referenceId;
     }
