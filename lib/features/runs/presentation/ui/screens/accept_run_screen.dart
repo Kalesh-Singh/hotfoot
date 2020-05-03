@@ -14,6 +14,7 @@ import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_b
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_state.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_event.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/run_photo.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
 import 'package:hotfoot/injection_container.dart';
 
 class AcceptRunScreen extends StatelessWidget {
@@ -59,91 +60,113 @@ class AcceptRunScreen extends StatelessWidget {
                   );
                 } else {
                   return Container(
-                      child: Column(
-                    children: <Widget>[
-                      BlocBuilder<PlaceDetailsBloc,
-                          PlaceDetailsState>(
-                        builder: (BuildContext context,
-                            PlaceDetailsState state) {
-                          PlaceEntity placeEntity;
-                          if (state is PlaceDetailsUninitialized) {
-                            runModel.pickupPlaceIdOrCustomPlace.fold(
-                                  (pickupPlaceId) {
-                                BlocProvider.of<PlaceDetailsBloc>(
-                                    context)
-                                    .add(PlaceDetailsRequested(
-                                    placeId: pickupPlaceId));
-                              },
-                                  (customPlace) {
-                                placeEntity = customPlace;
-                              },
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      children: <Widget>[
+                        BlocBuilder<PlaceDetailsBloc, PlaceDetailsState>(
+                          builder:
+                              (BuildContext context, PlaceDetailsState state) {
+                            PlaceEntity placeEntity;
+                            if (state is PlaceDetailsUninitialized) {
+                              runModel.pickupPlaceIdOrCustomPlace.fold(
+                                (pickupPlaceId) {
+                                  BlocProvider.of<PlaceDetailsBloc>(context)
+                                      .add(PlaceDetailsRequested(
+                                          placeId: pickupPlaceId));
+                                },
+                                (customPlace) {
+                                  placeEntity = customPlace;
+                                },
+                              );
+                            } else if (state is PlaceDetailsLoadSuccess) {
+                              placeEntity = state.placeEntity;
+                              BlocProvider.of<PlacePhotoBloc>(context).add(
+                                  PlacePhotoRequested(
+                                      placeEntity: state.placeEntity));
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: RunPhoto(placeEntity: placeEntity),
                             );
-                          } else if (state
-                          is PlaceDetailsLoadSuccess) {
-                            placeEntity = state.placeEntity;
-                            BlocProvider.of<PlacePhotoBloc>(context)
-                                .add(PlacePhotoRequested(
-                                placeEntity: state.placeEntity));
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: RunPhoto(placeEntity: placeEntity),
-                          );
-                        },
-                      ),
-                      Container(
-                        height: 220,
-                        width: double.maxFinite,
-                        child: Card(
-                          margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-                          child: Center(
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 28.0,
+                          },
+                        ),
+                        Expanded(
+                          child: Container(
+                            width: double.maxFinite,
+                            child: Card(
+                              margin:
+                                  EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                              child: Center(
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    _getLabelAndTextBody(
+                                        label: 'Address: ',
+                                        textBody:
+                                            runModel.destinationPlace.address),
+                                    _getLabelAndTextBody(
+                                        label: 'Request: ',
+                                        textBody: runModel.order),
+                                    _getLabelAndTextBody(
+                                        label: 'Compensation: \$',
+                                        textBody:
+                                            '${calculateRunnerFee(runModel.cost).toStringAsFixed(2)}'),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Text(
+                                              'Customer: ',
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ),
+                                          UserPhotoWidget(
+                                            radius: 50,
+                                            editable: false,
+                                            borderWidth: 3,
+                                            userId: runModel.customerId,
+                                          ),
+                                          SizedBox(width: 30),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                _getLabelAndTextBody(
-                                    label: 'Address: ',
-                                    textBody:
-                                        runModel.destinationPlace.address),
-                                _getLabelAndTextBody(
-                                    label: 'Request: ',
-                                    textBody: runModel.order),
-                                _getLabelAndTextBody(
-                                    label: 'Compensation: \$',
-                                    textBody:
-                                        '${calculateRunnerFee(runModel.cost).toStringAsFixed(2)}'),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                      ),
-                      Center(
-                        child: ButtonTheme(
-                          minWidth: 140.0,
-                          height: 40.0,
-                          child: RaisedButton.icon(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Center(
+                          child: ButtonTheme(
+                            minWidth: 140.0,
+                            height: 40.0,
+                            child: RaisedButton.icon(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              icon: FaIcon(FontAwesomeIcons.check,
+                                  color: Colors.white),
+                              onPressed: () {
+                                print("Accept run button is pressed");
+                                BlocProvider.of<AcceptRunBloc>(context).add(
+                                    AcceptRunButtonPressed(runModel: runModel));
+                              },
+                              label: Text('Accept Run',
+                                  style: TextStyle(color: Colors.white)),
+                              color: Colors.lightBlueAccent,
                             ),
-                            icon: FaIcon(FontAwesomeIcons.check,
-                                color: Colors.white),
-                            onPressed: () {
-                              print("Accept run button is pressed");
-                              BlocProvider.of<AcceptRunBloc>(context).add(
-                                  AcceptRunButtonPressed(runModel: runModel));
-                            },
-                            label: Text('Accept Run',
-                                style: TextStyle(color: Colors.white)),
-                            color: Colors.lightBlueAccent,
                           ),
                         ),
-                      ),
-                    ],
-                  ));
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                  );
                 }
               },
             ),
