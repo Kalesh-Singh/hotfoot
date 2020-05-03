@@ -23,6 +23,9 @@ abstract class IUserRemoteDataSource {
   Future<File> insertOrUpdateUserPhoto({@required File userPhotoFile});
 
   Future<File> getUserPhoto([String userId]);
+
+  Future<UserModel> insertOrUpdateUserById(
+      {@required String userId, @required UserModel userModel});
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -91,11 +94,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
   Future<UserModel> insertOrUpdateUser({UserModel userModel}) async {
     final user = await (firebaseAuth.currentUser());
     final userId = user.uid;
-    await firestore
-        .collection('users')
-        .document(userId)
-        .setData(userModel.toJson());
-    return userModel;
+    return await insertOrUpdateUserById(userId: userId, userModel: userModel);
   }
 
   @override
@@ -129,6 +128,17 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
         .updateData({'photoUrl': photoUrl});
 
     return userPhotoFile;
+  }
+
+  @override
+  Future<UserModel> insertOrUpdateUserById(
+      {String userId, UserModel userModel}) async {
+    print('InsertOrUpdate USER ID: $userId');
+    await firestore
+        .collection('users')
+        .document(userId)
+        .setData(userModel.toJson());
+    return userModel;
   }
 
   @override

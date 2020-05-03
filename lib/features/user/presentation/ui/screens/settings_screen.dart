@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_event.dart';
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_ratings/user_ratings_bloc.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_ratings_widget.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_funds_widget.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
@@ -33,8 +34,15 @@ class SettingsScreen extends StatelessWidget {
         onWillPop: () {
           return Future.value(false);
         },
-        child: BlocProvider<UserFundsBloc>(
-          create: (context) => sl<UserFundsBloc>(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<UserFundsBloc>(
+              create: (context) => sl<UserFundsBloc>(),
+            ),
+            BlocProvider<UserRatingsBloc>(
+              create: (context) => sl<UserRatingsBloc>(),
+            ),
+          ],
           child: SafeArea(
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -55,6 +63,7 @@ class SettingsScreen extends StatelessWidget {
                 SizedBox(height: 24),
                 UserTypeWidget(),
                 UserFundsWidget(),
+                UserRatingsWidget(),
                 SizedBox(height: 24.0),
                 Center(
                   child: signOutButton(context),

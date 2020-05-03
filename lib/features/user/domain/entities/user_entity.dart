@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:meta/meta.dart';
 
 enum UserType { CUSTOMER, RUNNER }
@@ -13,6 +14,7 @@ class UserEntity extends Equatable {
   final bool isEmailVerified;
   final double funds;
   final String photoUrl;
+  final RatingsEntity ratings;
 
   const UserEntity({
     @required this.id,
@@ -22,6 +24,7 @@ class UserEntity extends Equatable {
     @required this.isEmailVerified,
     @required this.funds,
     @required this.photoUrl,
+    @required this.ratings,
   });
 
   @override
@@ -36,5 +39,6 @@ class UserEntity extends Equatable {
         isEmailVerified,
         funds,
         photoUrl,
+        ratings,
       ];
 }

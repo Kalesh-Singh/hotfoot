@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -38,4 +39,12 @@ abstract class IUserRepository {
   /// currently signed in user. Else gets the photo
   /// for the provided [userId].
   Future<Either<Failure, File>> getUserPhoto([String userId]);
+
+  Future<Either<Failure, RatingsEntity>> getUserRatings();
+
+  Future<Either<Failure, void>> addCustomerRating(
+      {@required String userId, @required double rating});
+
+  Future<Either<Failure, void>> addRunnerRating(
+      {@required String userId, @required double rating});
 }

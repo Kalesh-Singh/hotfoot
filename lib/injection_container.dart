@@ -53,6 +53,7 @@ import 'package:hotfoot/features/run_map/domain/use_cases/insert_or_update_runne
 import 'package:hotfoot/features/run_map/presentation/blocs/other_user_details/other_user_details_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/blocs/runner_location/runner_location_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
+import 'package:hotfoot/features/run_placed/presentation/blocs/run_finalizer/run_finalizer_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_bloc.dart';
 import 'package:hotfoot/features/runs/data/data_sources/data_access_objects/run_dao.dart';
 import 'package:hotfoot/features/runs/data/data_sources/runs_local_data_source.dart';
@@ -81,6 +82,9 @@ import 'package:hotfoot/features/user/data/repositories/user_repositories_impl.d
 import 'package:hotfoot/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.dart';
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
+import 'package:hotfoot/features/user/domain/use_cases/add_customer_rating.dart';
+import 'package:hotfoot/features/user/domain/use_cases/add_runner_rating.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_ratings.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
@@ -89,6 +93,7 @@ import 'package:hotfoot/features/user/domain/use_cases/get_user_type.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:hotfoot/features/user/domain/use_cases/subtract_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/toggle_user_type.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_ratings/user_ratings_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_funds/user_funds_bloc.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_photo.dart';
 import 'package:hotfoot/features/user/domain/use_cases/insert_or_update_user_photo.dart';
@@ -184,8 +189,6 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => QRCodeBloc(
         updateOrInsertRun: sl(),
-        addUserFunds: sl(),
-        subtractUserFunds: sl(),
       ));
   sl.registerFactory(() => UserFundsBloc(
         getUserFunds: sl(),
@@ -197,6 +200,15 @@ Future<void> init() async {
   sl.registerFactory(() => UserPhotoBloc(
         insertOrUpdateUserPhoto: sl(),
         getUserPhoto: sl(),
+      ));
+  sl.registerFactory(() => UserRatingsBloc(
+        getUserRatings: sl(),
+      ));
+  sl.registerFactory(() => RunFinalizerBloc(
+        addUserFunds: sl(),
+        subtractUserFunds: sl(),
+        addCustomerRating: sl(),
+        addRunnerRating: sl(),
       ));
 
   // Use cases
@@ -288,12 +300,21 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => SubtractUserFunds(
-    userRepository: sl(),
-  ));
+        userRepository: sl(),
+      ));
   sl.registerLazySingleton(() => GetUserPhoto(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => InsertOrUpdateUserPhoto(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserRatings(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => AddCustomerRating(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => AddRunnerRating(
         userRepository: sl(),
       ));
 
