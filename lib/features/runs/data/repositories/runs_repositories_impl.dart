@@ -9,6 +9,7 @@ import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/runs/domain/repositories/runs_repository.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
 import 'package:meta/meta.dart';
 
@@ -168,6 +169,18 @@ class RunsRepository implements IRunsRepository {
       final pendingRunsIds =
           await runsRemoteDataSource.getPendingRunsIds();
       return Right(pendingRunsIds);
+    } on Exception catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> hasActiveRun({UserType userType}) async {
+    try {
+      final bool hasRunActive =
+          await runsRemoteDataSource.hasActiveRun(userType: userType);
+      return Right(hasRunActive);
     } on Exception catch (e) {
       print(e);
       return Left(FirestoreFailure());

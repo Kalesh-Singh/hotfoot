@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_state.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/runs/presentation/ui/screens/accept_run_screen.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
@@ -34,9 +35,10 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
       }
     } else if (event is CounterpartQRConfirmed) {
       if (event.isRunner) {
-        if (event.runModel.status == "ConfirmedByCustomer") {
+        if (event.runModel.status == RunStatus.CUSTOMER_CONFIRMATION) {
           final failureOrUpdateSuccess = await updateOrInsertRun(event.runModel
-              .copyWith(status: "Delivered", timeDelivered: DateTime.now()));
+              .copyWith(
+                  status: RunStatus.DELIVERED, timeDelivered: DateTime.now()));
           failureOrUpdateSuccess.fold(
             (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
             (_) async {
@@ -47,7 +49,7 @@ class QRCodeBloc extends Bloc<QRCodeEvent, QRCodeState> {
         }
       } else {
         final failureOrUpdateSuccess = await updateOrInsertRun(
-            event.runModel.copyWith(status: "ConfirmedByCustomer"));
+            event.runModel.copyWith(status: RunStatus.CUSTOMER_CONFIRMATION));
         failureOrUpdateSuccess.fold(
           (failure) => QRCodeFailure(message: _UPDATE_ERR_MSG),
           (_) async {

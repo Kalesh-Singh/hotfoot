@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRemoteDataSource {
@@ -25,6 +27,8 @@ abstract class IRunsRemoteDataSource {
   Future<List<String>> getRunsIdsWhereUserIsRunner();
 
   Future<List<String>> getPendingRunsIds();
+
+  Future<bool> hasActiveRun({@required UserType userType});
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -198,5 +202,15 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     }
 
     return _runsIds;
+  }
+
+  @override
+  Future<bool> hasActiveRun({UserType userType}) {
+    if (UserType is RunnerUserType) {
+      final runneRuns =
+
+    } else if (UserType is CustomerUserType) {
+
+    }
   }
 }

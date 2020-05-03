@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/runs/domain/use_cases/update_or_insert_run.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_event.dart';
 import 'package:hotfoot/features/runs/presentation/blocs/accept_run/accept_run_state.dart';
@@ -32,7 +33,7 @@ class AcceptRunBloc extends Bloc<AcceptRunEvent, AcceptRunState> {
           print("Runner id = $runnerId");
           print("Accepted Run id = ${event.runModel.id}");
           final failureOrAcceptRunSuccess = await updateOrInsertRun(
-              event.runModel.copyWith(runnerId: runnerId, status: "Accepted"));
+              event.runModel.copyWith(runnerId: runnerId, status: RunStatus.ACCEPTED));
             if (failureOrAcceptRunSuccess.isRight()) {
               yield AcceptRunSuccess();
             } else {

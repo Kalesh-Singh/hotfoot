@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotfoot/core/style/style.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 
 class StatusBar extends StatelessWidget {
   final String status;
@@ -11,11 +12,11 @@ class StatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color containerColor;
-    if (status == "Accepted") {
+    if (status == RunStatus.ACCEPTED) {
       containerColor = Colors.greenAccent;
-    } else if (status == "Cancelled") {
+    } else if (status == RunStatus.CANCELLED) {
       containerColor = Colors.red;
-    } else if (status == "Delivered") {
+    } else if (status == RunStatus.DELIVERED) {
       containerColor = Colors.lightBlueAccent;
     }else {
       containerColor = Colors.grey;
