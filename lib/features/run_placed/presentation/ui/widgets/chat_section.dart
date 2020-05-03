@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/chat_message_list_item.dart';
 import 'package:hotfoot/injection_container.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -35,7 +36,9 @@ class ChatSection extends StatelessWidget {
     }
     else {
       // Can also append date or whatever discerning factors to create unique chatrooms
-      String referenceId = runModel.customerId+runModel.runnerId;
+      // ! Regex will remove all special characters, appends the date as a series of numbers at the end to ENSURE unique chat room
+      String referenceId = runModel.customerId+runModel.runnerId + runModel.timePlaced.toString().
+                                                                  replaceAll(RegExp(r'[^A-Za-z0-9]'), '');
       print(referenceId);
       return referenceId;
     }
@@ -115,6 +118,7 @@ class ChatWindow extends StatelessWidget {
                     onChanged: (String txt) {
                     },
                     onSubmitted: _submitMsg,
+                    style: style.copyWith(fontSize: 12),
                     decoration:
                        InputDecoration.collapsed(hintText: "Enter some text to send a message"),
                   ),
@@ -123,7 +127,7 @@ class ChatWindow extends StatelessWidget {
                 margin:  EdgeInsets.symmetric(horizontal: 3.0),
                 child: Theme.of(context).platform == TargetPlatform.iOS
                   ?  CupertinoButton(
-                    child:  Text("Submit"),
+                    child:  Text("Submit", style: style.copyWith(fontSize: 12),),
                     onPressed: () => _submitMsg(_textController.text),
                 )
                     :  IconButton(

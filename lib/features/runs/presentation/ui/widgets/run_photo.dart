@@ -28,8 +28,8 @@ class RunPhoto extends StatelessWidget {
           } else {
             return Image.asset(
               'assets/place-photo-placeholder.png',
-              width: 140,
-              height: 140,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 3,
               fit: BoxFit.fill,
             );
           }

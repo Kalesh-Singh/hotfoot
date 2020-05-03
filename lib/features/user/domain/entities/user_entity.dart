@@ -11,6 +11,8 @@ class UserEntity extends Equatable {
   final String email;
   final UserType type;
   final bool isEmailVerified;
+  final double funds;
+  final String photoUrl;
   final double customerRating;
 
   const UserEntity({
@@ -19,6 +21,8 @@ class UserEntity extends Equatable {
     @required this.email,
     @required this.type,
     @required this.isEmailVerified,
+    @required this.funds,
+    @required this.photoUrl,
     @required this.customerRating,
   });
 
@@ -32,6 +36,8 @@ class UserEntity extends Equatable {
         email,
         type,
         isEmailVerified,
+        funds,
+        photoUrl,
         customerRating,
       ];
 }

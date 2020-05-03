@@ -8,6 +8,8 @@ class UserModel extends UserEntity {
     @required String email,
     @required UserType type,
     @required bool isEmailVerified,
+    @required double funds,
+    @required String photoUrl,
     @required double customerRating,
   }) : super(
           id: id,
@@ -15,6 +17,8 @@ class UserModel extends UserEntity {
           email: email,
           type: type,
           isEmailVerified: isEmailVerified,
+          funds: funds,
+          photoUrl: photoUrl,
           customerRating: customerRating,
         );
 
@@ -26,6 +30,8 @@ class UserModel extends UserEntity {
           type: _getUserTypeFromString(json['type'] as String),
           isEmailVerified:
               _getIsEmailVerifiedFromString(json['isEmailVerified'] as String),
+          funds: (json['funds'] as double),
+          photoUrl: (json['photoUrl'] as String),
           customerRating: (json['customerRating'] as double),
         )
       : null;
@@ -37,6 +43,8 @@ class UserModel extends UserEntity {
     map['email'] = email;
     map['type'] = type.toString();
     map['isEmailVerified'] = isEmailVerified.toString();
+    map['funds'] = funds;
+    map['photoUrl'] = photoUrl;
     map['customerRating'] = customerRating;
     return map;
   }
@@ -56,6 +64,8 @@ class UserModel extends UserEntity {
     UserType type,
     String status,
     bool isEmailVerified,
+    double funds,
+    String photoUrl,
     double customerRating,
   }) {
     return UserModel(
@@ -64,6 +74,8 @@ class UserModel extends UserEntity {
       email: email ?? this.email,
       type: type ?? this.type,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      funds: funds ?? this.funds,
+      photoUrl: photoUrl ?? this.photoUrl,
       customerRating: customerRating ?? this.customerRating,
     );
   }

@@ -50,7 +50,6 @@ dependencies:
   # For chat
   firebase_database:
   firebase_analytics:
-  image_picker:
   # To use font awesome icons
   # instead of using Icon() use FaIcon()
   # Find available icons here => https://fontawesome.com/icons?d=gallery&q
@@ -75,6 +74,12 @@ dependencies:
   qr_flutter: ^3.2.0
   # For scanning QR codes
   flutter_barcode_scanner: ^0.1.7
+  # For the speed dial button
+  flutter_speed_dial: ^1.2.5
+  # For user avatars
+  circular_profile_avatar: ^1.0.6
+  # Image Picker for Gallery and Camera
+  image_picker: ^0.6.5+3
   # For rating bar
   flutter_rating_bar: ^3.0.1+1
 
@@ -83,7 +88,6 @@ dependencies:
   google_maps_webservice: ^0.0.16
 
   rxdart: ^0.23.0
-  flutter_speed_dial: ^1.2.4
 
 dev_dependencies:
   # Flutter Unit Tests
@@ -108,7 +112,7 @@ flutter:
     - assets/flutter_logo.png
     - assets/place-photo-placeholder.png
     - assets/HotFoot.png
-  
+
   fonts:
     - family: Montserrat
       fonts:

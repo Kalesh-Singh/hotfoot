@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 
-abstract class IPlacePhotoDao {
+abstract class IUserPhotoDao {
   /// Returns the inserted File
   Future<File> insertOrUpdate({
     @required String id,
@@ -19,14 +19,14 @@ abstract class IPlacePhotoDao {
   Future<void> deleteAll();
 }
 
-class PlacePhotoDao implements IPlacePhotoDao {
-  static const String _PLACE_PHOTO_DIR = 'place_photos';
+class UserPhotoDao implements IUserPhotoDao {
+  static const String _USER_PHOTO_DIR = 'user_photos';
   final String _photosDir;
 
-  PlacePhotoDao({
+  UserPhotoDao({
     @required Directory photosDir,
   })  : assert(photosDir != null),
-        this._photosDir = join(photosDir.path, _PLACE_PHOTO_DIR);
+        this._photosDir = join(photosDir.path, _USER_PHOTO_DIR);
 
   @override
   Future<void> delete({String id}) async {

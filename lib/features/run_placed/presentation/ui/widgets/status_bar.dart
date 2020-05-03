@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotfoot/core/style/style.dart';
 
 class StatusBar extends StatelessWidget {
   final String status;
@@ -32,11 +33,7 @@ class StatusBar extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           "Status: $status",
-          style: TextStyle(
-            fontSize: 15.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: style.copyWith(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)
         ),
       ),
       decoration: BoxDecoration(
