@@ -112,7 +112,7 @@ class RunCard extends StatelessWidget {
                           Expanded(
                             child: Center(
                               child: Text(
-                                DateFormat.yMMMMEEEEd()
+                                DateFormat.yMMMEd().add_Hm()
                                     .format(runEntity.timePlaced),
                                 style: style.copyWith(fontSize: 16.0),
                               ),
