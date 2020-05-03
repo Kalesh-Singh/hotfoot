@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
 import 'package:hotfoot/features/run_map/presentation/ui/widgets/run_map_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_finalizer/run_finalizer_bloc.dart';
@@ -21,11 +22,6 @@ import 'package:hotfoot/features/runs/data/models/run_model.dart';
 class RunPlacedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
-    final currRun = navScreenBloc.state.runModel;
-    final json1 = json.encode(currRun.toJson());
-    print('FROM NAV BLOC');
-    print(json1);
     return MultiBlocProvider(
       providers: [
         BlocProvider<QRCodeBloc>(create: (context) => sl<QRCodeBloc>()),
@@ -33,11 +29,15 @@ class RunPlacedScreen extends StatelessWidget {
         BlocProvider<RunFinalizerBloc>(
             create: (context) => sl<RunFinalizerBloc>()),
       ],
-      child: _runListenersWidget(context, currRun),
+      child: _runListenersWidget(context),
     );
   }
 
-  Widget _runListenersWidget(BuildContext context, RunModel currRun) {
+  Widget _runListenersWidget(BuildContext context) {
+    final navScreenBloc = BlocProvider.of<NavigationScreenBloc>(context);
+    RunModel currRun = navScreenBloc.state.runModel;
+    print('FROM NAV BLOC');
+    print(json.encode(currRun.toJson()));
     final bool isRunner =
         BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType;
     return MultiBlocListener(
@@ -73,10 +73,12 @@ class RunPlacedScreen extends StatelessWidget {
                     rating: ratingOrNull));
               }
             } else {
-              // TODO: Simply finish the run screen
+              print("Run is finalized without rating!");
+              navScreenBloc.add(EnteredHome());
             }
           } else if (state is RunFinalizerDone) {
             print("Run is finalized!");
+            navScreenBloc.add(EnteredHome());
           }
         }),
       ],
