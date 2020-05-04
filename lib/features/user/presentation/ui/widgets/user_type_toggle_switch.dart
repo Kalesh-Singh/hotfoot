@@ -17,8 +17,8 @@ class UserTypeSwitch extends StatelessWidget {
             _toggleUserType(context);
           },
           value: switchValue,
-          activeColor: Colors.blue,
-          activeTrackColor: Colors.green,
+          activeColor: Colors.deepOrange,
+          activeTrackColor: Colors.orange,
           inactiveThumbColor: Colors.white,
           inactiveTrackColor: Colors.grey,
         );
