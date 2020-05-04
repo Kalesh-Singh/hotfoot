@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotfoot/core/use_cases/use_case.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_id.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRemoteDataSource {
@@ -25,6 +27,8 @@ abstract class IRunsRemoteDataSource {
   Future<List<String>> getRunsIdsWhereUserIsRunner();
 
   Future<List<String>> getPendingRunsIds();
+
+  Future<RunModel> getActiveRun({@required UserType userType});
 }
 
 class RunsRemoteDataSource implements IRunsRemoteDataSource {
@@ -198,5 +202,85 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
     }
 
     return _runsIds;
+  }
+
+  Future<List<String>> _getRunsIds({
+    @required String userIdField,
+    @required String userId,
+    @required String runStatus,
+  }) async {
+    List<String> _runsIds = List<String>();
+    final Query _runsCollectionGroup = firestore.collectionGroup('run');
+    print('Created Collection group');
+    try {
+      final QuerySnapshot _runsSnapshot = await _runsCollectionGroup
+          .where(userIdField, isEqualTo: userId)
+          .where('status', isEqualTo: runStatus)
+          .getDocuments();
+      print('Got collection group');
+      _runsSnapshot.documents.forEach(
+        (document) {
+          _runsIds.add(document.documentID);
+        },
+      );
+    } on Exception catch (e) {
+      throw e;
+    }
+    print('Runs Ids');
+    for (final id in _runsIds) {
+      print(id);
+    }
+    return _runsIds;
+  }
+
+  Future<List<String>> _getActiveRunsIds({@required UserType userType}) async {
+    final String userIdField =
+        (userType is RunnerUserType) ? 'runnerId' : 'customerId';
+    final userEither = await getUserId(NoParams());
+    print('Got user either');
+    List<String> _runsIds;
+    await userEither.fold(
+      (failure) async {
+        print('failed to getUser');
+      },
+      (userId) async {
+        try {
+          final pendingRunsIds = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.PENDING,
+          );
+          final acceptedRunsIds = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.ACCEPTED,
+          );
+          final customerConfirmedRuns = await _getRunsIds(
+            userIdField: userIdField,
+            userId: userId,
+            runStatus: RunStatus.CUSTOMER_CONFIRMATION,
+          );
+          _runsIds = pendingRunsIds + acceptedRunsIds + customerConfirmedRuns;
+        } catch (e) {
+          print(e);
+          throw e;
+        }
+      },
+    );
+    return _runsIds;
+  }
+
+  @override
+  Future<RunModel> getActiveRun({UserType userType}) async {
+    final List<String> activeRunsIds =
+        await _getActiveRunsIds(userType: userType);
+    // NOTE: There should only be one active run at any given time.
+    if (activeRunsIds.length > 1) {
+      throw Exception(
+          'Inconsistent State: Multiple active runs for the same user');
+    } else if (activeRunsIds.length == 1) {
+      return await getRunById(id: activeRunsIds[0]);
+    }
+    return null;
   }
 }

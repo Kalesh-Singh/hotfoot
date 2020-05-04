@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotfoot/app.dart';
+import 'package:hotfoot/features/runs/presentation/blocs/active_run/active_run_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/injection_container.dart' as di;
 import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
@@ -21,6 +22,9 @@ void main() async {
         ),
         BlocProvider<UserTypeBloc>(
           create: (context) => di.sl<UserTypeBloc>(),
+        ),
+        BlocProvider<ActiveRunBloc>(
+          create: (context) => di.sl<ActiveRunBloc>(),
         )
       ],
       child: App(),

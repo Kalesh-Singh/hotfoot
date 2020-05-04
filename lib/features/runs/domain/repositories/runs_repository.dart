@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
 import 'package:hotfoot/features/runs/data/models/run_model.dart';
 import 'package:hotfoot/features/runs/domain/entities/run_entity.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 
 abstract class IRunsRepository {
@@ -28,4 +29,7 @@ abstract class IRunsRepository {
   Future<Either<Failure, List<String>>> getRunsIdsWhereUserIsRunner();
 
   Future<Either<Failure, List<String>>> getPendingRunsIds();
+
+  /// Returns [Right(null)] if there is no active run.
+  Future<Either<Failure, RunModel>> getActiveRun({@required UserType userType});
 }
