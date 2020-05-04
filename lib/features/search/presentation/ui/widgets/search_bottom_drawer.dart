@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
@@ -94,10 +95,11 @@ class DrawerContents extends StatelessWidget {
               ),
               Text(
                 "Place Details",
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: style.copyWith(
+                  fontSize: 17, 
+                  fontWeight: FontWeight.bold, 
+                  color: Colors.white
+                ),
               ),
               PlaceDetails(),
             ],

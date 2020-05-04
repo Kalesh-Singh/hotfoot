@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/places/presentation/blocs/place_details/place_details_bloc.dart';
@@ -30,7 +31,9 @@ class RunDetailsScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Run Details'),
+          title: Text('Run Details',
+          style: style.copyWith(fontWeight: FontWeight.bold),
+          ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             // TODO: This has to account for going back to the pin

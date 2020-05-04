@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:hotfoot/features/run_placed/presentation/blocs/qr_code/qr_code_bloc.dart';
@@ -90,7 +91,11 @@ class RunPlacedScreen extends StatelessWidget {
 
   Widget _runnerRunPlacedScreen(BuildContext context, RunModel currRun) {
     return Scaffold(
-      appBar: AppBar(title: Text('Run Status')),
+      appBar: AppBar(
+        title: Text('Run Status',
+        style: style.copyWith(fontWeight: FontWeight.bold),
+        )
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -107,7 +112,11 @@ class RunPlacedScreen extends StatelessWidget {
 
   Widget _customerRunPlacedScreen(BuildContext context, RunModel currRun) {
     return Scaffold(
-      appBar: AppBar(title: Text('Run Status')),
+      appBar: AppBar(
+        title: Text('Run Status',
+        style: style.copyWith(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
