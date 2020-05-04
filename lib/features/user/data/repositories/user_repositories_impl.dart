@@ -246,6 +246,7 @@ class UserRepository implements IUserRepository {
       photoFile = await userRemoteDataSource.getUserPhoto(userId);
       print('Got photo from remote repo');
       photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+        userId: userId,
         userPhotoFile: photoFile,
       );
       final bytes = photoFile.lengthSync();

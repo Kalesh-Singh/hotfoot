@@ -10,7 +10,7 @@ abstract class IUserLocalDataSource {
 
   Future<UserModel> getUserInfo();
 
-  Future<File> insertOrUpdateUserPhoto({@required File userPhotoFile});
+  Future<File> insertOrUpdateUserPhoto({@required String userId, @required File userPhotoFile,});
 
   Future<File> getUserPhoto([String userId]);
 }
@@ -42,10 +42,10 @@ class UserLocalDataSource implements IUserLocalDataSource {
   }
 
   @override
-  Future<File> insertOrUpdateUserPhoto({File userPhotoFile}) async {
-    final String userId = (await userDao.get()).id;
+  Future<File> insertOrUpdateUserPhoto({String userId, File userPhotoFile,}) async {
+    final String id = userId ?? (await userDao.get()).id;
     return await userPhotoDao.insertOrUpdate(
-      id: userId,
+      id: id,
       photoFile: userPhotoFile,
     );
   }

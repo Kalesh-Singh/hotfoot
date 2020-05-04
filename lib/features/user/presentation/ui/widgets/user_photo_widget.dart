@@ -28,7 +28,7 @@ class UserPhotoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          sl<UserPhotoBloc>()..add(UserPhotoRequested(userId: null)),
+          sl<UserPhotoBloc>()..add(UserPhotoRequested(userId: userId)),
       child: Container(
         child: BlocBuilder<UserPhotoBloc, UserPhotoState>(
             builder: (BuildContext context, UserPhotoState state) {
