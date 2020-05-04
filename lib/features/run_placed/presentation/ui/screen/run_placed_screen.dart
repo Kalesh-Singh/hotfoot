@@ -15,6 +15,7 @@ import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_up
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/give_rating_popup.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/other_user_cancelled_popup.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
@@ -47,11 +48,11 @@ class RunPlacedScreen extends StatelessWidget {
         BlocListener<RunUpdateBloc, RunUpdateState>(
           listener: (context, state) async {
             if (state is RunUpdateLoadSuccess) {
-              if (state.runModel.status == 'Delivered') {
+              if (state.runModel.status == RunStatus.DELIVERED) {
                 currRun = state.runModel;
                 BlocProvider.of<RunFinalizerBloc>(context).add(
                     DeliveryConfirmed(isRunner: isRunner, cost: currRun.cost));
-              } else if (state.runModel.status == 'Cancelled') {
+              } else if (state.runModel.status == RunStatus.CANCELLED) {
                 await showDialog(
                     context: context,
                     builder: (_) {

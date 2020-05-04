@@ -8,8 +8,6 @@ class OtherUserCancelledPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _rating = 0.0;
-
     return AlertDialog(
       title: Text(
         'Run cancelled by ${isRunner?'customer':'runner'}',
