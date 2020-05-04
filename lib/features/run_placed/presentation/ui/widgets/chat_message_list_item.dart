@@ -1,7 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/core/style/style.dart';
+import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
 
 var currentUserEmail;
 
@@ -13,12 +16,13 @@ class ChatMessageListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SizeTransition(
-      sizeFactor:
-       CurvedAnimation(parent: animation, curve: Curves.decelerate),
-      child:  Container(
+    final runModel =
+        BlocProvider.of<NavigationScreenBloc>(context).state.runModel;
+    return SizeTransition(
+      sizeFactor: CurvedAnimation(parent: animation, curve: Curves.decelerate),
+      child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child:  Row(
+        child: Row(
           children: currentUserEmail == messageSnapshot.value['email']
               ? getSentMessageLayout()
               : getReceivedMessageLayout(),
@@ -40,30 +44,38 @@ class ChatMessageListItem extends StatelessWidget {
   List<Widget> getSentMessageLayout() {
     String senderName = _parseBisonEmail(messageSnapshot.value['senderName']);
     return <Widget>[
-       Expanded(
-        child:  Column(
+      Expanded(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-             Text(senderName,
+            Text(senderName,
                 style: style.copyWith(
-                  color: Colors.black, 
-                  fontSize: 14, 
-                  fontWeight: FontWeight.bold)
-                ),
-             Container(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold)),
+            Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(messageSnapshot.value['text'], style: style.copyWith(fontSize: 12),),
+              child: Text(
+                messageSnapshot.value['text'],
+                style: style.copyWith(fontSize: 12),
+              ),
             ),
           ],
         ),
       ),
-       Column(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-           Container(
-              margin: const EdgeInsets.only(left: 8.0),
-              child: FaIcon(FontAwesomeIcons.user, color: Colors.black),
-              ),
+          Container(
+            margin: const EdgeInsets.only(left: 8.0),
+//              child: FaIcon(FontAwesomeIcons.user, color: Colors.black),
+            child: UserPhotoWidget(
+              radius: 20,
+              editable: false,
+              borderWidth: 2,
+              userId: null,
+            ),
+          ),
         ],
       ),
     ];
@@ -72,29 +84,34 @@ class ChatMessageListItem extends StatelessWidget {
   List<Widget> getReceivedMessageLayout() {
     String senderName = _parseBisonEmail(messageSnapshot.value['senderName']);
     return <Widget>[
-       Column(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-           Container(
-              margin: const EdgeInsets.only(right: 8.0),
+          Container(
+            margin: const EdgeInsets.only(right: 8.0),
 //              child: FaIcon(FontAwesomeIcons.user, color: Colors.black),
-
-              ),
+            child: UserPhotoWidget(
+              radius: 20,
+              editable: false,
+              borderWidth: 2,
+              userId: null,
+            ),
+          ),
         ],
       ),
-       Expanded(
-        child:  Column(
+      Expanded(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-             Text(senderName,
-                style:  style.copyWith(
-                  color: Colors.black, 
-                  fontSize: 14, fontWeight: 
-                  FontWeight.bold)
-                ),
-             Container(
+            Text(senderName,
+                style: style.copyWith(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold)),
+            Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(messageSnapshot.value['text'], style: style.copyWith(fontSize: 12)),
+              child: Text(messageSnapshot.value['text'],
+                  style: style.copyWith(fontSize: 12)),
             ),
           ],
         ),
