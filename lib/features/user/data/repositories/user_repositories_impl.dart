@@ -227,34 +227,35 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<Either<Failure, File>> getUserPhoto([String userId]) async {
-    // Only reach out to remote repository if there is no image
-    // cached locally
-    print('Getting photo from local repo');
-    File photoFile = await userLocalDataSource.getUserPhoto(userId);
+    // Always get from remote repo if possible to keep in sync.
+    // Expensive but simplest solution.
+    File photoFile;
+    if (await networkInfo.isConnected) {
+      try {
+        print('Getting photo form remote repo');
+        photoFile = await userRemoteDataSource.getUserPhoto(userId);
+        print('Got photo from remote repo');
+        photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
+          userId: userId,
+          userPhotoFile: photoFile,
+        );
+        final bytes = photoFile.lengthSync();
+        print('PHOTO SIZE REPO: $bytes');
+        return Right(photoFile);
+      } catch (e) {
+        print('Exception: $e');
+        return Left(FirebaseStorageFailure());
+      }
+    } else {
+      print('Getting photo from local repo');
+      photoFile = await userLocalDataSource.getUserPhoto(userId);
 
-    if (photoFile != null) {
+      if (photoFile == null) {
+        return Left(NetworkFailure());
+      }
+
       print('Got photo form local repo');
       return Right(photoFile);
-    }
-
-    if (!(await networkInfo.isConnected)) {
-      return Left(NetworkFailure());
-    }
-
-    try {
-      print('Getting photo form remote repo');
-      photoFile = await userRemoteDataSource.getUserPhoto(userId);
-      print('Got photo from remote repo');
-      photoFile = await userLocalDataSource.insertOrUpdateUserPhoto(
-        userId: userId,
-        userPhotoFile: photoFile,
-      );
-      final bytes = photoFile.lengthSync();
-      print('PHOTO SIZE REPO: $bytes');
-      return Right(photoFile);
-    } catch (e) {
-      print('Exception: $e');
-      return Left(FirebaseStorageFailure());
     }
   }
 
