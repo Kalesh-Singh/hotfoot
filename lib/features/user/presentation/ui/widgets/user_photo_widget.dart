@@ -35,6 +35,8 @@ class UserPhotoWidget extends StatelessWidget {
           if (state is UserPhotoLoadFailure ||
               state is UserPhotoUpdateFailure ||
               state is UserPhotoUninitialized) {
+            BlocProvider.of<UserPhotoBloc>(context)
+                .add(UserPhotoRequested(userId: userId));
             return Container(
               height: radius * 2,
               child: Column(
