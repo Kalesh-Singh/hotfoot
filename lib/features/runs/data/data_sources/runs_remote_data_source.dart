@@ -235,7 +235,7 @@ class RunsRemoteDataSource implements IRunsRemoteDataSource {
 
   Future<List<String>> _getActiveRunsIds({@required UserType userType}) async {
     final String userIdField =
-        (userType is RunnerUserType) ? 'runnerId' : 'customerId';
+        (userType == UserType.RUNNER) ? 'runnerId' : 'customerId';
     final userEither = await getUserId(NoParams());
     print('Got user either');
     List<String> _runsIds;
