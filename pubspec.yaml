@@ -80,6 +80,8 @@ dependencies:
   circular_profile_avatar: ^1.0.6
   # Image Picker for Gallery and Camera
   image_picker: ^0.6.5+3
+  # For rating bar
+  flutter_rating_bar: ^3.0.1+1
 
   # TODO: Maybe delete unused ones
   flutter_google_places: ^0.2.3
@@ -110,7 +112,7 @@ flutter:
     - assets/flutter_logo.png
     - assets/place-photo-placeholder.png
     - assets/HotFoot.png
-  
+
   fonts:
     - family: Montserrat
       fonts:

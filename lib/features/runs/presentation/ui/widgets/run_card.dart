@@ -155,9 +155,9 @@ class RunCard extends StatelessWidget {
                     SingleChildScrollView(
                       child: Text(
                         this.runEntity.order,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        style: style.copyWith(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 22
                         ),
                       ),
                     ),
@@ -168,8 +168,18 @@ class RunCard extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RaisedButton(
+                              padding: EdgeInsets.fromLTRB(0.0, 12.5, 0.0, 12.5),
+                              color: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
                               onPressed: () => _cancelOrderAgain(context),
-                              child: Text('Cancel'),
+                              child: Text('Cancel',
+                              textAlign: TextAlign.center, 
+                              style: style.copyWith(
+                                fontSize: 16, 
+                                fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),
@@ -177,8 +187,18 @@ class RunCard extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RaisedButton(
+                              padding: EdgeInsets.fromLTRB(0.0, 12.5, 0.0, 12.5),
+                              color: Colors.amberAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
                               onPressed: () => _orderAgain(context),
-                              child: Text('Order Again'),
+                              child: Text('Order Again',
+                              textAlign: TextAlign.center, 
+                              style: style.copyWith(
+                                fontSize: 16, 
+                                fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),

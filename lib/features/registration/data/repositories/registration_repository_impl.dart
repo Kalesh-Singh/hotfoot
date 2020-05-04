@@ -7,6 +7,7 @@ import 'package:hotfoot/features/registration/domain/repositories/registration_r
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/use_cases/init_user.dart';
 import 'package:meta/meta.dart';
+import 'dart:async';
 
 class RegistrationRepository implements IRegistrationRepository {
   final FirebaseAuth firebaseAuth;
@@ -28,7 +29,7 @@ class RegistrationRepository implements IRegistrationRepository {
         email: email,
         password: password,
       );
-      final _firebaseUser = result.user;
+      FirebaseUser _firebaseUser = result.user;
       if (_firebaseUser == null) {
         print("firebase user is null");
       }
@@ -37,12 +38,24 @@ class RegistrationRepository implements IRegistrationRepository {
         await _firebaseUser.sendEmailVerification();
       }
       final either = await initUser(NoParams());
+      int loops = 0;
       return either.fold(
         (failure) {
           return Left(failure);
         },
-        (success) {
-          return Right(success);
+        (success) async {
+          while(true) {
+            await Future.delayed(const Duration(seconds: 10));
+            loops++;
+            await _firebaseUser.reload();
+            _firebaseUser = await firebaseAuth.currentUser();
+            if (_firebaseUser.isEmailVerified) {
+              return Right(success.copyWith(isEmailVerified: true));
+            } 
+            if (loops >= 6) {
+              return Right(success);
+            }
+          }
         },
       );
     } catch (e) {

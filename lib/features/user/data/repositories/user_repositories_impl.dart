@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:hotfoot/core/error/failures.dart';
+import 'package:hotfoot/features/user/data/models/ratings_model.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
+import 'package:hotfoot/features/user/domain/entities/ratings_entity.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:hotfoot/features/user/domain/repositories/user_repository.dart';
@@ -187,10 +189,10 @@ class UserRepository implements IUserRepository {
   Future<Either<Failure, double>> subtractUserFunds({double funds}) async {
     final userFundsEither = await getUserFunds();
     return userFundsEither.fold(
-          (failure) {
+      (failure) {
         return Left(failure);
       },
-          (userFunds) async {
+      (userFunds) async {
         final newFunds = userFunds - funds;
         final updateFundsEither = await updateUserFunds(funds: newFunds);
         return updateFundsEither.fold((failure) {
@@ -253,5 +255,90 @@ class UserRepository implements IUserRepository {
       print('Exception: $e');
       return Left(FirebaseStorageFailure());
     }
+  }
+
+  Future<Either<Failure, void>> insertOrUpdateUserById(
+      {String userId, UserModel userModel}) async {
+    if (!(await networkInfo.isConnected)) {
+      return Left(NetworkFailure());
+    }
+    try {
+      final result = await userRemoteDataSource.insertOrUpdateUserById(
+          userId: userId, userModel: userModel);
+      return Right(result);
+    } catch (e) {
+      print(e);
+      return Left(FirestoreFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, RatingsEntity>> getUserRatings() async {
+    final userModelEither = await getUserInfo();
+    return userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) {
+        return (userModel.ratings != null)
+            ? Right(userModel.ratings)
+            : Right(RatingsModel.empty());
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> addCustomerRating(
+      {String userId, double rating}) async {
+    final userModelEither = await getUserInfoById(userId: userId);
+    return await userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        final RatingsEntity ratings = userModel.ratings ?? RatingsModel.empty();
+        print("Got here! Ratings = $ratings");
+        final int newRatingsCount = ratings.customerRatingCount + 1;
+        final double newRating =
+            (ratings.customerRating * ratings.customerRatingCount + rating) /
+                newRatingsCount;
+        final RatingsModel newRatingsModel = (ratings as RatingsModel).copyWith(
+          customerRating: newRating,
+          customerRatingCount: newRatingsCount,
+        );
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(ratings: newRatingsModel);
+        final result = await insertOrUpdateUserById(
+            userId: userId, userModel: newUserModel);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> addRunnerRating(
+      {String userId, double rating}) async {
+    final userModelEither = await getUserInfoById(userId: userId);
+    return await userModelEither.fold(
+      (failure) {
+        return Left(failure);
+      },
+      (userModel) async {
+        final RatingsEntity ratings = userModel.ratings ?? RatingsModel.empty();
+        final int newRatingsCount = ratings.runnerRatingCount + 1;
+        final double newRating =
+            (ratings.runnerRating * ratings.runnerRatingCount + rating) /
+                newRatingsCount;
+        final RatingsModel newRatingsModel = (ratings as RatingsModel).copyWith(
+          runnerRating: newRating,
+          runnerRatingCount: newRatingsCount,
+        );
+        UserModel newUserModel =
+            (userModel as UserModel).copyWith(ratings: newRatingsModel);
+        final result = await insertOrUpdateUserById(
+            userId: userId, userModel: newUserModel);
+        return Right(result);
+      },
+    );
   }
 }
