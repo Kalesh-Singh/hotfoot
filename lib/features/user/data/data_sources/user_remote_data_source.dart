@@ -26,6 +26,8 @@ abstract class IUserRemoteDataSource {
 
   Future<UserModel> insertOrUpdateUserById(
       {@required String userId, @required UserModel userModel});
+  String capitalize(String name);
+  String parseBisonEmail(String email);
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -45,20 +47,27 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
         assert(firebaseAuth != null),
         assert(firebaseStorage != null),
         this._photosDir = join(tempPhotosDir.path, _TEMP_PHOTOS_DIR);
+  
+  // Helper functions for getUserFromFirebase
+  @override
+  String capitalize(String name) {
+    return name[0].toUpperCase() + name.substring(1);
+  }
+
+  String parseBisonEmail(String email) {
+    String firstNameDotLastname = email.substring(0, email.indexOf('@'));
+    final nameArray = firstNameDotLastname.split(".");
+    return capitalize(nameArray[0]) + " " + capitalize(nameArray[1]);
+  }
 
   @override
   Future<UserModel> getUserFromFirebase() async {
-    // ! kattenlaf =>
-    // Right now we will keep name as email,
-    // if user wants to change their username we can implement that functionality
-    // Or I can parse the email to get the names but like I said its not safe because
-    // Howard sometimes makes emails weird with numbers or abbreviations etc
 
     final firebaseUser = await firebaseAuth.currentUser();
     UserModel userModel = UserModel(
       email: firebaseUser.email,
       id: firebaseUser.uid,
-      name: firebaseUser.email,
+      name: parseBisonEmail(firebaseUser.email),
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
       isEmailVerified: firebaseUser.isEmailVerified,
