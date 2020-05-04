@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hotfoot/features/location/data/models/location_model.dart';
@@ -21,6 +25,9 @@ class RunnerLocationBloc
   Set<Polyline> polylines = {};
   Set<Marker> markers = {};
   LatLng cameraLocation;
+  BitmapDescriptor runnerIcon;
+  BitmapDescriptor pickupIcon;
+  BitmapDescriptor destinationIcon;
 
   RunnerLocationBloc({
     @required this.insertOrUpdateRunnerLocation,
@@ -36,6 +43,7 @@ class RunnerLocationBloc
   Stream<RunnerLocationState> mapEventToState(
       RunnerLocationEvent event) async* {
     if (event is RunnerLocationUpdated) {
+      await _loadCustomMarkers();
       // Important locations for maps provided below.
       final LocationModel runnerLocation = event.runnerLocation;
       final LocationModel pickupLocation = await _getPickupLocation(event);
@@ -71,8 +79,9 @@ class RunnerLocationBloc
       } else if (userType == UserType.CUSTOMER) {
         if (runnerLocation == null) {
           print("Runner location not available");
-          markers.add(_makeMarker("pickup", pickupLocation));
-          markers.add(_makeMarker("destination", destinationLocation));
+          markers.add(_makeMarker("pickup", pickupLocation, pickupIcon));
+          markers.add(
+              _makeMarker("destination", destinationLocation, destinationIcon));
           cameraLocation = LatLng(pickupLocation.lat, pickupLocation.lng);
         } else {
           await _allMarkersAndRoutes(
@@ -124,11 +133,12 @@ class RunnerLocationBloc
   }
 
   // TODO: Different marker description and icons
-  Marker _makeMarker(String id, LocationEntity position) {
+  Marker _makeMarker(
+      String id, LocationEntity position, BitmapDescriptor icon) {
     return Marker(
         markerId: MarkerId(id),
         position: LatLng(position.lat, position.lng),
-        icon: BitmapDescriptor.defaultMarker);
+        icon: icon);
   }
 
   Future<void> _allMarkersAndRoutes(
@@ -151,12 +161,35 @@ class RunnerLocationBloc
           print("Found route between Pickup and Destination");
           polylines.add(_makePolyline("poly1", route1));
           polylines.add(_makePolyline("poly2", route2));
-          markers.add(_makeMarker("runner", runnerLocation));
-          markers.add(_makeMarker("pickup", pickupLocation));
-          markers.add(_makeMarker("destination", destinationLocation));
+          markers.add(_makeMarker("runner", runnerLocation, runnerIcon));
+          markers.add(_makeMarker("pickup", pickupLocation, pickupIcon));
+          markers.add(
+              _makeMarker("destination", destinationLocation, destinationIcon));
           cameraLocation = LatLng(runnerLocation.lat, runnerLocation.lng);
         });
       },
     );
+  }
+
+  Future<void> _loadCustomMarkers() async {
+    final runnerIconBytes =
+        await getBytesFromAsset('assets/runner_marker.png', 150);
+    final pickupIconBytes =
+        await getBytesFromAsset('assets/pickup_marker.png', 60);
+    final destinationIconBytes =
+        await getBytesFromAsset('assets/destination_marker.png', 100);
+    runnerIcon = BitmapDescriptor.fromBytes(runnerIconBytes);
+    pickupIcon = BitmapDescriptor.fromBytes(pickupIconBytes);
+    destinationIcon = BitmapDescriptor.fromBytes(destinationIconBytes);
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
   }
 }

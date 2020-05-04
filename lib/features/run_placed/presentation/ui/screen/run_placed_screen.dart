@@ -14,6 +14,8 @@ import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_up
 import 'package:hotfoot/features/run_placed/presentation/blocs/run_update/run_update_state.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/active_run_info_widget.dart';
 import 'package:hotfoot/features/run_placed/presentation/ui/widgets/give_rating_popup.dart';
+import 'package:hotfoot/features/run_placed/presentation/ui/widgets/other_user_cancelled_popup.dart';
+import 'package:hotfoot/features/runs/domain/entities/run_status.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
@@ -44,12 +46,21 @@ class RunPlacedScreen extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         BlocListener<RunUpdateBloc, RunUpdateState>(
-          listener: (context, state) {
-            if (state is RunUpdateLoadSuccess &&
-                state.runModel.status == 'Delivered') {
-              currRun = state.runModel;
-              BlocProvider.of<RunFinalizerBloc>(context).add(
-                  DeliveryConfirmed(isRunner: isRunner, cost: currRun.cost));
+          listener: (context, state) async {
+            if (state is RunUpdateLoadSuccess) {
+              if (state.runModel.status == RunStatus.DELIVERED) {
+                currRun = state.runModel;
+                BlocProvider.of<RunFinalizerBloc>(context).add(
+                    DeliveryConfirmed(isRunner: isRunner, cost: currRun.cost));
+              } else if (state.runModel.status == RunStatus.CANCELLED) {
+                await showDialog(
+                    context: context,
+                    builder: (_) {
+                      return OtherUserCancelledPopUp(isRunner: isRunner);
+                    });
+                BlocProvider.of<NavigationScreenBloc>(context)
+                    .add(EnteredHome());
+              }
             }
           },
         ),
@@ -92,10 +103,10 @@ class RunPlacedScreen extends StatelessWidget {
   Widget _runnerRunPlacedScreen(BuildContext context, RunModel currRun) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Run Status',
+          title: Text(
+        'Run Status',
         style: style.copyWith(fontWeight: FontWeight.bold),
-        )
-      ),
+      )),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -113,8 +124,9 @@ class RunPlacedScreen extends StatelessWidget {
   Widget _customerRunPlacedScreen(BuildContext context, RunModel currRun) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Run Status',
-        style: style.copyWith(fontWeight: FontWeight.bold),
+        title: Text(
+          'Run Status',
+          style: style.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(

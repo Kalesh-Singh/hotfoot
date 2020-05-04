@@ -112,6 +112,9 @@ flutter:
     - assets/flutter_logo.png
     - assets/place-photo-placeholder.png
     - assets/HotFoot.png
+    - assets/destination_marker.png
+    - assets/runner_marker.png
+    - assets/pickup_marker.png
 
   fonts:
     - family: Montserrat
