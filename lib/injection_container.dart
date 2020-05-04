@@ -388,16 +388,18 @@ Future<void> init() async {
             tempPhotosDir: sl(),
             cacheManager: sl(),
           ));
-  sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
-        userDao: sl(),
-        userPhotoDao: sl(),
-      ));
   sl.registerLazySingleton<IUserRemoteDataSource>(() => UserRemoteDataSource(
         firestore: sl(),
         firebaseAuth: sl(),
         tempPhotosDir: sl(),
         firebaseStorage: sl(),
       ));
+  sl.registerLazySingleton<IUserLocalDataSource>(() => UserLocalDataSource(
+        userDao: sl(),
+        userPhotoDao: sl(),
+        userRemoteDataSource: sl(),
+      ));
+
   sl.registerLazySingleton<IRunsLocalDataSource>(() => RunsLocalDataSource(
         runDao: sl(),
       ));
