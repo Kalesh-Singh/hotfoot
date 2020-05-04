@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_bloc.dart';
 import 'package:hotfoot/features/location/presentation/bloc/location_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
@@ -64,7 +65,9 @@ class _UnknownPlaceScreen extends State<UnknownPlaceScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Manual Location'),
+          title: Text('Manual Location',
+          style: style.copyWith(fontWeight: FontWeight.bold),
+          ),
           centerTitle: true,
           leading: GestureDetector(
             onTap: () {

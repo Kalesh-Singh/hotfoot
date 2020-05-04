@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_event.dart';
 import 'package:hotfoot/features/search/presentation/blocs/results_with_matching_address/results_with_matching_address_state.dart';
@@ -48,6 +49,7 @@ class SearchHandlerScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextField(
+                          style: style.copyWith(fontSize: 14),
                           cursorColor: Colors.black,
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.go,

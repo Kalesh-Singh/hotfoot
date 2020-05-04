@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_bloc.dart';
 import 'package:hotfoot/features/search/presentation/blocs/search_handler_screen/search_handler_screen_event.dart';
 
@@ -30,6 +31,7 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
             ),
             Expanded(
               child: TextField(
+                style: style.copyWith(fontSize: 14),
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.go,

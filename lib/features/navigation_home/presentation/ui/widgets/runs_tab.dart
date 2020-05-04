@@ -27,7 +27,9 @@ class RunsTab extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Your Runs'),
+          title: Text('Your Runs',
+          style: style.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
         body: BlocBuilder<UserTypeBloc, UserTypeState>(
           builder: (BuildContext context, UserTypeState state) {

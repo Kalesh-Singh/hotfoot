@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/location/presentation/ui/address_widget.dart';
 import 'package:hotfoot/features/navigation_home/presentation/ui/widgets/bottom_nav_bar.dart';
 import 'package:hotfoot/features/runs/presentation/ui/widgets/runs_list.dart';
@@ -28,7 +29,9 @@ class HomeTab extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Center(
-            child: Text('Popular Near You'),
+            child: Text('Popular Near You',
+            style: style.copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
           actions: <Widget>[
             Padding(
@@ -62,7 +65,9 @@ class HomeTab extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Center(
-            child: Text('Requested Runs'),
+            child: Text('Requested Runs',
+            style: style.copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
           actions: <Widget>[
             Padding(

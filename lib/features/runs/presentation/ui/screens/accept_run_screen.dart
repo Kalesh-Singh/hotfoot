@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,9 @@ class AcceptRunScreen extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Run Details'),
+          title: Text('Run Details',
+          style: style.copyWith(fontWeight: FontWeight.bold),
+          ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => BlocProvider.of<NavigationScreenBloc>(context)
