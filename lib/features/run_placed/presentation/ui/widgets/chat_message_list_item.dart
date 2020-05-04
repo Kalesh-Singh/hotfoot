@@ -1,12 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotfoot/core/style/style.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_bloc.dart';
+import 'package:hotfoot/features/navigation_auth/presentation/bloc/navigation_auth_state.dart';
 import 'package:hotfoot/features/navigation_screen/presentation/bloc/navigation_screen_bloc.dart';
+import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
+import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
-
-var currentUserEmail;
 
 class ChatMessageListItem extends StatelessWidget {
   final DataSnapshot messageSnapshot;
@@ -18,6 +20,15 @@ class ChatMessageListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final runModel =
         BlocProvider.of<NavigationScreenBloc>(context).state.runModel;
+    final userType =
+        BlocProvider.of<UserTypeBloc>(context).state is RunnerUserType
+            ? UserType.RUNNER
+            : UserType.CUSTOMER;
+    final otherUserId =
+        (userType == UserType.RUNNER) ? runModel.customerId : runModel.runnerId;
+    final Authenticated authState =
+        BlocProvider.of<NavigationAuthBloc>(context).state;
+    final currentUserEmail = authState.displayName;
     return SizeTransition(
       sizeFactor: CurvedAnimation(parent: animation, curve: Curves.decelerate),
       child: Container(
@@ -25,7 +36,7 @@ class ChatMessageListItem extends StatelessWidget {
         child: Row(
           children: currentUserEmail == messageSnapshot.value['email']
               ? getSentMessageLayout()
-              : getReceivedMessageLayout(),
+              : getReceivedMessageLayout(otherUserId),
         ),
       ),
     );
@@ -68,7 +79,6 @@ class ChatMessageListItem extends StatelessWidget {
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 8.0),
-//              child: FaIcon(FontAwesomeIcons.user, color: Colors.black),
             child: UserPhotoWidget(
               radius: 20,
               editable: false,
@@ -81,7 +91,7 @@ class ChatMessageListItem extends StatelessWidget {
     ];
   }
 
-  List<Widget> getReceivedMessageLayout() {
+  List<Widget> getReceivedMessageLayout(String otherUserId) {
     String senderName = _parseBisonEmail(messageSnapshot.value['senderName']);
     return <Widget>[
       Column(
@@ -94,7 +104,7 @@ class ChatMessageListItem extends StatelessWidget {
               radius: 20,
               editable: false,
               borderWidth: 2,
-              userId: null,
+              userId: otherUserId,
             ),
           ),
         ],

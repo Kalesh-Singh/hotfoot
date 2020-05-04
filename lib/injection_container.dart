@@ -86,6 +86,7 @@ import 'package:hotfoot/features/user/data/data_sources/user_remote_data_source.
 import 'package:hotfoot/features/user/data/data_sources/data_access_objects/user_dao.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_customer_rating.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_runner_rating.dart';
+import 'package:hotfoot/features/user/domain/use_cases/get_user_info.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_ratings.dart';
 import 'package:hotfoot/features/user/domain/use_cases/add_user_funds.dart';
 import 'package:hotfoot/features/user/domain/use_cases/get_user_funds.dart';
@@ -269,6 +270,9 @@ Future<void> init() async {
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetUserInfoById(
+        userRepository: sl(),
+      ));
+  sl.registerLazySingleton(() => GetUserInfo(
         userRepository: sl(),
       ));
   sl.registerLazySingleton(() => GetResultsWithMatchingAddress(
