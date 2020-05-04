@@ -99,7 +99,6 @@ class ChatMessageListItem extends StatelessWidget {
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(right: 8.0),
-//              child: FaIcon(FontAwesomeIcons.user, color: Colors.black),
             child: UserPhotoWidget(
               radius: 20,
               editable: false,

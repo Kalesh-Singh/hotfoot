@@ -76,7 +76,7 @@ class ChatWindow extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar:  AppBar(
-        title:  Text("Chat with runner"),
+        title:  Text("Chat"),
         elevation:
           Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 6.0,
       ),
