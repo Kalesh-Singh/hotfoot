@@ -8,6 +8,7 @@ import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
+import 'package:hotfoot/core/util/util.dart';
 
 abstract class IUserRemoteDataSource {
   Future<UserModel> getUserFromFirebase();
@@ -26,8 +27,6 @@ abstract class IUserRemoteDataSource {
 
   Future<UserModel> insertOrUpdateUserById(
       {@required String userId, @required UserModel userModel});
-  String capitalize(String name);
-  String parseBisonEmail(String email);
 }
 
 class UserRemoteDataSource implements IUserRemoteDataSource {
@@ -48,18 +47,6 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
         assert(firebaseStorage != null),
         this._photosDir = join(tempPhotosDir.path, _TEMP_PHOTOS_DIR);
   
-  // Helper functions for getUserFromFirebase
-  @override
-  String capitalize(String name) {
-    return name[0].toUpperCase() + name.substring(1);
-  }
-
-  String parseBisonEmail(String email) {
-    String firstNameDotLastname = email.substring(0, email.indexOf('@'));
-    final nameArray = firstNameDotLastname.split(".");
-    return capitalize(nameArray[0]) + " " + capitalize(nameArray[1]);
-  }
-
   @override
   Future<UserModel> getUserFromFirebase() async {
 
@@ -67,7 +54,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     UserModel userModel = UserModel(
       email: firebaseUser.email,
       id: firebaseUser.uid,
-      name: parseBisonEmail(firebaseUser.email),
+      name: Util.parseBisonEmail(firebaseUser.email),
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
       isEmailVerified: firebaseUser.isEmailVerified,

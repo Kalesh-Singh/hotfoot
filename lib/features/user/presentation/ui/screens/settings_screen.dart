@@ -13,13 +13,13 @@ import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.
 import 'package:hotfoot/features/user/presentation/ui/widgets/user_type_widget.dart';
 import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/injection_container.dart';
-
+import 'package:hotfoot/core/util/util.dart';
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Authenticated authState =
         BlocProvider.of<NavigationAuthBloc>(context).state;
-    final user = authState.displayName;
+    final user = Util.parseBisonEmail(authState.displayName);
 
     return Scaffold(
       appBar: AppBar(
