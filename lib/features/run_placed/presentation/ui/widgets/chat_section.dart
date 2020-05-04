@@ -141,6 +141,16 @@ class ChatWindow extends StatelessWidget {
     );
   }
 
+  String _capitalize(String name) {
+    return name[0].toUpperCase() + name.substring(1);
+  }
+
+  String _parseBisonEmail(String email) {
+    String firstNameDotLastname = email.substring(0, email.indexOf('@'));
+    final nameArray = firstNameDotLastname.split(".");
+    return _capitalize(nameArray[0]) + " " + _capitalize(nameArray[1]);
+  }
+
   void _submitMsg(String txt) async {
     _textController.clear();
     final FirebaseUser __firebaseUser = await firebaseAuth.currentUser();
@@ -153,7 +163,7 @@ class ChatWindow extends StatelessWidget {
       reference.push().set({
       'text': formattedMsg,
       'email': firebaseUser.email,
-      'senderName': firebaseUser.email,
+      'senderName': _parseBisonEmail(firebaseUser.email),
     });
     }
   }
