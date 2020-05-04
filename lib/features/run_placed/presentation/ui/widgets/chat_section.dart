@@ -154,7 +154,7 @@ class ChatWindow extends StatelessWidget {
       reference.push().set({
       'text': formattedMsg,
       'email': firebaseUser.email,
-      'senderName': Util.parseBisonEmail(firebaseUser.email),
+      'senderName': HotfootUtil.parseBisonEmail(firebaseUser.email),
       });
     }
   }

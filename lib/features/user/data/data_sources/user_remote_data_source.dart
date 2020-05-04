@@ -54,7 +54,7 @@ class UserRemoteDataSource implements IUserRemoteDataSource {
     UserModel userModel = UserModel(
       email: firebaseUser.email,
       id: firebaseUser.uid,
-      name: Util.parseBisonEmail(firebaseUser.email),
+      name: HotfootUtil.parseBisonEmail(firebaseUser.email),
       // Initialize the user to be a customer
       type: UserType.CUSTOMER,
       isEmailVerified: firebaseUser.isEmailVerified,

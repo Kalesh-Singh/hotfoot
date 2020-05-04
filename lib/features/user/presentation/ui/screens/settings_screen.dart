@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Authenticated authState =
         BlocProvider.of<NavigationAuthBloc>(context).state;
-    final user = Util.parseBisonEmail(authState.displayName);
+    final user = HotfootUtil.parseBisonEmail(authState.displayName);
 
     return Scaffold(
       appBar: AppBar(
