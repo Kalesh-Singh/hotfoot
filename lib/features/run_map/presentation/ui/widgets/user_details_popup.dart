@@ -4,6 +4,7 @@ import 'package:hotfoot/features/run_map/presentation/blocs/other_user_details/o
 import 'package:hotfoot/features/run_map/presentation/blocs/other_user_details/other_user_details_state.dart';
 import 'package:hotfoot/features/user/data/models/user_model.dart';
 import 'package:hotfoot/features/user/domain/entities/user_entity.dart';
+import 'package:hotfoot/features/user/presentation/ui/widgets/user_photo_widget.dart';
 
 class UserDetailsPopUp extends StatelessWidget {
   final UserType userType;
@@ -37,6 +38,15 @@ class UserDetailsPopUp extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          Center(
+            child: UserPhotoWidget(
+              userId: otherUserModel.id,
+              borderWidth: 3,
+              radius: 50,
+              editable: false,
+            ),
+          ),
+          SizedBox(height: 15),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
