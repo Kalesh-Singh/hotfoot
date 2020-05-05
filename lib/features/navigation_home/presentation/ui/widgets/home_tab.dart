@@ -90,7 +90,7 @@ class HomeTab extends StatelessWidget {
               builder: (BuildContext context, PendingRunsIdsState state) {
                 if (state is PendingRunsIdsLoadSuccess) {
                   if (state.pendingRunsIds.length == 0) {
-                    return Text('No pending runs.');
+                    return Text('No pending runs.', style: style.copyWith(fontSize: 18),);
                   } else {
                     return RunsList(
                       runsIds: state.pendingRunsIds,
