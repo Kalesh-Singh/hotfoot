@@ -49,7 +49,7 @@ class RunsTab extends StatelessWidget {
           builder: (BuildContext context, RunnerRunsIdsState state) {
             if (state is RunnerRunsIdsLoadSuccess) {
               if (state.runnerRunsIds.length == 0) {
-                return Text('No runs completed yet.');
+                return Text('No runs completed yet.', style: style.copyWith(fontSize: 18),);
               } else {
                 return RunsList(
                   runsIds: state.runnerRunsIds,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotfoot/core/style/style.dart';
 import 'package:hotfoot/features/navigation_home/presentation/bloc/navigation_home_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_bloc.dart';
 import 'package:hotfoot/features/user/presentation/blocs/user_type/user_type_state.dart';
@@ -28,12 +30,12 @@ class BottomNavBar extends StatelessWidget {
   List<BottomNavigationBarItem> _runnerNavBarItems() {
     return const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        title: Text('Home'),
+        icon: FaIcon(FontAwesomeIcons.home),
+        title: Text('Home', style: navBarStyle,),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.library_books),
-        title: Text('Runs'),
+        icon: FaIcon(FontAwesomeIcons.solidStickyNote),
+        title: Text('Runs', style: navBarStyle,),
       ),
     ];
   }
@@ -41,16 +43,16 @@ class BottomNavBar extends StatelessWidget {
   List<BottomNavigationBarItem> _customerNavBarItems() {
     return const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        title: Text('Home'),
+        icon: FaIcon(FontAwesomeIcons.home),
+        title: Text('Home', style: navBarStyle,),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.search),
-        title: Text('Search'),
+        icon: FaIcon(FontAwesomeIcons.search),
+        title: Text('Search', style: navBarStyle,),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.library_books),
-        title: Text('Runs'),
+        icon: FaIcon(FontAwesomeIcons.solidStickyNote),
+        title: Text('Runs', style: navBarStyle,),
       ),
     ];
   }

@@ -48,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
               SnackBar(
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Login Failure'), Icon(Icons.error)],
+                  children: [Text('Login Failure', style: style.copyWith(fontSize: 16, fontWeight: FontWeight.bold),), Icon(Icons.error)],
                 ),
                 backgroundColor: Colors.red,
               ),
@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Logging In...'),
+                    Text('Logging In...', style: style.copyWith(fontSize: 16, fontWeight: FontWeight.bold),),
                     CircularProgressIndicator(),
                   ],
                 ),
